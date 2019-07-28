@@ -1,19 +1,16 @@
 <template>
   <div id="app">
     <HelloWorld/>
-    <ByWorld/>
   </div>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld.vue'
-import ByWorld from './components/ByWorld'
 
 export default {
   name: 'app',
   components: {
     HelloWorld,
-    ByWorld
   }
 }
 </script>
