@@ -20,7 +20,7 @@ export default {
   },
   methods:{
     async onLogin(){
-      const login = await this.axios.post('/auth/testLogin');
+      const login = await this.axios.post('/testLogin');
       console.log(login);
     }
   }
