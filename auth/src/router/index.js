@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import VueCookies from 'vue-cookies'
 
 Vue.use(VueRouter)
 
@@ -8,7 +9,8 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: Home
+    component: Home,
+    meta: { requiresAuth: true }
   },
   {
     path: '/about',
@@ -24,6 +26,15 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth
+    || VueCookies.get('token'))){
+    console.log('Auth');
+  }
+    return next();
 })
+
 
 export default router

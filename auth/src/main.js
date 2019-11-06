@@ -3,8 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from './service/axios';
+import VueCookies from 'vue-cookies';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.use(VueCookies);
 
 Vue.prototype.axios = axios;
 

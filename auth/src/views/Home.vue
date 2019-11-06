@@ -21,6 +21,9 @@ export default {
   methods:{
     async onLogin(){
       const login = await this.axios.post('/testLogin');
+  
+      this.$cookies.set('token', login.data.data.token, '60s' );
+      this.$cookies.set('refreshToken', login.data.data.refresh_token, '180s');
       console.log(login);
     }
   }
