@@ -29,11 +29,15 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
+
   if (to.matched.some(record => record.meta.requiresAuth
     || VueCookies.get('token'))){
-    console.log('Auth');
-  }
+    console.log('인증 완료');
+
     return next();
+  }
+    alert('로그인 해주세요');
+    return next('/');
 })
 
 
