@@ -4,6 +4,8 @@ import VueCookies from 'vue-cookies';
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.headers['token'] = VueCookies.get('token');
 
+
+
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent

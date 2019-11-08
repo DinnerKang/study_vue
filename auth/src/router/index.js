@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Login from '../views/Login.vue'
 import VueCookies from 'vue-cookies'
+
+import { refreshToken } from '../service/login'
 
 Vue.use(VueRouter)
 
@@ -10,6 +13,11 @@ const routes = [
     path: '/',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
     meta: { requiresAuth: true }
   },
   {
@@ -28,16 +36,18 @@ const router = new VueRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach( async(to, from, next) => {
 
-  if (to.matched.some(record => record.meta.requiresAuth
-    || VueCookies.get('token'))){
-    console.log('인증 완료');
+  if(VueCookies.get('token')===null && VueCookies.get('refresh_token') !== null){
+    console.log('refresh', VueCookies.get('refresh_token'));
+    await refreshToken();
+  }
 
+  if (to.matched.some(record => record.meta.requiresAuth) || VueCookies.get('token')){
     return next();
   }
     alert('로그인 해주세요');
-    return next('/');
+    return next('/login');
 })
 
 
