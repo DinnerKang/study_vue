@@ -46,8 +46,8 @@ router.beforeEach( async(to, from, next) => {
     return next();
   }
 
-    await alert('로그인 해주세요');
-    return await next('/login');
+    alert('로그인 해주세요');
+    return next('/login');
 })
 
 
