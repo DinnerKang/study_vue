@@ -18,7 +18,7 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
-    meta: { requiresAuth: true }
+    meta: { unauthorized : true }
   },
   {
     path: '/about',
@@ -39,15 +39,15 @@ const router = new VueRouter({
 router.beforeEach( async(to, from, next) => {
 
   if(VueCookies.get('token')===null && VueCookies.get('refresh_token') !== null){
-    console.log('refresh', VueCookies.get('refresh_token'));
     await refreshToken();
   }
 
-  if (to.matched.some(record => record.meta.requiresAuth) || VueCookies.get('token')){
+  if (to.matched.some(record => record.meta.unauthorized) || VueCookies.get('token')){
     return next();
   }
-    alert('로그인 해주세요');
-    return next('/login');
+
+    await alert('로그인 해주세요');
+    return await next('/login');
 })
 
 

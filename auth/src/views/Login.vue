@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { testLogin } from '../service/login'
 
 export default {
   name: 'login',
@@ -13,9 +14,9 @@ export default {
   },
   methods:{
     async onLogin(){
-      const login = await this.axios.post('/testLogin');
-      console.log(login);
-      this.$router.push('/');
+      const login = await testLogin();
+      console.log('login', login);
+      await this.$router.push('/');
     }
   }
 }
