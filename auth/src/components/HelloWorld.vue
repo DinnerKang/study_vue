@@ -14,7 +14,6 @@ export default {
   },
   methods:{
     async onTest(){
-      console.log(this.$cookies.get('token'))
       const test = await testCall();
       console.log(test);
     }

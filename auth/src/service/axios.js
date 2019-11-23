@@ -3,20 +3,14 @@ import VueCookies from 'vue-cookies';
 import { refreshToken } from '../service/login'
 
 axios.defaults.baseURL = 'http://localhost:3000';
-axios.defaults.headers['token'] = VueCookies.get('token');
-axios.defaults.headers['refresh_token'] = VueCookies.get('refresh_token');
 
-let isRefresh = false;
 // Add a request interceptor
 axios.interceptors.request.use(async function (config) {
     // Do something before request is sent
-    console.log('axios 시작', config);
-    if(VueCookies.get('token') === null && VueCookies.get('refresh_token') !== null && isRefresh===false ){
-      console.log('token 값이 날라감');
-      isRefresh = true;
-      const token = await refreshToken();
-      config.defaults.headers['token'] = token.data.data.token;
-    }
+    config.headers.token = VueCookies.get('token');
+    config.headers.refresh_token = VueCookies.get('refresh_token');
+  
+    console.log(config);
     return config;
   }, function (error) {
     // Do something with request error
@@ -27,18 +21,18 @@ axios.interceptors.request.use(async function (config) {
 axios.interceptors.response.use(function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
-    console.log('axios 성공 후 response 전달');
-    isRefresh = true;
     return response;
   }, async function (error) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
-    console.log('에러일 경우');
-    if(error.response.data.status===401){
+    console.log('에러일 경우', error.config);
+    const errorAPI = error.config;
+    if(error.response.data.status===401 && errorAPI.retry===undefined){
+      errorAPI.retry = true;
       console.log('토큰이 이상한 오류일 경우');
-      return await refreshToken();
+      await refreshToken();
+      return await axios(errorAPI);
     }
-    isRefresh = true;
     return Promise.reject(error);
   });
 
