@@ -1,26 +1,16 @@
 <template>
   <div id="app">
-    <input type="file" id="fileData" v-on:change="handleFileUpload" />
+    <Components></Components>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Components from './components/Components';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
-  },
-  methods:{
-    handleFileUpload() {
-        var fileUpload = document.getElementById("fileData");
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            console.log(e.target.result);
-        }
-         reader.readAsText(fileUpload.files[0],'ISO-8859-4' );
-    }
+    Components
   },
 }
 
