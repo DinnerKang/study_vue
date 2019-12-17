@@ -1,21 +1,55 @@
 <template>
   <div class="login_container">
-      <input type="text" placeholder="아이디" v-model="userId" />
-      <input type="password" placeholder="비밀번호" v-model="userPwd" />
+      <button class="google_btn" type="button" @click="loginGoogle">구글 로그인</button>
   </div>
 </template>
 
 <script>
+import * as firebase from 'firebase/app';
+import "firebase/auth";
+import firebaseConfig from '../../firebaseConfig';
+
 
 export default {
-   data() {
-     return {
-       userId: '',
-       userPwd: '',
-     }
-   },
+    created(){
+        firebase.initializeApp(firebaseConfig);
+    },
+    methods: {
+      loginGoogle(){
+        const provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider); /*.then(function(result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          // var token = result.credential.accessToken;
+          // The signed-in user info.
+          // var user = result.user;
+          // ...
+        }).catch(function(error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          alret(errorCode, errorMessage, email, credential);
+          // ...
+        });*/
+      }
+    }
 }
 </script>
 
 <style scoped>
+    .google_btn{
+      background-color: #F15F5F;
+      width: 120px;
+      height: 40px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .google_btn:hover{
+      background-color: #c0392b;
+    }
 </style>
