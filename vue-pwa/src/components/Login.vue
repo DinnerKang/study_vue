@@ -15,9 +15,16 @@ export default {
         firebase.initializeApp(firebaseConfig);
     },
     methods: {
-      loginGoogle(){
+      async loginGoogle(){
         const provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider); /*.then(function(result) {
+        const { user } = await firebase.auth().signInWithPopup(provider);
+        console.log(user);
+        this.$store.commit('setName', user.displayName);
+        this.$store.commit('setEmail', user.email);
+
+        this.$router.push('/about');
+
+        /*.then(function(result) {
           // This gives you a Google Access Token. You can use it to access the Google API.
           // var token = result.credential.accessToken;
           // The signed-in user info.
