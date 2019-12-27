@@ -6,7 +6,6 @@ import store from './store'
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
-Vue.use(VueCookies);
 
 new Vue({
   router,

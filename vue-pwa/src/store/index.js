@@ -15,6 +15,10 @@ export default new Vuex.Store({
     setEmail(state, payload) {
       state.userEmail = payload;
     },
+    clearUser(state) {
+      state.userEmail = '';
+      state.userName = '';
+    }
   },
   actions: {
   },
