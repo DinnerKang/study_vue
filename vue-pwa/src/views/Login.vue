@@ -1,6 +1,5 @@
 <template>
   <div class="login_container">
-    구글 로그인 해주세요.
     <Login />
   </div>
 </template>

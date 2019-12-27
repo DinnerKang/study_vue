@@ -19,7 +19,7 @@ export default {
       async loginGoogle(){
         const provider = new firebase.auth.GoogleAuthProvider();
         const { user } = await firebase.auth().signInWithPopup(provider);
-        console.log(user);
+
         this.$store.commit('setName', user.displayName);
         this.$store.commit('setEmail', user.email);
 
@@ -30,9 +30,17 @@ export default {
 </script>
 
 <style scoped>
+
+    .login_container{
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      }
     .google_btn{
       background-color: #F15F5F;
-      width: 120px;
+      width: 160px;
       height: 40px;
       border: none;
       color: #fff;
