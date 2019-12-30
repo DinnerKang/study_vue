@@ -1,7 +1,8 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
+    <img class="logo_img" src="../assets/logo.png" alt="Vue logo" >
     홈
+    <router-link to="/myPage">마이페이지</router-link>
   </div>
 </template>
 
@@ -14,5 +15,8 @@ export default {
 <style scoped>
   .home{
     text-align: center;
+  }
+  .logo_img{
+    width: 200px;
   }
 </style>

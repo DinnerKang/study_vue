@@ -2,6 +2,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import Login from '../views/Login';
+import MyPage from '../views/MyPage';
+
 import Store from '../store/index';
 
 Vue.use(VueRouter);
@@ -17,6 +19,11 @@ const routes = [
     name: 'Login',
     meta: { unauthorized: true},
     component: Login,
+  },
+  {
+    path: '/myPage',
+    name: 'MyPage',
+    component: MyPage
   },
 ]
 

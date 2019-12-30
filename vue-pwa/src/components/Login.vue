@@ -1,5 +1,6 @@
 <template>
   <div class="login_container">
+
       <button class="google_btn" type="button" @click="loginGoogle">구글 로그인</button>
   </div>
 </template>
@@ -11,6 +12,11 @@ import firebaseConfig from '../../firebaseConfig';
 
 
 export default {
+  data(){
+    return {
+      logoImg: require('../assets/logo.png'),
+    }
+  },
     created(){
         firebase.initializeApp(firebaseConfig);
         this.$store.commit('clearUser');
