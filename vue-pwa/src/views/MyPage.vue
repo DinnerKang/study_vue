@@ -16,35 +16,26 @@
         </div>
       </article>
     </session>
-    <session class="myMusic_container">
-      <article class="myMusic_list">
-        <ul>
-          <li v-for="(list, idx) in musicList" :key="idx">
-            {{list}}
-          </li>
-        </ul>
-      </article>
-    </session>
+    <MusicList />
   </div>
 </template>
 
 <script>
 import * as firebase from 'firebase';
+import MusicList from '../components/MyPage/MusicList';
 
 export default {
   name: 'MyPage',
+  component: {
+    MusicList,
+  },
   data(){
     return {
       userName: this.$store.state.userName,
       musicName: '',
       singerName: '',
       youtubeURL: '',
-      
-      musicList: [],
     }
-  },
-  created(){
-    this.getMusicList();
   },
   methods: {
     registData() {
@@ -55,17 +46,10 @@ export default {
           time: new Date(),
         });
     },
-    getMusicList() {
-      firebase.database()
-          .ref(`myMusic/${this.userName}`)
-          .on('value', (snapshot) => {
-            this.musicList = snapshot.val();
-      });
-    }
   }
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .myPage_container{
     text-align: center;
   }

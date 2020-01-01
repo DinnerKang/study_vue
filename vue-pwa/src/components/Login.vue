@@ -1,6 +1,5 @@
 <template>
   <div class="login_container">
-
       <button class="google_btn" type="button" @click="loginGoogle">구글 로그인</button>
   </div>
 </template>
@@ -35,7 +34,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
     .login_container{
       height: 100vh;
@@ -43,17 +42,21 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+
+        .google_btn{
+          background-color: #F15F5F;
+          width: 160px;
+          height: 40px;
+          border: none;
+          color: #fff;
+          cursor: pointer;
+          font-size: 15px;
+
+          &:hover{
+            background-color: #c0392b;
+          }
       }
-    .google_btn{
-      background-color: #F15F5F;
-      width: 160px;
-      height: 40px;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      font-size: 15px;
     }
-    .google_btn:hover{
-      background-color: #c0392b;
-    }
+    
+    
 </style>
