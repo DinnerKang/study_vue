@@ -14,9 +14,10 @@
 import * as firebase from 'firebase';
 
 export default {
-    name: 'myMusic',
+    name: 'MusicList',
     data(){
         return {
+            userName: this.$store.state.userName,
             musicList: [],
         };
     },
