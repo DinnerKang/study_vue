@@ -17,12 +17,16 @@
       </article>
     </session>
     <MusicList />
+    <br />
+    유튜브 테스트
+    <p>{{test}}</p>
   </div>
 </template>
 
 <script>
 import * as firebase from 'firebase';
 import MusicList from '../components/MyPage/MusicList';
+import youtubeKey from '../../youtubeConfig';
 
 export default {
   name: 'MyPage',
@@ -35,7 +39,12 @@ export default {
       musicName: '',
       singerName: '',
       youtubeURL: '',
+
+      test: [],
     }
+  },
+  created() {
+    this.checkAPI();
   },
   methods: {
     registData() {
@@ -46,6 +55,15 @@ export default {
           time: new Date(),
         });
     },
+    async checkAPI() {
+      const params = {
+        key: youtubeKey,
+        part: 'snippet',
+        q: 'vue',
+        maxResult: 2,
+      }
+      this.test = await this.$axios.get(`https://www.googleapis.com/youtube/v3/search`, {params});
+    }
   }
 }
 </script>
