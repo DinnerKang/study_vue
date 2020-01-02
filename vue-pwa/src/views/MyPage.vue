@@ -13,7 +13,6 @@
 </template>
 
 <script>
-import * as firebase from 'firebase';
 import MusicList from '../components/MyPage/MusicList';
 import MusicRegist from '../components/MyPage/MusicRegist';
 import youtubeKey from '../../youtubeConfig';
