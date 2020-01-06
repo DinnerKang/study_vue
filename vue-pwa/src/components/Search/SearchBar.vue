@@ -1,6 +1,6 @@
 <template>
     <div class="search_container">
-        <input type="text" class="search_text" v-model="value" placeholder="검색어" 
+        <input type="text" class="search_text" v-model="searhText" placeholder="검색어" 
                     @keyup.enter="clickSearchBtn" />
         <img :src="youtubeBtn" class="youtube_btn" alt="유튜브 검색" @click="clickSearchBtn" />
     </div>
@@ -21,6 +21,7 @@ export default {
     data() {
         return {
             youtubeBtn: require('../../assets/youtube.jpg'),
+            searhText: this.value,
         }
     },
     methods: {
@@ -28,7 +29,7 @@ export default {
             const params = {
                 key: youtubeKey,
                 part: 'snippet',
-                q: this.value,
+                q: this.searhText,
                 maxResults: 10,
             }
             const { data } = await searchYoutube(params);
