@@ -6,9 +6,8 @@
     <h5>
       {{ userName }}님 안녕하세요.
     </h5>
-    <MusicRegist />
-    <MusicList />
-    <br />
+    <MusicRegist></MusicRegist>
+    <MusicList></MusicList>
   </div>
 </template>
 
@@ -18,14 +17,13 @@ import MusicRegist from '../components/MyPage/MusicRegist';
 
 export default {
   name: 'MyPage',
-  component: {
+  components: {
     MusicList,
     MusicRegist,
   },
   data(){
     return {
       userName: this.$store.state.userName,
-      test: [],
     }
   },
 }

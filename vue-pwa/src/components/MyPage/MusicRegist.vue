@@ -2,18 +2,18 @@
     <session class="regist_container">
       <article>
         <div>
-          <input type="text" v-model="musicName" placeholder="검색어" />
-          <img :src="youtubeBtn" alt="유튜브 검색" @click="clickSearchBtn" />
-          
-          <button type="button" @click="registData">등록</button>
-          {{ result }}
+            <div class="search_container">
+                <input type="text" class="search_text" v-model="searchText" placeholder="검색어" />
+                <img :src="youtubeBtn" class="youtube_btn" alt="유튜브 검색" @click="clickSearchBtn" />
+            </div>
         </div>
       </article>
     </session>
 </template>
 
 <script>
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
+import 'firebase/database';
 import { searchYoutube } from '../../service/Youtube';
 import youtubeKey from '../../../youtubeConfig';
 
@@ -24,8 +24,7 @@ export default {
             userName: this.$store.state.userName,
             youtubeBtn: require('../../assets/youtube.png'),
             result: [],
-            musicName: '',
-            singerName: '',
+            searchText: '',
         }
     },
     methods: {
@@ -33,7 +32,7 @@ export default {
             const params = {
                 key: youtubeKey,
                 part: 'snippet',
-                q: 'vue',
+                q: this.searchText,
                 maxResult: 2,
             }
             this.result = await searchYoutube(params);
@@ -50,8 +49,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .youtubeBtn{
-        width: 120px;
-        height: 46px;
+
+.search_container{
+    width: 70%;
+    display: flex;
+    align-items: center;
+    border: 1px solid red;
+    margin: 0 auto;
+
+    .search_text{
+        width: calc(100% - 56px);
+        height: 32px;
     }
+
+    .youtube_btn{
+        width: 56px;
+        height: 32px;
+        cursor: pointer;
+    }
+}
 </style>
