@@ -1,12 +1,14 @@
 <template>
     <session class="regist_container">
       <article>
-        <div>
-            <div class="search_container">
-                <input type="text" class="search_text" v-model="searchText" placeholder="검색어" />
-                <img :src="youtubeBtn" class="youtube_btn" alt="유튜브 검색" @click="clickSearchBtn" />
-            </div>
-        </div>
+        <SearchBar v-model="searchText" @click="clickSearch" />
+      </article>
+      <article>
+          <ul>
+              <li v-for="(list, idx) in searchResult.items" :key="idx">
+                  <img :src='list.snippet.thumbnails.medium.url' class="thumbnails" alt="유튜브 썸네일"/>
+              </li>
+          </ul>
       </article>
     </session>
 </template>
@@ -14,28 +16,24 @@
 <script>
 import * as firebase from 'firebase/app';
 import 'firebase/database';
-import { searchYoutube } from '../../service/Youtube';
-import youtubeKey from '../../../youtubeConfig';
+
+import SearchBar from '../Search/SearchBar';
 
 export default {
     name: 'MusicRegist',
+    components: {
+        SearchBar,
+    },
     data() {
         return {
             userName: this.$store.state.userName,
-            youtubeBtn: require('../../assets/youtube.png'),
-            result: [],
             searchText: '',
+            searchResult: {},
         }
     },
     methods: {
-        async clickSearchBtn() {
-            const params = {
-                key: youtubeKey,
-                part: 'snippet',
-                q: this.searchText,
-                maxResult: 2,
-            }
-            this.result = await searchYoutube(params);
+        clickSearch(payload) {
+            this.searchResult = payload;
         },
         registData() {
             firebase.database().ref(`myMusic/${this.userName}`).push({
@@ -49,23 +47,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-.search_container{
-    width: 70%;
-    display: flex;
-    align-items: center;
-    border: 1px solid red;
-    margin: 0 auto;
-
-    .search_text{
-        width: calc(100% - 56px);
-        height: 32px;
-    }
-
-    .youtube_btn{
-        width: 56px;
-        height: 32px;
-        cursor: pointer;
-    }
+.thumbnails{
+    width: 320px;
+    height: 180px;
 }
 </style>

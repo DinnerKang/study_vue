@@ -25,6 +25,11 @@ const routes = [
     name: 'MyPage',
     component: MyPage
   },
+  {
+      path: '*',
+      component: Login,
+      meta: { unauthorized: true },
+  },
 ]
 
 const router = new VueRouter({
