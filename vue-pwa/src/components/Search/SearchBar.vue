@@ -8,7 +8,6 @@
 
 <script>
 import { searchYoutube } from '../../service/Youtube';
-import youtubeKey from '../../../youtubeConfig';
 
 
 export default {
@@ -26,13 +25,9 @@ export default {
     },
     methods: {
         async clickSearchBtn() {
-            const params = {
-                key: youtubeKey,
-                part: 'snippet',
-                q: this.searhText,
-                maxResults: 10,
-            }
-            const { data } = await searchYoutube(params);
+            const maxResults = 9;
+            const q = this.searhText
+            const { data } = await searchYoutube(q, maxResults);
             this.$emit('click', data);
         },
     }

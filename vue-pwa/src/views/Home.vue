@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <img class="logo_img" src="../assets/logo.png" alt="Vue logo" >
-    홈
+    {{$store.state}}
     <router-link to="/myPage">마이페이지</router-link>
   </div>
 </template>

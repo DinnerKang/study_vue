@@ -3,6 +3,9 @@
     <h2>
       My Page
     </h2>
+    <h3>
+      <router-link to='/myMusic'>내 음악</router-link>
+    </h3>
     <h5>
       {{ userName }}님 안녕하세요.
     </h5>

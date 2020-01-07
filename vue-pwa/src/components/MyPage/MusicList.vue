@@ -7,6 +7,9 @@
           </li>
         </ul>
       </article>
+      <article>
+        {{playList}}
+      </article>
     </session>
 </template>
 
@@ -14,16 +17,20 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
+import { getPlayList } from '../../service/Youtube';
+
 export default {
     name: 'MusicList',
     data(){
         return {
             userName: this.$store.state.userName,
             musicList: [],
+            playList: [],
         };
     },
     created() {
         this.getMusicList();
+        this.getMyPlayList();
     },
     methods: {
         getMusicList() {
@@ -32,6 +39,9 @@ export default {
                 .on('value', (snapshot) => {
                     this.musicList = snapshot.val();
             });
+        },
+        async getMyPlayList() {
+          this.playList = await getPlayList();
         }
     }
 }

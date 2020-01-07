@@ -25,8 +25,7 @@ export default {
         const provider = new firebase.auth.GoogleAuthProvider();
         const { user } = await firebase.auth().signInWithPopup(provider);
 
-        this.$store.commit('setName', user.displayName);
-        this.$store.commit('setEmail', user.email);
+        this.$store.commit('loginUser', user);
 
         this.$router.push('/');
       }
