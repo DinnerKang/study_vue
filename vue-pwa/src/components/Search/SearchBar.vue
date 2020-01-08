@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { searchYoutube } from '../../service/Youtube';
+import { searchYoutube, addPlayList } from '../../service/Youtube';
 
 
 export default {
@@ -30,6 +30,9 @@ export default {
             const { data } = await searchYoutube(q, maxResults);
             this.$emit('click', data);
         },
+        async addPlayList() {
+            await addPlayList();
+        }
     }
 }
 </script>
