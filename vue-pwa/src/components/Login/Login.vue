@@ -26,11 +26,11 @@ export default {
       async loginGoogle(){
         const provider = new firebase.auth.GoogleAuthProvider();
         console.log(provider);
-        provider.addScope('https://www.googleapis.com/auth/youtube.force-ssl');
+        // provider.addScope('https://www.googleapis.com/auth/youtube.force-ssl');
         const result = await firebase.auth().signInWithPopup(provider);
         console.log(result);
-        const youtube = await googleOAuth();
-        console.log(youtube);
+      //  const youtube = await googleOAuth();
+      //  console.log(youtube);
         this.$store.commit('loginUser', result.user);
         this.$store.commit('setToken', result.credential.accessToken);
 
