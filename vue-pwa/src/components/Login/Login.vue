@@ -1,7 +1,6 @@
 <template>
   <div class="login_container">
       <button class="google_btn" type="button" @click="loginGoogle">구글 로그인</button>
-      <a href="">체</a>
   </div>
 </template>
 
@@ -9,7 +8,6 @@
 import * as firebase from 'firebase/app';
 import "firebase/auth";
 import firebaseConfig from '../../../firebaseConfig';
-import { googleOAuth } from '../../service/Google';
 
 
 export default {
@@ -25,16 +23,13 @@ export default {
     methods: {
       async loginGoogle(){
         const provider = new firebase.auth.GoogleAuthProvider();
-        console.log(provider);
-        // provider.addScope('https://www.googleapis.com/auth/youtube.force-ssl');
+        provider.addScope('https://www.googleapis.com/auth/youtube.force-ssl');
         const result = await firebase.auth().signInWithPopup(provider);
         console.log(result);
-      //  const youtube = await googleOAuth();
-      //  console.log(youtube);
         this.$store.commit('loginUser', result.user);
         this.$store.commit('setToken', result.credential.accessToken);
 
-        // this.$router.push('/');
+        this.$router.push('/'); 
       }
     }
 }
