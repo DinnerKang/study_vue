@@ -7,8 +7,7 @@
 </template>
 
 <script>
-import { searchYoutube, addPlayList } from '../../service/Youtube';
-
+import { searchYoutube } from '../../service/Youtube';
 
 export default {
     name: 'searchBar',
@@ -26,13 +25,10 @@ export default {
     methods: {
         async clickSearchBtn() {
             const maxResults = 9;
-            const q = this.searhText
+            const q = this.searhText;
             const { data } = await searchYoutube(q, maxResults);
             this.$emit('click', data);
         },
-        async addPlayList() {
-            await addPlayList();
-        }
     }
 }
 </script>

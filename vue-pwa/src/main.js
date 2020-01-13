@@ -3,14 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from 'axios';
-import GoogleAuth from 'vue-google-auth'
-
-Vue.use(GoogleAuth, { clientID: '945431733283-a4tf33jpvkabm0c1d56rqj96lu4i8iet.apps.googleusercontent.com' })
-Vue.googleAuth().load()
+import filters from './filters';
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 Vue.prototype.$axios = axios;
+
+// 필터 등록
+Object.entries(filters).map((item) => {
+  Vue.filter(item[0], item[1]);
+  return item;
+});
 
 new Vue({
   router,

@@ -1,6 +1,8 @@
 <template>
   <div class="login_container">
-      <button class="google_btn" type="button" @click="loginGoogle">구글 로그인</button>
+      <input type="text" placeholder="구글 아이디" v-model="userId" />
+      <input type ="password" placeholder="비밀번호" v-model="userPwd" />
+      <button class="google_btn" type="button" @click="loginGoogleAuth">구글 로그인</button>
   </div>
 </template>
 
@@ -14,6 +16,8 @@ export default {
   data(){
     return {
       logoImg: require('../../assets/logo.png'),
+      userId: '',
+      userPwd: '',
     }
   },
     created(){
@@ -23,14 +27,15 @@ export default {
     methods: {
       async loginGoogle(){
         const provider = new firebase.auth.GoogleAuthProvider();
-        provider.addScope('https://www.googleapis.com/auth/youtube.force-ssl');
         const result = await firebase.auth().signInWithPopup(provider);
         console.log(result);
         this.$store.commit('loginUser', result.user);
-        this.$store.commit('setToken', result.credential.accessToken);
 
         this.$router.push('/'); 
-      }
+      },
+      async loginGoogleAuth(){
+        console.log(this.userId, this.userPwd);
+      },
     }
 }
 </script>
