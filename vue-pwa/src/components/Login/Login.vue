@@ -1,8 +1,6 @@
 <template>
   <div class="login_container">
-      <input type="text" placeholder="구글 아이디" v-model="userId" />
-      <input type ="password" placeholder="비밀번호" v-model="userPwd" />
-      <button class="google_btn" type="button" @click="loginGoogleAuth">구글 로그인</button>
+      <div class="g-signin2" id="google_auth_btn"></div>
   </div>
 </template>
 
@@ -13,30 +11,28 @@ import firebaseConfig from '../../../firebaseConfig';
 
 
 export default {
-  data(){
-    return {
-      logoImg: require('../../assets/logo.png'),
-      userId: '',
-      userPwd: '',
-    }
-  },
+    data(){
+      return {
+        logoImg: require('../../assets/logo.png'),
+      }
+    },
     created(){
         firebase.initializeApp(firebaseConfig);
         this.$store.commit('clearUser');
     },
+    mounted() {
+      gapi.signin2.render('google_auth_btn', {
+        onsuccess: this.onSignIn
+      });
+    },
     methods: {
-      async loginGoogle(){
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const result = await firebase.auth().signInWithPopup(provider);
-        console.log(result);
-        this.$store.commit('loginUser', result.user);
-
-        this.$router.push('/'); 
-      },
-      async loginGoogleAuth(){
-        console.log(this.userId, this.userPwd);
-      },
-    }
+      onSignIn (user) {
+        const profile = user.getBasicProfile();
+        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+        console.log('Name: ' + profile.getName());
+        console.log('Email: ' + profile.getEmail());
+      }
+    },
 }
 </script>
 

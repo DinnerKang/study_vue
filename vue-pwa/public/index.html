@@ -4,33 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="google-signin-client_id" content="945431733283-a4tf33jpvkabm0c1d56rqj96lu4i8iet.apps.googleusercontent.com">
+    <meta name="google-signin-fetch_basic_profile"content = "email profile openid">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <script src="https://apis.google.com/js/api.js"></script>
-    <script>
-      function start() {
-        // 2. Initialize the JavaScript client library.
-        gapi.client.init({
-          'apiKey': 'AIzaSyAueYMZTIZtOZLRYMveiNkD9RA8WrfTOyc',
-          // Your API key will be automatically added to the Discovery Document URLs.
-          'discoveryDocs': ['https://people.googleapis.com/$discovery/rest'],
-          // clientId and scope are optional if auth is not required.
-          'clientId': '945431733283-a4tf33jpvkabm0c1d56rqj96lu4i8iet.apps.googleusercontent.com',
-          'scope': 'profile',
-        }).then(function() {
-          // 3. Initialize and make the API request.
-          return gapi.client.people.people.get({
-            'resourceName': 'people/me',
-            'requestMask.includeField': 'person.names'
-          });
-        }).then(function(response) {
-          console.log(response.result);
-        }, function(reason) {
-          console.log('Error: ' + reason.result.error.message);
-        });
-      };
-      // 1. Load the JavaScript client library.
-      gapi.load('client', start);
-    </script>
+    <script src="https://apis.google.com/js/platform.js" async defer>{lang:'pt'}</script>
     <title>딜리튜브</title>
   </head>
   <body>
