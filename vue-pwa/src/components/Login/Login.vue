@@ -27,10 +27,13 @@ export default {
     },
     methods: {
       onSignIn (user) {
+        console.log('login');
         const profile = user.getBasicProfile();
-        console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName());
-        console.log('Email: ' + profile.getEmail());
+        const token = user.getAuthResponse().access_token;
+        this.$store.commit('loginUser', profile);
+        this.$store.commit('setToken', token);
+        console.log(token);
+        this.$router.push('/');
       }
     },
 }
