@@ -9,6 +9,9 @@
 
 export default {
   name: 'home',
+  created(){
+    this.$axios.defaults.headers['authorization'] = `Bearer ${this.$store.state.accessToken}`;
+  },
 }
 </script>
 <style scoped>

@@ -21,23 +21,15 @@ export function getPlayList() {
     };
     return axios.get(`https://www.googleapis.com/youtube/v3/playlists`, {params});
 }
-export function addPlayList(name) {
-    const params = {
-        part,
-        resource: {
-            snippet: {
-              title: `Dealicious_${name}`,
-              description: `Dealicious ${name}`,
-            },
-          }
-    };
-    return axios.post(`https://www.googleapis.com/youtube/v3/playlists`, {params});
-}
 
-export function addPlayItem() {
-    const params = {
-        key,
-        part,
+
+// POST
+export function addPlayList(name) {
+    const data = {
+        snippet: {
+            title: 'Deali_Music',
+            description: `Dealicious ${name}`,
+        },
     };
-    return axios.post(`https://www.googleapis.com/youtube/v3/playlists`, {params});
+    return axios.post(`https://www.googleapis.com/youtube/v3/playlists?part=snippet`, data);
 }

@@ -22,7 +22,7 @@ export default {
     },
     mounted() {
       gapi.signin2.render('google_auth_btn', {
-        onsuccess: this.onSignIn
+            onsuccess: this.onSignIn
       });
     },
     methods: {
@@ -32,7 +32,6 @@ export default {
         const token = user.getAuthResponse().access_token;
         this.$store.commit('loginUser', profile);
         this.$store.commit('setToken', token);
-        this.$axios.defaults.headers['authorization'] = `Bearer ${Store.state.accessToken}`
         console.log(token);
         this.$router.push('/');
       },
