@@ -1,6 +1,7 @@
 <template>
   <div class="login_container">
       <div class="g-signin2" id="google_auth_btn"></div>
+      <button type="button" class="guest_btn">게스트 로그인</button>
   </div>
 </template>
 
@@ -18,7 +19,6 @@ export default {
     },
     created(){
         firebase.initializeApp(firebaseConfig);
-        this.$store.commit('clearUser');
     },
     mounted() {
       gapi.signin2.render('google_auth_btn', {
@@ -32,9 +32,18 @@ export default {
         const token = user.getAuthResponse().access_token;
         this.$store.commit('loginUser', profile);
         this.$store.commit('setToken', token);
+        this.$axios.defaults.headers['authorization'] = `Bearer ${Store.state.accessToken}`
         console.log(token);
         this.$router.push('/');
-      }
+      },
+      guestLogin() {
+        const profile = {
+          userName: 'Guest',
+          userEmail: '',
+        };
+        this.$store.commit('loginUser', profile);
+        this.$router.push('/');
+      },
     },
 }
 </script>
@@ -48,7 +57,7 @@ export default {
       align-items: center;
       justify-content: center;
 
-        .google_btn{
+        .guest_btn{
           background-color: #F15F5F;
           width: 160px;
           height: 40px;

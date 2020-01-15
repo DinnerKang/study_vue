@@ -55,6 +55,7 @@ export default {
                 videoId,
                 registDate,
             });
+            
         },
     }
 }

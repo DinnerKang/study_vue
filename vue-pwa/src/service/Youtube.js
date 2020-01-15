@@ -1,11 +1,12 @@
 import axios from 'axios';
 import key from '../../youtubeConfig';
-import Store from '../store';
+
+const part = 'snippet';
 
 export function searchYoutube(q, maxResults) {
     const params = {
         key,
-        part: 'snippet',
+        part,
         q,
         maxResults,
     };
@@ -13,11 +14,30 @@ export function searchYoutube(q, maxResults) {
 }
 
 export function getPlayList() {
-    axios.defaults.headers['authorization'] = `Bearer ${Store.state.accessToken}`
     const params = {
         key,
-        part: 'snippet',
+        part,
         mine: true,
     };
     return axios.get(`https://www.googleapis.com/youtube/v3/playlists`, {params});
+}
+export function addPlayList(name) {
+    const params = {
+        part,
+        resource: {
+            snippet: {
+              title: `Dealicious_${name}`,
+              description: `Dealicious ${name}`,
+            },
+          }
+    };
+    return axios.post(`https://www.googleapis.com/youtube/v3/playlists`, {params});
+}
+
+export function addPlayItem() {
+    const params = {
+        key,
+        part,
+    };
+    return axios.post(`https://www.googleapis.com/youtube/v3/playlists`, {params});
 }
