@@ -1,14 +1,14 @@
 <template>
     <section class="myMusic_container">
-      <article class="myMusic_list">
+      <article class="myMusic_list_area">
         <ul>
-          <li v-for="(list, idx) in musicList" :key="idx">
-            {{list}}
+          <li class="myMusic_list" v-for="(list, idx) in musicList" :key="idx">
+            <div class="music_name">음악 : {{list.musicName}}</div>
           </li>
         </ul>
       </article>
       <article>
-        {{playList}}
+        <router-link to="/musicPlayer">musicPlayer</router-link>
       </article>
     </section>
 </template>
@@ -43,4 +43,21 @@ export default {
 
 <style lang="scss" scoped>
 
+    .myMusic_list{
+      width: 300px;
+      height: 80px;
+      padding: 20px;
+      box-sizing: border-box;
+      border: 1px solid #000;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+
+        .music_name{
+          width: 100%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+    }
 </style>

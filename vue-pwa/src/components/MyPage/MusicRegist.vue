@@ -39,9 +39,6 @@ export default {
             searchResult: {},
         }
     },
-    filters: {
-        
-    },
     methods: {
         clickSearch(payload) {
             this.searchResult = payload;

@@ -1,7 +1,6 @@
 <template>
   <div class="login_container">
-      <div class="g-signin2" id="google_auth_btn"></div>
-      <button type="button" class="guest_btn">게스트 로그인</button>
+      <div class="g-signin2" id="google-signin-btn"></div>
   </div>
 </template>
 
@@ -21,26 +20,23 @@ export default {
         firebase.initializeApp(firebaseConfig);
     },
     mounted() {
-      gapi.signin2.render('google_auth_btn', {
-            onsuccess: this.onSignIn
-      });
+        window.addEventListener("google-loaded", this.renderGoogleLoginButton);
     },
     methods: {
+      renderGoogleLoginButton() {
+        gapi.signin2.render("google-signin-btn", {
+          'width': 240,
+          'height': 50,
+          longtitle: true,
+          theme: 'dark',
+          onsuccess: this.onSignIn,
+        });
+      },
       onSignIn (user) {
-        console.log('login');
         const profile = user.getBasicProfile();
         const token = user.getAuthResponse().access_token;
         this.$store.commit('loginUser', profile);
         this.$store.commit('setToken', token);
-        console.log(token);
-        this.$router.push('/');
-      },
-      guestLogin() {
-        const profile = {
-          userName: 'Guest',
-          userEmail: '',
-        };
-        this.$store.commit('loginUser', profile);
         this.$router.push('/');
       },
     },

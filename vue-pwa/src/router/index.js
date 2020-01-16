@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import Login from '../views/Login';
 import MyPage from '../views/MyPage';
+import MusicPlayer from '../views/MusicPlayer';
 
 import Store from '../store/index';
 
@@ -24,6 +25,11 @@ const routes = [
     path: '/myPage',
     name: 'MyPage',
     component: MyPage
+  },
+  {
+    path: '/musicPlayer',
+    name: 'MusicPlayer',
+    component: MusicPlayer,
   },
   {
       path: '*',
