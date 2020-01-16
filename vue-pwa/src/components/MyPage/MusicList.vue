@@ -8,7 +8,6 @@
         </ul>
       </article>
       <article>
-        <router-link to="/musicPlayer">musicPlayer</router-link>
       </article>
     </section>
 </template>
@@ -23,7 +22,6 @@ export default {
         return {
             userName: this.$store.state.userName,
             musicList: [],
-            playList: [],
         };
     },
     created() {
@@ -34,7 +32,8 @@ export default {
             firebase.database()
                 .ref(`myMusic/${this.userName}`)
                 .on('value', (snapshot) => {
-                    this.musicList = snapshot.val();
+                    this.musicList = Object.values(snapshot.val());
+                    this.$emit('input', this.musicList);
             });
         },
     }

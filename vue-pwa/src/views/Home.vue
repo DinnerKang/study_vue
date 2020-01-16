@@ -2,6 +2,7 @@
   <div class="home">
     <img class="logo_img" src="../assets/logo.png" alt="logo" >
     <router-link to="/myPage">마이페이지</router-link>
+    <router-link to="/musicPlayer">음악듣기</router-link>
   </div>
 </template>
 

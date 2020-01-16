@@ -20,6 +20,13 @@ const routes = [
     name: 'Login',
     meta: { unauthorized: true},
     component: Login,
+    beforeEnter: (to, from, next) => {
+      if (Store.state.accessToken) {
+          next('/');
+          return;
+      }
+      next();
+    },
   },
   {
     path: '/myPage',

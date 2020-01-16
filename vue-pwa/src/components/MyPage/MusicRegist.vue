@@ -43,6 +43,9 @@ export default {
         clickSearch(payload) {
             this.searchResult = payload;
         },
+        checkPlayList() {
+
+        },
         async registData(data) {
             const musicName = data.snippet.title;
             const videoId = data.id.videoId;
@@ -53,7 +56,7 @@ export default {
                 videoId,
                 registDate,
             });
-            await addPlayList(this.userName);
+            // await addPlayList(this.userName);
         },
     }
 }
