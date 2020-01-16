@@ -27,8 +27,11 @@ export default {
     },
     watch: {
         myMusicList() {
-            if (this.myMusicList.length === 0) return;
-            this.onYouTubeIframeAPIReady();
+            if (this.myMusicList.length === 0) {
+                this.onYouTubeIframeAPIReady();
+            } else {
+                this.addPlayList();
+            }
         },
     },
     methods: {
@@ -46,8 +49,7 @@ export default {
         },
         addPlayList() {
             const playList = this.myMusicList.map(item => item.videoId);
-            console.log('hi', playList);
-            this.player.cuePlaylist({
+            this.player.loadPlaylist({
                 playlist : playList,
             });
         },
