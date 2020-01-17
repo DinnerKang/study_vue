@@ -32,7 +32,7 @@ export default {
             firebase.database()
                 .ref(`myMusic/${this.userName}`)
                 .on('value', (snapshot) => {
-                    this.musicList = Object.values(snapshot.val());
+                    this.musicList = Object.values(snapshot.val()).reverse();
                     this.$emit('input', this.musicList);
             });
         },
