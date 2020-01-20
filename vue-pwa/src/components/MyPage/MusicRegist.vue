@@ -56,7 +56,7 @@ export default {
                 videoId,
                 registDate,
             });
-            // await addPlayList(this.userName);
+            await addPlayList(this.userName);
         },
     }
 }
