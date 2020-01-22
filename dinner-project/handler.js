@@ -2,6 +2,10 @@
 
 const cheerio = require('cheerio');
 const axios = require('axios');
+const firebase = require('firebase/app');
+require('firebase/database');
+const config = require('./firebaseConfig');
+firebase.initializeApp(config);
 
 module.exports.hello = async (event, ctx, cb) => {
   const title = [];
@@ -39,6 +43,12 @@ module.exports.hello = async (event, ctx, cb) => {
            artist: artist[i],
       }
   }
+  
+  const registDate = String(new Date());
+  firebase.database().ref(`melon`).set({
+      result,
+      registDate,
+  });
   const response = {
     statusCode: 200,
     body: JSON.stringify({
