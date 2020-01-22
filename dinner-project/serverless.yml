@@ -1,0 +1,20 @@
+
+service: dinner-project
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: ap-northeast-2
+  deploymentBucket: ${file(./config.js):config.BUCKET_NAME}
+  deploymentPrefix: ${self:service}
+  role: arn:aws:iam::${file(./config.js):config.ACCOUNT_NUM}:role/${file(./config.js):config.ROLE_NAME}
+
+functions:
+  hello:
+    handler: handler.hello
+    events: 
+      - http:
+          path: hello
+          method: get
+      - schedule: cron(0 00 * * ? *)
