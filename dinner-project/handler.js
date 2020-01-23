@@ -5,7 +5,11 @@ const axios = require('axios');
 const firebase = require('firebase/app');
 require('firebase/database');
 const config = require('./firebaseConfig');
+
 firebase.initializeApp(config);
+axios.defaults.baseURL = 'https://vue-pwa-776e7.firebaseapp.com';
+axios.defaults.headers['Content-Type'] = 'application/json';
+axios.defaults.headers['Accept'] = '*/*';
 
 module.exports.hello = async (event, ctx, cb) => {
   const title = [];
@@ -16,6 +20,7 @@ module.exports.hello = async (event, ctx, cb) => {
     try {
         return await axios.get('https://www.melon.com/chart/');
     } catch (err) {
+        console.error('axios error', axios);
         console.error(err);
     }
   }
