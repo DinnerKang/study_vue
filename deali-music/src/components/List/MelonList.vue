@@ -2,7 +2,7 @@
     <div>
         <ul>
             <li class="melon_list" v-for="(list, idx) in melonList" :key="idx">
-                {{idx}}위<br />
+                {{idx + 1}}위<br />
                 음악 : {{list.title}}<br />
                 가수 : {{list.artist}}
             </li>

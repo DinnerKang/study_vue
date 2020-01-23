@@ -11,8 +11,8 @@ export default new Vuex.Store({
   },
   mutations: {
     loginUser(state, payload) {
-      state.userName = payload.getName();
-      state.userEmail = payload.getEmail();
+      state.userName = payload.user.displayName;
+      state.userEmail = payload.email;
     },
     setToken(state, payload) {
       state.accessToken = payload;
