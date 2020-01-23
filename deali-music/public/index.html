@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta name="google-signin-client_id" content="945431733283-a4tf33jpvkabm0c1d56rqj96lu4i8iet.apps.googleusercontent.com">
+    <meta name="google-signin-fetch_basic_profile" content="email profile openid">
+    <meta name="google-signin-scope" content="https://www.googleapis.com/auth/youtube">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <script type="text/javascript">
+      function triggerGoogleLoaded() {
+        window.dispatchEvent(new Event("google-loaded"));
+      }
+    </script>
+    <script src="https://apis.google.com/js/platform.js?onload=triggerGoogleLoaded" async defer></script>
+    <script src="https://www.youtube.com/player_api"></script>
+    <title>딜리튜브</title>
+  </head>
+  <body>
+    <noscript>
+      <strong>We're sorry but vue-pwa doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
