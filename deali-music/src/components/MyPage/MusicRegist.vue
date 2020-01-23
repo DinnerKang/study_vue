@@ -25,7 +25,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 
 import SearchBar from '../Search/SearchBar';
-import { addPlayList } from '@/service/Youtube';
 
 export default {
     name: 'MusicRegist',
@@ -43,9 +42,6 @@ export default {
         clickSearch(payload) {
             this.searchResult = payload;
         },
-        checkPlayList() {
-
-        },
         async registData(data) {
             const musicName = data.snippet.title;
             const videoId = data.id.videoId;
@@ -56,7 +52,6 @@ export default {
                 videoId,
                 registDate,
             });
-            await addPlayList(this.userName);
         },
     }
 }
