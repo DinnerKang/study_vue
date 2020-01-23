@@ -17,5 +17,5 @@ functions:
       - http:
           path: hello
           method: get
-      - schedule: cron(50 05 * * ? *)
+      - schedule: cron(00 00 * * ? *)
       - cloudwatchLog: '/aws/lambda/${self:service}'
