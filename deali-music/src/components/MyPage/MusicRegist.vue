@@ -33,6 +33,7 @@ export default {
     },
     data() {
         return {
+            userId: this.$store.state.googleId,
             userName: this.$store.state.userName,
             searchText: '',
             searchResult: {},
@@ -47,7 +48,7 @@ export default {
             const videoId = data.id.videoId;
             const registDate = String(new Date());
 
-            firebase.database().ref(`myMusic/${this.userName}`).push({
+            firebase.database().ref(`myMusic/${this.userId}/${this.userName}/default`).push({
                 musicName,
                 videoId,
                 registDate,

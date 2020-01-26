@@ -22,9 +22,6 @@ export default {
             searhText: this.value,
         }
     },
-    created() {
-        this.getPlayList();
-    },
     methods: {
         async clickSearchBtn() {
             const params = {
