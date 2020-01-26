@@ -23,9 +23,7 @@ export default {
       async onSignIn () {
         const provider = new firebase.auth.GoogleAuthProvider();
         const profile = await firebase.auth().signInWithPopup(provider);
-        const token = profile.credential.accessToken;
         this.$store.commit('loginUser', profile);
-        this.$store.commit('setToken', token);
         this.$router.push('/');
       },
     },

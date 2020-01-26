@@ -5,19 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    googleId: '',
     userName: '',
     userEmail: '',
-    accessToken: '',
   },
   mutations: {
     loginUser(state, payload) {
+      state.googleId = payload.credential.localId;
       state.userName = payload.user.displayName;
       state.userEmail = payload.user.email;
     },
-    setToken(state, payload) {
-      state.accessToken = payload;
-    },
     clearUser(state) {
+      state.googleId = '';
       state.userEmail = '';
       state.userName = '';
     }
