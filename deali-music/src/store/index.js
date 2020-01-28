@@ -5,20 +5,23 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    googleId: '',
     userName: '',
     userEmail: '',
+    dealiName: '',
+    userState: '',
   },
   mutations: {
     loginUser(state, payload) {
-      state.googleId = payload.credential.idToken;
       state.userName = payload.user.displayName;
       state.userEmail = payload.user.email;
+      state.dealiName = state.userEmail.split('@')[0];
+      state.userState = state.userEmali.split('@')[1] === 'deali.net' ? '딜리언즈' : '게스트';
     },
     clearUser(state) {
-      state.googleId = '';
       state.userEmail = '';
       state.userName = '';
+      state.dealiName = '';
+      state.userState = '';
     }
   },
   actions: {
