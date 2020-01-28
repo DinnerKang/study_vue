@@ -1,6 +1,7 @@
 <template>
     <div>
         <ul>
+            <li>{{updateDate}}</li>
             <li class="melon_list" v-for="(list, idx) in melonList" :key="idx">
                 {{idx + 1}}위<br />
                 음악 : {{list.title}}<br />
@@ -17,6 +18,7 @@ export default {
     data() {
         return {
             melonList: [],
+            updateDate: '',
         };
     },
     created() {

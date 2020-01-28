@@ -23,6 +23,7 @@ export default {
       async onSignIn () {
         const provider = new firebase.auth.GoogleAuthProvider();
         const profile = await firebase.auth().signInWithPopup(provider);
+        console.log(profile);
         this.$store.commit('loginUser', profile);
         this.$router.push('/');
       },
