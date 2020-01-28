@@ -7,9 +7,8 @@ require('firebase/database');
 const config = require('./firebaseConfig');
 
 firebase.initializeApp(config);
-axios.defaults.baseURL = 'https://vue-pwa-776e7.firebaseapp.com';
-axios.defaults.headers['Content-Type'] = 'application/json';
-axios.defaults.headers['Accept'] = '*/*';
+axios.defaults.headers['Content-Type'] = 'application/octet-stream';
+axios.defaults.headers['Accept'] = '';
 
 module.exports.hello = async (event, ctx, cb) => {
   const title = [];
@@ -57,8 +56,7 @@ module.exports.hello = async (event, ctx, cb) => {
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      message: [result, new Date],
-      input: event,
+      message: result,
     }),
   };
   cb(null, response);
