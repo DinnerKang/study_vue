@@ -2,6 +2,7 @@
     <div>
         <div id="player"></div>
         <div>
+            {{ musicStatus }}
             <button type="button" @click="startVideo">시작</button>
             <button type="button" @click="stopVideo">정지</button>
             <button type="button" @click="prefVideo">이전곡</button>
@@ -12,7 +13,11 @@
 </template>
 
 <script>
+import * as firebase from 'firebase/app';
+import 'firebase/database';
 import MusicList from '../components/MyPage/MusicList';
+import { videoController } from '@/service/Firebase.js';
+
 export default {
     name: 'MusicPlayer',
     components: {
@@ -22,6 +27,7 @@ export default {
         return {
             player: {},
             myMusicList: [],
+            musicStatus: '',
         }
     },
     watch: {
@@ -32,6 +38,16 @@ export default {
                 this.addPlayList();
             }
         },
+        musicStatus(newValue) {
+            if (newValue === 'start') {
+                this.player.playVideo();
+            } else if (newValue === 'stop') {
+                this.player.pauseVideo();
+            }
+        }
+    },
+    created() {
+        this.observeLoungeStatus();
     },
     methods: {
         onYouTubeIframeAPIReady() {
@@ -53,10 +69,10 @@ export default {
             });
         },
         startVideo() {
-            this.player.playVideo();
+            videoController('start');
         },
         stopVideo() {
-            this.player.pauseVideo();
+            videoController('stop');
         },
         prefVideo() {
             this.player.previousVideo();
@@ -64,7 +80,13 @@ export default {
         nextVideo() {
             this.player.nextVideo();
         },
-        
+        observeLoungeStatus() {
+            firebase.database()
+                .ref(`control/lounge`)
+                .on('value', (snapshot) => {
+                    this.musicStatus = snapshot.val().status;
+            });
+        },
     },
 }
 </script>

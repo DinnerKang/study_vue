@@ -18,6 +18,9 @@ import 'firebase/database';
 
 export default {
     name: 'MusicList',
+    props: {
+      value: {},
+    },
     data(){
         return {
             userName: this.$store.state.userName,

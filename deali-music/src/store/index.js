@@ -14,8 +14,8 @@ export default new Vuex.Store({
     loginUser(state, payload) {
       state.userName = payload.user.displayName;
       state.userEmail = payload.user.email;
-      state.dealiName = state.userEmail.split('@')[0];
-      state.userState = state.userEmali.split('@')[1] === 'deali.net' ? '딜리언즈' : '게스트';
+      state.dealiName = payload.user.email.split('@')[0];
+      state.userState = payload.user.email.split('@')[1] === 'deali.net' ? '딜리언즈' : '게스트';
     },
     clearUser(state) {
       state.userEmail = '';

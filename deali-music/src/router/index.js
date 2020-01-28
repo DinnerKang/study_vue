@@ -52,8 +52,8 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const id = Store.state.googleId;
-  if (id === '' && to.matched.some(record => record.meta.unauthorized) === false) {
+  const userName = Store.state.userName;
+  if (userName === '' && to.matched.some(record => record.meta.unauthorized) === false) {
     next('/login');
   }
   next();
