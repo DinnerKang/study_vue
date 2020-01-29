@@ -48,10 +48,11 @@ export default {
             const videoId = data.id.videoId;
             const registDate = String(new Date());
 
-            firebase.database().ref(`myMusic/${this.userId}/${this.userName}/default`).push({
+            firebase.database().ref('music/lounge').push({
                 musicName,
                 videoId,
                 registDate,
+                saveName: this.$store.state.userName
             });
         },
     }
