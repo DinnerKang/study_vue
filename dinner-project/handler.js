@@ -7,14 +7,15 @@ require('firebase/database');
 const config = require('./firebaseConfig');
 
 firebase.initializeApp(config);
-axios.defaults.headers['Content-Type'] = 'application/octet-stream';
-axios.defaults.headers['Accept'] = '';
+axios.defaults.baseURL = 'https://vue-pwa-776e7.firebaseapp.com';
+axios.defaults.headers['Accept'] = 'application/json, text/plain, */*';
 
 module.exports.hello = async (event, ctx, cb) => {
   const title = [];
   const artist = [];
   const result = {};
   const rank = 100;
+  console.log(axios.defaults.headers.common);
   const getHtml = async () => {
     try {
         return await axios.get('https://www.melon.com/chart/');
