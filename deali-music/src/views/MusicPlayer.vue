@@ -5,7 +5,7 @@
             {{ musicStatus }}
             <button type="button" @click="startVideo">시작</button>
             <button type="button" @click="stopVideo">정지</button>
-            <button type="button" @click="prefVideo">이전곡</button>
+            <button type="button" @click="prevVideo">이전곡</button>
             <button type="button" @click="nextVideo">다음곡</button>
         </div>
         <music-list v-model="myMusicList"></music-list>
@@ -39,9 +39,10 @@ export default {
             }
         },
         musicStatus(newValue) {
-            console.log(newValue);
-            if (newValue === 'start') this.player.playVideo();
-            if (newValue === 'stop') this.player.pauseVideo();
+            if (newValue === 'start') return this.player.playVideo();
+            if (newValue === 'stop') return this.player.pauseVideo();
+            if (newValue === 'prev') return this.player.previousVideo();
+            if (newValue === 'next') return this.player.nextVideo();
         }
     },
     mounted() {
@@ -72,11 +73,11 @@ export default {
         stopVideo() {
             videoController('stop');
         },
-        prefVideo() {
-            this.player.previousVideo();
+        prevVideo() {
+            videoController('prev');
         },
         nextVideo() {
-            this.player.nextVideo();
+            videoController('next');
         },
         observeLoungeStatus() {
             firebase.database()
