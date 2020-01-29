@@ -27,7 +27,7 @@ export default {
         return {
             player: {},
             myMusicList: [],
-            musicStatus: '',
+            musicStatus: 'stop',
         }
     },
     watch: {
@@ -39,14 +39,12 @@ export default {
             }
         },
         musicStatus(newValue) {
-            if (newValue === 'start') {
-                this.player.playVideo();
-            } else if (newValue === 'stop') {
-                this.player.pauseVideo();
-            }
+            console.log(newValue);
+            if (newValue === 'start') this.player.playVideo();
+            if (newValue === 'stop') this.player.pauseVideo();
         }
     },
-    created() {
+    mounted() {
         this.observeLoungeStatus();
     },
     methods: {
