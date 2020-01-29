@@ -34,7 +34,7 @@ export default {
         myMusicList(newValue, oldValue) {
             if (oldValue.length === 0) {
                 this.onYouTubeIframeAPIReady();
-            } else{s
+            } else{
                 this.addPlayList();
             }
         },
