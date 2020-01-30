@@ -3,7 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import Login from '../views/Login';
 import MyPage from '../views/MyPage';
-import MusicPlayer from '../views/MusicPlayer';
+import Lounge from '../views/Lounge';
 
 import Store from '../store/index';
 
@@ -34,9 +34,9 @@ const routes = [
     component: MyPage
   },
   {
-    path: '/musicPlayer',
-    name: 'MusicPlayer',
-    component: MusicPlayer,
+    path: '/lounge',
+    name: 'Lounge',
+    component: Lounge,
   },
   {
       path: '*',

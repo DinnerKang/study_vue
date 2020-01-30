@@ -22,7 +22,7 @@ export default new Vuex.Store({
       state.userName = '';
       state.dealiName = '';
       state.userState = '';
-    }
+    },
   },
   actions: {
   },
