@@ -2,11 +2,7 @@
 
 const cheerio = require('cheerio');
 const axios = require('axios');
-const firebase = require('firebase/app');
-require('firebase/database');
-const config = require('./firebaseConfig');
 
-firebase.initializeApp(config);
 axios.defaults.baseURL = 'https://vue-pwa-776e7.firebaseapp.com';
 axios.defaults.headers['Accept'] = 'application/json, text/plain, */*';
 
@@ -15,7 +11,6 @@ module.exports.hello = async (event, ctx, cb) => {
   const artist = [];
   const result = {};
   const rank = 100;
-  console.log(axios.defaults.headers.common);
   const getHtml = async () => {
     try {
         return await axios.get('https://www.melon.com/chart/');
@@ -50,14 +45,11 @@ module.exports.hello = async (event, ctx, cb) => {
   }
   
   const registDate = String(new Date());
-  firebase.database().ref(`melon`).set({
-      result,
-      registDate,
-  });
   const response = {
     statusCode: 200,
     body: JSON.stringify({
-      message: result,
+      result,
+      registDate,
     }),
   };
   cb(null, response);

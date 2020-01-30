@@ -9,6 +9,14 @@ provider:
   deploymentBucket: ${file(./config.js):config.BUCKET_NAME}
   deploymentPrefix: ${self:service}
   role: arn:aws:iam::${file(./config.js):config.ACCOUNT_NUM}:role/${file(./config.js):config.ROLE_NAME}
+  usagePlan:
+    quota:
+      limit: 5000
+      offset: 2
+      period: MONTH
+    throttle:
+      burstLimit: 200
+      rateLimit: 100
 
 functions:
   hello:
@@ -17,5 +25,4 @@ functions:
       - http:
           path: hello
           method: get
-      - schedule: cron(00 00 * * ? *)
       - cloudwatchLog: '/aws/lambda/${self:service}'  
