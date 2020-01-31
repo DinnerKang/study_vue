@@ -25,4 +25,4 @@ functions:
       - http:
           path: hello
           method: get
-      - cloudwatchLog: '/aws/lambda/${self:service}'  
+      - cloudwatchLog: '/aws/lambda/${self:service}'
