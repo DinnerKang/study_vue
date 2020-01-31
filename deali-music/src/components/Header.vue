@@ -1,9 +1,9 @@
 <template>
     <header>
-        <div>
+        <div class="user_area">
             {{userName}}  {{userState}}
         </div>
-        <div>
+        <div class="btn_area">
             <button type="button">로그인</button>
         </div>
     </header>
@@ -33,5 +33,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    
+    header{
+        width: 100%;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid gray;
+
+        .user_area{
+            width: 300px;
+        }
+        .btn_area{
+            width: 300px;
+        }
+    }
 </style>
