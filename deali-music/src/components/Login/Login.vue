@@ -7,17 +7,12 @@
 <script>
 import * as firebase from 'firebase/app';
 import "firebase/auth";
-import firebaseConfig from '../../../firebaseConfig';
-
 
 export default {
     data(){
       return {
         logoImg: require('../../assets/logo.png'),
       }
-    },
-    created(){
-        firebase.initializeApp(firebaseConfig);
     },
     methods: {
       async onSignIn () {

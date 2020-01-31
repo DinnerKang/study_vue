@@ -2,13 +2,13 @@
     <div>
         <div id="player"></div>
         <div>
-            {{ musicStatus }}
             <button type="button" @click="startVideo">시작</button>
             <button type="button" @click="stopVideo">정지</button>
             <button type="button" @click="prevVideo">이전곡</button>
             <button type="button" @click="nextVideo">다음곡</button>
         </div>
-        <music-list v-model="myMusicList"></music-list>
+        <music-list v-model="myMusicList" 
+                    :is-list="false" />
     </div>
 </template>
 
@@ -19,7 +19,7 @@ import MusicList from '../components/MyPage/MusicList';
 import { videoController } from '@/service/Firebase.js';
 
 export default {
-    name: 'MusicPlayer',
+    name: 'Lounge',
     components: {
         MusicList,
     },
@@ -27,39 +27,38 @@ export default {
         return {
             player: {},
             myMusicList: [],
-            musicStatus: 'stop',
+            isYoutubeLoad: false,
+            musicStatus: {},
         }
     },
     watch: {
-        myMusicList(newValue, oldValue) {
-            if (oldValue.length === 0) {
-                this.onYouTubeIframeAPIReady();
-            } else{
-                this.addPlayList();
-            }
+        myMusicList() {
+            if (!this.isYoutubeLoad) return;
+            this.addPlayList();
         },
         musicStatus(newValue) {
-            if (newValue === 'start') return this.player.playVideo();
-            if (newValue === 'stop') return this.player.pauseVideo();
-            if (newValue === 'prev') return this.player.previousVideo();
-            if (newValue === 'next') return this.player.nextVideo();
+            if (!this.isYoutubeLoad) return;
+            if (newValue.status === 'start') return this.player.playVideo();
+            if (newValue.status === 'stop') return this.player.pauseVideo();
+            if (newValue.status === 'prev') return this.player.previousVideo();
+            if (newValue.status === 'next') return this.player.nextVideo();
         }
     },
     mounted() {
         this.observeLoungeStatus();
+        this.onYouTubeIframeAPIReady();
     },
     methods: {
         onYouTubeIframeAPIReady() {
-            const firstVideo = this.myMusicList[0].videoId;
             this.player = new YT.Player('player', {
                 playerVars: {'origin':'https://vue-pwa-776e7.firebaseapp.com'},
                 height: '360',
                 width: '640',
-                videoId: firstVideo,
                 events: {
                     'onReady': this.addPlayList,
                 }
             });
+            this.isYoutubeLoad = true;
         },
         addPlayList() {
             const playList = this.myMusicList.map(item => item.videoId);
@@ -83,7 +82,7 @@ export default {
             firebase.database()
                 .ref(`control/lounge`)
                 .on('value', (snapshot) => {
-                    this.musicStatus = snapshot.val().status;
+                    this.musicStatus = snapshot.val();
             });
         },
     },

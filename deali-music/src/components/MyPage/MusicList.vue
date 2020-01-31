@@ -1,5 +1,5 @@
 <template>
-    <section class="myMusic_container">
+    <section class="myMusic_container" v-if="isList">
       <article class="myMusic_list_area">
         <ul>
           <li class="myMusic_list" v-for="(list, idx) in musicList" :key="idx">
@@ -20,6 +20,10 @@ export default {
     name: 'MusicList',
     props: {
       value: {},
+      isList: {
+            type: Boolean,
+            defaults: true,
+        }
     },
     data(){
         return {

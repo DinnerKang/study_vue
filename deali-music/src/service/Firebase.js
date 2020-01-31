@@ -5,6 +5,7 @@ import Store from '@/store';
 export function videoController(status) {
     firebase.database().ref(`control/lounge`).set({
         status,
+        date: String(new Date()),
     });
 
     firebase.database().ref('control/log').push({

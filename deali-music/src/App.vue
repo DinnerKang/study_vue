@@ -1,8 +1,20 @@
 <template>
   <div id="app">
-    <router-view/>
+    <main-component></main-component>
   </div>
 </template>
+<script>
+import * as firebase from 'firebase/app';
+import firebaseConfig from '../firebaseConfig';
+import MainComponent from './views/Main';
+
+export default {
+    components: { MainComponent },
+    created(){
+        firebase.initializeApp(firebaseConfig);
+    },
+}
+</script>
 
 <style>
  ul, li{
