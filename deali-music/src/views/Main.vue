@@ -1,7 +1,7 @@
-<<template>
+<template>
   <div class="home">
     <header-menu></header-menu>
-    <router-view/>
+    <router-view class="main"/>
   </div>
 </template>
 
@@ -15,3 +15,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  .main{
+    max-width: 1024px;
+    margin: 0 auto;
+  }
+</style>
