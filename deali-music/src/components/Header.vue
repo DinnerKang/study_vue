@@ -4,7 +4,10 @@
             <div class="user_area">
                 {{userName}}  {{userState}}
             </div>
-            <button type="button" class="login_btn" @click="userLogin">로그인</button>
+            <div>
+                <button v-if="userName" type="button" class="login_btn" @click="userLogin">로그인</button>
+                <button v-else type="button" class="login_btn" @click="userLogout">로그아웃</button>
+            </div>
         </div>
     </header>
 </template>
@@ -23,22 +26,28 @@ const getUserInfo = (store) => {
         const profile = await firebase.auth().signInWithPopup(provider);
         store.commit('loginUser', profile);
     }
+
+    const userLogout = () => {
+        store.commit('logoutUser');
+    }
     
     return { 
         userName,
         userState,
         userLogin,
+        userLogout,
     }
 }
 
 export default {
     setup(props, { root }) {
-        const { userName, userState, userLogin } = getUserInfo(root.$store);
+        const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store);
 
         return {
             userName,
             userState,
             userLogin,
+            userLogout,
         };
     },
 };

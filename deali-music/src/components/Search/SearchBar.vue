@@ -1,50 +1,61 @@
 <template>
     <div class="search_container">
-        <input type="text" class="search_text" v-model="searhText" placeholder="검색어" 
+        <input type="text" class="search_text" v-model="searchText" placeholder="검색어" 
                     @keyup.enter="clickSearchBtn" />
-        <img :src="youtubeBtn" class="youtube_btn" alt="유튜브 검색" @click="clickSearchBtn" />
+        <img :src="youtubeBtnImg" class="youtube_btn" alt="유튜브 검색" @click="clickSearchBtn" />
     </div>
 </template>
 
 <script>
-import { searchYoutube } from '../../service/Youtube';
+import { reactive, toRefs } from '@vue/composition-api';
+import { getYoutubeData } from '../../service/Youtube';
 import youtubeKey from '../../../youtubeConfig';
 
-export default {
-    name: 'searchBar',
-    props: {
-        value: {
-            type: String,
-        },
-    },
-    data() {
-        return {
-            youtubeBtn: require('../../assets/youtube.jpg'),
-            searhText: this.value,
+const searchYoutube = (emit) => {
+    const state = reactive({
+        searchText: '',
+    });
+
+    const clickSearchBtn = async() => {
+        try {
+            const params = {
+                key: youtubeKey,
+                part: 'snippet',
+                q: state.searchText,
+                maxResult: 9,
+            };
+            const { data } = await getYoutubeData(params);
+            console.log(data);
+            const searchResult = data;
+            emit('click', searchResult);
+        } catch (e) {
+            console.log(e);
         }
-    },
-    methods: {
-        async clickSearchBtn() {
-            try {
-                const params = {
-                    key: youtubeKey,
-                    part: 'snippet',
-                    q: this.searhText,
-                    maxResult: 9,
-                };
-                const { data } = await searchYoutube(params);
-                this.$emit('click', data);
-            } catch (e) {
-                console.log(e.response);
-            }
-        },
+    }
+
+    return {
+        clickSearchBtn,
+        ...toRefs(state),
     }
 }
+
+
+export default {
+    setup(props, { emit }) {
+        const youtubeBtnImg = require('../../assets/youtube.jpg');
+        const { clickSearchBtn, searchText } = searchYoutube(emit);
+        return {
+            youtubeBtnImg,
+            clickSearchBtn,
+            searchText,
+        };
+    },
+};
 </script>
 
 <style lang="scss" scoped>
 .search_container{
-    width: 70%;
+    width: 100%;
     display: flex;
     align-items: center;
     border: 1px solid red;
