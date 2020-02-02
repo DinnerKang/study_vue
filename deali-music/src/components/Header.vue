@@ -15,7 +15,7 @@ import * as firebase from 'firebase/app';
 import "firebase/auth";
 
 const getUserInfo = (store) => {
-    const userName = computed(() => store.state.userName);
+    let userName = computed(() => store.state.userName || '로그인을 하셔야 서비스를 이용하실 수 있습니다.');
     const userState = computed(() => store.state.userState);
 
     const userLogin = async() => {
@@ -60,10 +60,12 @@ export default {
             justify-content: space-between;
 
             .user_area{
-                width: 300px;
+                width: 500px;
             }
             .login_btn{
                 width: 100px;
+                border: 1px solid gray;
+                background-color: #fff;
             }
         }
         
