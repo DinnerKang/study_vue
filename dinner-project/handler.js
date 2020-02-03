@@ -11,12 +11,15 @@ module.exports.hello = async (event, ctx, cb) => {
   const artist = [];
   const result = {};
   const rank = 100;
+  const status = event.pathParameters.status;
+
+  if (status !== 'deali') return cb(null, {statusCode: 400});
+
   const getHtml = async () => {
     try {
         return await axios.get('https://www.melon.com/chart/');
     } catch (err) {
-        console.error('axios error', axios);
-        console.error(err);
+        cb(null, err);
     }
   }
 

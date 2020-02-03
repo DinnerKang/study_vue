@@ -20,9 +20,15 @@ provider:
 
 functions:
   hello:
+    vpc:
+    securityGroupIds:
+      - ${file(./config.js):config.securityGroupIds}
+    subnetdIds:
+      - ${file(./config.js):config.subnetdIds}
     handler: handler.hello
     events: 
       - http:
-          path: hello
+          path: hello/{status}
           method: get
       - cloudwatchLog: '/aws/lambda/${self:service}'
+  
