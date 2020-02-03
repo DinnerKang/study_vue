@@ -5,7 +5,7 @@
                 멜론 차트
             </div>
             <div class="update_area">
-                최근 업데이트 : {{updateDate | timeForToday}}
+                최근 업데이트 : {{updateDate | getDate}}
                 <button class="update_btn" @click="updateMelonChart">새로고침</button>
             </div>
         </li>
@@ -42,7 +42,7 @@ const getMelon = (store) => {
 
     const updateMelonChart = async() => {
         const status = store.state.login.userState === '딜리언즈' ? 'deali' : '';
-        
+        state.updateDate = '';
         try {
             const { data } = await getMelonChart(status);
             await updateMelon(data);
@@ -85,11 +85,11 @@ export default {
             height: 60px;
 
             .title{
-                width: 50%;
+                width: 30%;
                 height: 100%;
             }
             .update_area{
-                width: 50%;
+                width: 70%;
                 height: 100%;
             }
         }

@@ -22,4 +22,15 @@ export default {
 
         return `${Math.floor(betweenTimeDay / 365)}년전`;
     },
+
+    getDate(value) {
+        if(value === '') return '...';
+        const date = new Date(value);
+        const YYYY = date.getFullYear();
+        const MM = date.getMonth() + 1 < 10 ? '0' + date.getMonth() : date.getMonth();
+        const DD = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+        const hh = date.getHours();
+        const mm = date.getMinutes();
+        return `${YYYY}-${MM}-${DD} ${hh}:${mm}`;
+    }
 }
