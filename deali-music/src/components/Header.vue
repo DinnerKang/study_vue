@@ -23,6 +23,9 @@ const getUserInfo = (store) => {
 
     const userLogin = async() => {
         const provider = new firebase.auth.GoogleAuthProvider();
+        provider.setCustomParameters({
+            prompt: 'select_account'
+        });
         const profile = await firebase.auth().signInWithPopup(provider);
         store.commit('login/loginUser', profile);
     }

@@ -13,3 +13,11 @@ export function videoController(status) {
         name: Store.state.userName,
     });
 }
+
+export function updateMelon(data) {
+    console.log('up', data);
+    firebase.database().ref('melon').set({
+        result : data.result,
+        registDate : data.registDate,
+    });
+}

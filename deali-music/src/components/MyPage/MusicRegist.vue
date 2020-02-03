@@ -1,8 +1,5 @@
 <template>
     <section class="regist_container">
-      <article>
-        <SearchBar v-model="searchText" @click="clickSearch" />
-      </article>
       <article class="music_list_container">
           <ul class="list_area">
             <li class="item_lists" v-for="(list, idx) in searchResult.items" :key="idx">  
@@ -24,13 +21,9 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
 
-import SearchBar from '../Search/SearchBar';
 
 export default {
     name: 'MusicRegist',
-    components: {
-        SearchBar,
-    },
     data() {
         return {
             userId: this.$store.state.googleId,
