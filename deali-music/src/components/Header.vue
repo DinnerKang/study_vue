@@ -2,10 +2,10 @@
     <header>
         <div class="header_container">
             <div class="user_area">
-                {{userName}}  {{userState}}
+                {{userName}}  {{userState}} {{isDJ}}
             </div>
             <div>
-                <button v-if="userName" type="button" class="login_btn" @click="userLogin">로그인</button>
+                <button v-if="!userState" type="button" class="login_btn" @click="userLogin">로그인</button>
                 <button v-else type="button" class="login_btn" @click="userLogout">로그아웃</button>
             </div>
         </div>
@@ -20,6 +20,7 @@ import "firebase/auth";
 const getUserInfo = (store) => {
     let userName = computed(() => store.state.login.userName || '로그인을 하셔야 서비스를 이용하실 수 있습니다.');
     const userState = computed(() => store.state.login.userState);
+    const isDJ = computed(() => store.state.login.isDJ === true ? 'DJ' : '');
 
     const userLogin = async() => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -37,6 +38,7 @@ const getUserInfo = (store) => {
     return { 
         userName,
         userState,
+        isDJ,
         userLogin,
         userLogout,
     }
@@ -44,11 +46,12 @@ const getUserInfo = (store) => {
 
 export default {
     setup(props, { root }) {
-        const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store);
+        const { userName, userState, isDJ, userLogin, userLogout } = getUserInfo(root.$store);
 
         return {
             userName,
             userState,
+            isDJ,
             userLogin,
             userLogout,
         };
