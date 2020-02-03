@@ -5,7 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <script src="https://www.youtube.com/player_api" async defer></script>
+    <script>
+      function loadYoutube() {
+        window.dispatchEvent(new Event("load-youtube"));
+      }
+    </script>
+    <script src="https://www.youtube.com/player_api" defer onload="loadYoutube()"></script>
    
     <title>딜리튜브</title>
   </head>

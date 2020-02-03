@@ -29,6 +29,7 @@ export default {
             myMusicList: [],
             isYoutubeLoad: false,
             musicStatus: {},
+            addTime: 0,
         }
     },
     watch: {
@@ -46,10 +47,20 @@ export default {
     },
     mounted() {
         this.observeLoungeStatus();
-        this.onYouTubeIframeAPIReady();
+        window.addEventListener('load-youtube', this.onYouTubeIframeAPIReady);
     },
     methods: {
         onYouTubeIframeAPIReady() {
+            if (this.addTime > 10) {
+                alert('네트워크 에러');
+                return;
+            }
+            if (YT.Player === undefined) {
+                setTimeout(() =>{
+                    this.addTime++;
+                    this.onYouTubeIframeAPIReady();
+                }, 1000);
+            }
             this.player = new YT.Player('player', {
                 playerVars: {'origin':'https://vue-pwa-776e7.firebaseapp.com'},
                 height: '360',
