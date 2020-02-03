@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '../views/Home';
 import MyPage from '../views/MyPage';
 import Lounge from '../views/Lounge';
+import Search from '../views/Search.vue';
 
 Vue.use(VueRouter);
 
@@ -11,24 +12,25 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { unauthorized: true},
   },
   {
     path: '/myPage',
     name: 'MyPage',
     component: MyPage,
-    meta: { unauthorized: true},
   },
   {
     path: '/lounge',
     name: 'Lounge',
     component: Lounge,
-    meta: { unauthorized: true},
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search,
   },
   {
       path: '*',
       component: Home,
-      meta: { unauthorized: true },
   },
 ]
 

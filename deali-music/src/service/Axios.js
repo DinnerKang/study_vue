@@ -1,11 +1,11 @@
 import axios from 'axios';
-import Store from '../store';
+// import Store from '../store';
 
 axios.defaults.baseURL = 'https://vue-pwa-776e7.firebaseapp.com';
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
-    if (Store.state.login.userState !== '딜리언즈') return Promise.reject(alert('딜리언즈만 이용하실 수 있습니다.'));
+    // if (Store.state.login.userState !== '딜리언즈') return Promise.reject(alert('딜리언즈만 이용하실 수 있습니다.'));
     // Do something before request is sent
     return config;
   }, function (error) {

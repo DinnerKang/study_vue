@@ -1,8 +1,6 @@
 <template>
   <div class="home">
-    <div>
-      <router-link to="/myPage">마이페이지</router-link>
-    </div>
+    <search-bar class="search_bar"></search-bar>
     <div>
       <router-link to="/lounge">라운지</router-link>
     </div>
@@ -16,10 +14,12 @@
 
 <script>
 import MelonList from '../components/List/MelonList';
+import SearchBar from '../components/Search/SearchBar';
 
 export default {
   components: {
     MelonList,
+    SearchBar,
   },
   
 
@@ -28,7 +28,7 @@ export default {
 <style lang="scss" scoped>
   .home{
     text-align: center;
-
+    
     .melon_container{
       width: 50%;
     }

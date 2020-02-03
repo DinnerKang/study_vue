@@ -8,28 +8,17 @@
 
 <script>
 import { ref } from '@vue/composition-api';
-import { getYoutubeData } from '../../service/Youtube';
-import youtubeKey from '../../../youtubeConfig';
 
-const searchYoutube = (emit) => {
+const searchYoutube = (router) => {
     
     const searchText = ref('');
 
-    const clickSearchBtn = async() => {
-        try {
-            const params = {
-                key: youtubeKey,
-                part: 'snippet',
-                q: searchText,
-                maxResult: 9,
-            };
-            const { data } = await getYoutubeData(params);
-            console.log(data);
-            const searchResult = data;
-            emit('click', searchResult);
-        } catch (e) {
-            console.log(e);
-        }
+    const clickSearchBtn = () => {
+
+        router.push({
+                path: '/search',
+                query: { q : searchText },
+         });
     }
 
     return {
@@ -40,9 +29,11 @@ const searchYoutube = (emit) => {
 
 
 export default {
-    setup(props, { emit }) {
+    setup(props, { root }) {
+
         const youtubeBtnImg = require('../../assets/youtube.jpg');
-        const { clickSearchBtn, searchText } = searchYoutube(emit);
+        const { clickSearchBtn, searchText } = searchYoutube(root.$router);
+        
         return {
             youtubeBtnImg,
             clickSearchBtn,
@@ -54,7 +45,7 @@ export default {
 
 <style lang="scss" scoped>
 .search_container{
-    width: 100%;
+    width: 50%;
     display: flex;
     align-items: center;
     border: 1px solid red;
