@@ -18,13 +18,13 @@ import * as firebase from 'firebase/app';
 import "firebase/auth";
 
 const getUserInfo = (store) => {
-    let userName = computed(() => store.state.userName || '로그인을 하셔야 서비스를 이용하실 수 있습니다.');
-    const userState = computed(() => store.state.userState);
+    let userName = computed(() => store.state.login.userName || '로그인을 하셔야 서비스를 이용하실 수 있습니다.');
+    const userState = computed(() => store.state.login.userState);
 
     const userLogin = async() => {
         const provider = new firebase.auth.GoogleAuthProvider();
         const profile = await firebase.auth().signInWithPopup(provider);
-        store.commit('loginUser', profile);
+        store.commit('login/loginUser', profile);
     }
 
     const userLogout = () => {

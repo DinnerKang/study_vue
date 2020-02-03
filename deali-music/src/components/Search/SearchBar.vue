@@ -7,21 +7,20 @@
 </template>
 
 <script>
-import { reactive, toRefs } from '@vue/composition-api';
+import { ref } from '@vue/composition-api';
 import { getYoutubeData } from '../../service/Youtube';
 import youtubeKey from '../../../youtubeConfig';
 
 const searchYoutube = (emit) => {
-    const state = reactive({
-        searchText: '',
-    });
+    
+    const searchText = ref('');
 
     const clickSearchBtn = async() => {
         try {
             const params = {
                 key: youtubeKey,
                 part: 'snippet',
-                q: state.searchText,
+                q: searchText,
                 maxResult: 9,
             };
             const { data } = await getYoutubeData(params);
@@ -35,7 +34,7 @@ const searchYoutube = (emit) => {
 
     return {
         clickSearchBtn,
-        ...toRefs(state),
+        searchText,
     }
 }
 
