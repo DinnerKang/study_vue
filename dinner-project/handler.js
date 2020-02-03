@@ -50,6 +50,9 @@ module.exports.hello = async (event, ctx, cb) => {
   const registDate = String(new Date());
   const response = {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin" : "*",
+    },
     body: JSON.stringify({
       result,
       registDate,
