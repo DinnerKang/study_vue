@@ -34,8 +34,7 @@ export default {
     },
     watch: {
         myMusicList() {
-            if (!this.isYoutubeLoad) return;
-            this.addPlayList();
+            this.onYouTubeIframeAPIReady();
         },
         musicStatus(newValue) {
             if (!this.isYoutubeLoad) return;
@@ -47,20 +46,10 @@ export default {
     },
     mounted() {
         this.observeLoungeStatus();
-        window.addEventListener('load-youtube', this.onYouTubeIframeAPIReady);
     },
     methods: {
         onYouTubeIframeAPIReady() {
-            if (this.addTime > 10) {
-                alert('네트워크 에러');
-                return;
-            }
-            if (YT.Player === undefined) {
-                setTimeout(() =>{
-                    this.addTime++;
-                    this.onYouTubeIframeAPIReady();
-                }, 1000);
-            }
+            if (this.myMusicList.length === 0) return;
             this.player = new YT.Player('player', {
                 playerVars: {'origin':'https://vue-pwa-776e7.firebaseapp.com'},
                 height: '360',
@@ -69,7 +58,6 @@ export default {
                     'onReady': this.addPlayList,
                 }
             });
-            this.isYoutubeLoad = true;
         },
         addPlayList() {
             const playList = this.myMusicList.map(item => item.videoId);
