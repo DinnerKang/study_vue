@@ -1,47 +1,39 @@
 <template>
     <div>
         <div id="player"></div>
-        <div>
-            <button type="button" @click="startVideo">시작</button>
-            <button type="button" @click="stopVideo">정지</button>
-            <button type="button" @click="prevVideo">이전곡</button>
-            <button type="button" @click="nextVideo">다음곡</button>
-        </div>
-        <music-list v-model="myMusicList" 
-                    :is-list="false" />
+        <music-list v-model="myMusicList" :is-list="false" />
     </div>
 </template>
 
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/database';
-import MusicList from '../components/MyPage/MusicList';
-import { videoController } from '@/service/Firebase.js';
+import * as firebase from "firebase/app";
+import "firebase/database";
+import MusicList from "../components/MyPage/MusicList";
+import { addVideoStatus } from "@/service/Firebase";
 
 export default {
-    name: 'Lounge',
+    name: "Lounge",
     components: {
-        MusicList,
+        MusicList
     },
     data() {
         return {
             player: {},
             myMusicList: [],
-            isYoutubeLoad: false,
             musicStatus: {},
-            addTime: 0,
-        }
+            isReady: false
+        };
     },
     watch: {
         myMusicList() {
             this.onYouTubeIframeAPIReady();
         },
         musicStatus(newValue) {
-            if (!this.isYoutubeLoad) return;
-            if (newValue.status === 'start') return this.player.playVideo();
-            if (newValue.status === 'stop') return this.player.pauseVideo();
-            if (newValue.status === 'prev') return this.player.previousVideo();
-            if (newValue.status === 'next') return this.player.nextVideo();
+            if (!this.isReady) return;
+            if (newValue.status === "start") return this.player.playVideo();
+            if (newValue.status === "stop") return this.player.pauseVideo();
+            if (newValue.status === "prev") return this.player.previousVideo();
+            if (newValue.status === "next") return this.player.nextVideo();
         }
     },
     mounted() {
@@ -50,44 +42,49 @@ export default {
     methods: {
         onYouTubeIframeAPIReady() {
             if (this.myMusicList.length === 0) return;
-            this.player = new YT.Player('player', {
-                playerVars: {'origin':'https://vue-pwa-776e7.firebaseapp.com'},
-                height: '360',
-                width: '640',
+            this.player = new YT.Player("player", {
+                playerVars: { origin: "https://vue-pwa-776e7.firebaseapp.com" },
+                height: "360",
+                width: "640",
                 events: {
-                    'onReady': this.addPlayList,
+                    onReady: this.addPlayList,
+                    onStateChange: this.stateChange
                 }
             });
         },
         addPlayList() {
             const playList = this.myMusicList.map(item => item.videoId);
             this.player.cuePlaylist({
-                playlist : playList,
+                playlist: playList
             });
+            this.isReady = true;
         },
-        startVideo() {
-            videoController('start');
-        },
-        stopVideo() {
-            videoController('stop');
-        },
-        prevVideo() {
-            videoController('prev');
-        },
-        nextVideo() {
-            videoController('next');
+        stateChange(event) {
+            console.log(event.data);
+
+            const data = {
+                status: event.data,
+                videoName: this.myMusicList.filter(
+                    item =>
+                        item.videoId === this.player.getVideoData()["video_id"]
+                )[0].musicName
+            };
+            if (data.status === 1 || data.status === 2) {
+                console.log('hi');
+                addVideoStatus(data);
+            }
         },
         observeLoungeStatus() {
-            firebase.database()
+            firebase
+                .database()
                 .ref(`control/lounge`)
-                .on('value', (snapshot) => {
+                .on("value", snapshot => {
                     this.musicStatus = snapshot.val();
-            });
-        },
-    },
-}
+                });
+        }
+    }
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <search-bar class="search_bar"></search-bar>
     <div>
       <router-link to="/lounge">라운지</router-link>
     </div>
+    <music-controller class="music_control_container"></music-controller>
     <section class="melon_container">
       <article>
         <melon-list></melon-list>
@@ -14,15 +14,13 @@
 
 <script>
 import MelonList from '../components/List/MelonList';
-import SearchBar from '../components/Search/SearchBar';
+import musicController from '@/components/MusicController';
 
 export default {
   components: {
     MelonList,
-    SearchBar,
+    musicController,
   },
-  
-
 }
 </script>
 <style lang="scss" scoped>
@@ -31,6 +29,11 @@ export default {
     
     .melon_container{
       width: 50%;
+    }
+    .music_control_container{
+      float: right;
+      width: 300px;
+      border: 1px solid gray;
     }
   }
 </style>
