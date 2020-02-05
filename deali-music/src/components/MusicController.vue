@@ -4,6 +4,7 @@
       <div>
           현재곡 : {{ videoStatus.videoName }} ({{ videoStatus.status === 1 ? '재생중' : '정지' }})
       </div>
+      <div>{{ videoStatus.playTime | getTime}}</div>
       <div> 
             <button type="button" @click="videoControl('start')">시작</button>
             <button type="button" @click="videoControl('stop')">정지</button>

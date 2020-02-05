@@ -32,5 +32,18 @@ export default {
         const hh = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
         const mm = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
         return `${YYYY}-${MM}-${DD} ${hh}:${mm}`;
+    },
+
+    getTime(value) {
+        let result = 0, mm = 0, ss = 0;
+        if (value > 60) mm = Math.floor(value / 60);
+        ss = Math.floor(value) - (60 * mm);
+        
+        if (mm < 10) mm = '0' + mm;
+        if (ss < 10) ss = '0' + ss;
+
+        result = mm + ':' + ss;
+        
+        return result;
     }
 }

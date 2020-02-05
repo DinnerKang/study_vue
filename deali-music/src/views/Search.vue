@@ -1,17 +1,20 @@
 <template>
-  <div class="myPage_container">{{searchResult}}</div>
+  <div class="myPage_container">
+    <music-regist :search-result="searchResult"></music-regist>
+  </div>
 </template>
 
 <script>
-import { ref } from "@vue/composition-api";
+import { ref, watch } from "@vue/composition-api";
 import { getYoutubeData } from "../service/Youtube.js";
 import youtubeKey from "../../youtubeConfig";
 
-const showYoutubeData = route => {
-  let searchResult = ref("");
-  const searchText = route.query.q.value;
+import MusicRegist from '../components/MyPage/MusicRegist';
 
-  const getYotube = async () => {
+const showYoutubeData = () => {
+  let searchResult = ref("");
+
+  const getYotube = async (searchText) => {
     try {
       const params = {
         key: youtubeKey,
@@ -22,7 +25,7 @@ const showYoutubeData = route => {
       const { data } = await getYoutubeData(params);
       searchResult.value = data;
     } catch (e) {
-      if (e.status === 403) alert('검색 API가 초과하였습니다. 커피사주세요.');
+      if (e.status === 403) alert('검색 사용량이 초과하였습니다. 추가하실려면 커피사주세요.');
     }
   };
 
@@ -34,10 +37,13 @@ const showYoutubeData = route => {
 
 export default {
   name: "search",
+  components: {MusicRegist},
   setup(props, { root }) {
-    const { searchResult, getYotube } = showYoutubeData(root.$route);
-    getYotube();
-
+    
+    const { searchResult, getYotube } = showYoutubeData();
+    watch(() => {
+      getYotube(root.$route.query.q);
+    });
     return {
       searchResult,
     };

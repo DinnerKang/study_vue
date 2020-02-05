@@ -12,13 +12,21 @@ import { ref } from '@vue/composition-api';
 const searchYoutube = (router) => {
     
     const searchText = ref('');
+    let searchDelay = true;
+
 
     const clickSearchBtn = () => {
+        if (!searchDelay) return;
+        searchDelay = false;
 
         router.push({
                 path: '/search',
-                query: { q : searchText },
+                query: { q : searchText.value },
          });
+         
+        setTimeout(()=>{
+            searchDelay = true;
+        }, 500);
     }
 
     return {

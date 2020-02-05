@@ -60,17 +60,16 @@ export default {
             this.isReady = true;
         },
         stateChange(event) {
-            console.log(event.data);
-
-            const data = {
-                status: event.data,
-                videoName: this.myMusicList.filter(
-                    item =>
-                        item.videoId === this.player.getVideoData()["video_id"]
-                )[0].musicName
-            };
-            if (data.status === 1 || data.status === 2) {
-                console.log('hi');
+            if (event.data === 1 || event.data === 2) {
+                const playTime = this.player.getDuration();
+                const data = {
+                    status: event.data,
+                    playTime,
+                    videoName: this.myMusicList.filter(
+                        item =>
+                            item.videoId === this.player.getVideoData()["video_id"]
+                    )[0].musicName,
+                };
                 addVideoStatus(data);
             }
         },

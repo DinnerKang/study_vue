@@ -18,35 +18,39 @@
 </template>
 
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/database';
+import { addGroupMusic } from '@/service/Firebase';
 
 
 export default {
     name: 'MusicRegist',
+    props: {
+        searchResult: {
+            type: [Object, String],
+        }
+    },
     data() {
         return {
-            userId: this.$store.state.googleId,
-            userName: this.$store.state.userName,
+            userId: this.$store.state.login.dealiName,
+            userName: this.$store.state.login.userName,
             searchText: '',
-            searchResult: {},
         }
     },
     methods: {
-        clickSearch(payload) {
-            this.searchResult = payload;
-        },
-        async registData(data) {
-            const musicName = data.snippet.title;
-            const videoId = data.id.videoId;
+        registData(item) {
+            const musicName = item.snippet.title;
+            const videoId = item.id.videoId;
             const registDate = String(new Date());
 
-            firebase.database().ref('music/lounge').push({
+            const data = {
                 musicName,
                 videoId,
                 registDate,
-                saveName: this.$store.state.userName
-            });
+                userId: this.userId,
+                userName: this.userName,
+                groupName: 'default',
+            };
+            
+            addGroupMusic(data);
         },
     }
 }
