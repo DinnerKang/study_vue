@@ -1,27 +1,26 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="'lounge'" :is-list="false" />
+        <music-list v-model="myMusicList" :group-name="groupName" />
     </div>
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/database";
 import MusicList from "../components/MyPage/MusicList";
 import { addVideoStatus } from "@/service/Firebase";
 
 export default {
-    name: "Lounge",
+    name: "PlayPage",
     components: {
         MusicList
     },
     data() {
         return {
+            groupName: this.$router.query.groupName,
             player: {},
             myMusicList: [],
             musicStatus: {},
-            isReady: false
+            isReady: false,
         };
     },
     watch: {
@@ -36,9 +35,6 @@ export default {
             if (newValue.status === "next") return this.player.nextVideo();
         }
     },
-    mounted() {
-        this.observeLoungeStatus();
-    },
     methods: {
         onYouTubeIframeAPIReady() {
             if (this.myMusicList.length === 0) return;
@@ -47,8 +43,8 @@ export default {
                 height: "360",
                 width: "640",
                 events: {
-                    onReady: this.addPlayList,
-                    onStateChange: this.stateChange
+                    // onReady: this.addPlayList,
+                    // onStateChange: this.stateChange
                 }
             });
         },
@@ -73,14 +69,6 @@ export default {
                 addVideoStatus(data);
             }
         },
-        observeLoungeStatus() {
-            firebase
-                .database()
-                .ref(`control/lounge`)
-                .on("value", snapshot => {
-                    this.musicStatus = snapshot.val();
-                });
-        }
     }
 };
 </script>

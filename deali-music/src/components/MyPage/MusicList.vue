@@ -21,9 +21,12 @@ export default {
     props: {
       value: {},
       isList: {
-            type: Boolean,
-            defaults: true,
-        }
+        type: Boolean,
+        defaults: true,
+      },
+      groupName: {
+        type: String,
+      }
     },
     data(){
         return {
@@ -36,10 +39,13 @@ export default {
     },
     methods: {
         getMusicList() {
+            const id = this.groupName === 'lounge' ? 'lounge' : this.$store.state.login.dealiName;
+            
             firebase.database()
-                .ref(`music/lounge`)
+                .ref(`music/${id}/${this.groupName}`)
                 .on('value', (snapshot) => {
-                    this.musicList = Object.values(snapshot.val()).reverse();
+                    this.musicList = Object.values(snapshot.val());
+                    console.log(snapshot.val());
                     this.$emit('input', this.musicList);
             });
         },

@@ -4,6 +4,7 @@ import Home from '../views/Home';
 import MyPage from '../views/MyPage';
 import Lounge from '../views/Lounge';
 import Search from '../views/Search.vue';
+import PlayPage from '../views/PlayPage';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: Search,
+  },
+  {
+    path: '/playPage',
+    name: 'PlayPage',
+    component: PlayPage,
   },
   {
       path: '*',

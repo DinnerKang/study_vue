@@ -3,115 +3,83 @@
         <div>
             <h2>내 그룹 설정</h2>
             <ul>
-                <li class="group_area" v-for="(list, idx) in groupList" :key="idx">
-                    <div v-if="!isGroupList[idx+1]">{{list}}<button type="button" @click="isGroupList[idx+1] = true">수정</button></div>
-                    <!-- <div>
-                      <div v-if="!isEdit">
-                        <span>{{defaultGroupName}}</span><button @click="isEdit=true">수정</button>
-                      </div>
-                      <div v-if="isEdit" >
-                        <input type="text" v-model="groupName" placeholder="그룹 이름"/>
-                        <button type="button" @click="editGroup('기본 그룹1')">저장</button>
-                      </div>
-                    </div> -->
+                <li class="group_area" v-for="(list, idx) in groupList" 
+                    :key="idx" @click="clickPlayList(list.groupName)">
+                    <div>{{list.groupName}}</div>
                 </li>
 
-                <!-- <li class="group_area" @click.self.prevent="clickAddGroup">
-                    <div>+</div>
-                    <div>
-                      <div v-if="!isEdit">
-                        <span>{{defaultGroupName}}</span><button @click="isEdit=true">수정</button>
-                      </div>
-                      <div v-if="isEdit" >
-                        <input type="text" v-model="groupName" placeholder="그룹 이름"/>
-                        <button type="button" @click="editGroup('기본 그룹1')">저장</button>
-                      </div>
-                    </div>
-                </li> -->
+                <li class="group_area">
+                    <div @click="clickAddGroup">+</div>
+                </li>
             </ul>
         </div>
     </article>
 </template>
 
 <script>
-import { ref, watch } from "@vue/composition-api";
+import { reactive, toRefs } from "@vue/composition-api";
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { addMyGroup, editMyGroup } from '@/service/Firebase';
+import { addMyGroup } from '@/service/Firebase';
 
-const myGroup = store => {
-    let groupList = ref([]);
-    let groupName = ref('');
-    const isEdit = ref(false);
-    let isGroupList = ref([]);
+const myGroup = (store, router) => {
 
-    watch(() => groupList, (groupList) => {
-        console.log('gro', groupList);
-        isGroupList = groupList;
-        console.log(isGroupList);
+    const state = reactive({
+        groupList: [],
+        groupName: '',
+        dealiName: store.state.login.dealiName,
+        userState: store.state.login.userState,
     });
 
-    let i = ref(1);
-    const defaultGroupName = ref(`기본 그룹${i}`);
-
-    const { dealiName, userState } = store.state.login;
-    
-    if (dealiName) {
-      firebase
-        .database()
-        .ref(`music/group/${dealiName}`)
-        .once("value", snapshot => {
-            const res = snapshot.val();
-            groupList.value = res;
-      });
-    }
-    
-
     const clickAddGroup = () => {
-        if (userState !== '딜리언즈') return alert('딜리언즈만 추가가 가능합니다.');
-        console.log('click');
+        if (state.userState !== '딜리언즈') return alert('딜리언즈만 추가가 가능합니다.');
         const data = {
-            groupName: defaultGroupName.value,
-            userId: dealiName,
+            groupName: 'test',
+            userId: state.dealiName,
         }
         addMyGroup(data);
-
-        i.value = i.value + 1;
     }
 
-    const editGroup = () => {
-        console.log('edi');
-        const data = {
-            groupName: groupName.value,
-            userId: dealiName,
-        }
-        editMyGroup(data);
-    };
+    if (state.userState === '딜리언즈') {
+      firebase
+        .database()
+        .ref(`group/${state.dealiName}`)
+        .on("value", snapshot => {
+            const res = snapshot.val();
+            if (res === null) {
+              const defaultData = {
+                  groupName: 'default',
+                  userId: state.dealiName,
+              }
+              addMyGroup(defaultData);
+              return;
+            } 
+            state.groupList = Object.values(res);
+      });
+    }
+
+    const clickPlayList = (groupName) => {
+        router.push({
+          path: '/playPage',
+          query: {
+            groupName: groupName
+          },
+        });
+    }
 
     return {
-        groupList,
-        editGroup,
         clickAddGroup,
-        groupName,
-        isEdit,
-        isGroupList,
-        defaultGroupName,
+        clickPlayList,
+        ...toRefs(state),
     };
 };
 
 export default {
     name: "MyPage",
     setup(props, { root }) {
-        const { groupList, editGroup, clickAddGroup, groupName, isEdit, isGroupList, defaultGroupName } = myGroup(root.$store);
-
+        
         return {
-            groupList,
-            editGroup,
-            clickAddGroup,
-            groupName,
-            isEdit,
-            isGroupList,
-            defaultGroupName,
+            ...myGroup(root.$store, root.$router),
         };
     }
 };

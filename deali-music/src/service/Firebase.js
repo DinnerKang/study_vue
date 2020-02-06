@@ -30,10 +30,10 @@ export function addVideoStatus(data) {
     });
 }
 
-export function addGroupMusic(data) {
+export function registMusic(data) {
     if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
 
-    firebase.database().ref(`music/group/${data.userId}/${data.groupName}`).push({
+    firebase.database().ref(`music/${data.userId}/${data.groupName}`).push({
         musicName: data.musicName,
         videoId: data.videoId,
         registDate: data.registDate,
@@ -45,14 +45,7 @@ export function addGroupMusic(data) {
 export function addMyGroup(data) {
     if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
 
-    firebase.database().ref(`music/group/${data.userId}`).push().set({
-        [data.groupName]: '',
-    });
-}
-export function editMyGroup(data) {
-    if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
-    const key = data.userId + '/name';
-    firebase.database().ref(`music/group`).update({
-        [key] : data.groupName,
+    firebase.database().ref(`group/${data.userId}`).push().set({
+        groupName : data.groupName,
     });
 }

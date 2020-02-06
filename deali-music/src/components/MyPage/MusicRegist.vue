@@ -9,6 +9,7 @@
                     <div class="sub_text">
                         <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
                         <button class="btn" @click="registData(list)">담기</button>
+                        <button class="btn" @click="registData(list, 'default')">기본에 담기</button>
                     </div>
                 </div>
             </li>
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-import { addGroupMusic } from '@/service/Firebase';
+import { registMusic } from '@/service/Firebase';
 
 
 export default {
@@ -36,21 +37,23 @@ export default {
         }
     },
     methods: {
-        registData(item) {
+        registData(item, groupName='lounge') {
             const musicName = item.snippet.title;
             const videoId = item.id.videoId;
             const registDate = String(new Date());
+
+            const id = groupName === 'lounge' ? 'lounge' : this.userId;
 
             const data = {
                 musicName,
                 videoId,
                 registDate,
-                userId: this.userId,
+                userId: id,
                 userName: this.userName,
-                groupName: 'default',
+                groupName,
             };
             
-            addGroupMusic(data);
+            registMusic(data);
         },
     }
 }
