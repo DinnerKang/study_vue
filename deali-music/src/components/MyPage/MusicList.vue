@@ -15,6 +15,28 @@
 <script>
 import * as firebase from 'firebase/app';
 import 'firebase/database';
+import { ref } from '@vue/composition-api';
+
+const setMusicList = (props, store, emit) => {
+
+    const id = props.groupName === 'lounge' ? 'lounge' : store.state.login.dealiName;
+    let musicList = ref([]);
+
+
+    const getMusicList = () => {
+        firebase.database()
+            .ref(`music/${id}/${props.groupName}`)
+            .on('value', (snapshot) => {
+                musicList = Object.values(snapshot.val());
+                emit('input', musicList);
+        });
+    }
+
+    return {
+        getMusicList,
+        musicList,
+    }
+}
 
 export default {
     name: 'MusicList',
@@ -28,6 +50,17 @@ export default {
         type: String,
       }
     },
+    setup(props, { root, emit }){
+        const { getMusicList, musicList } = setMusicList(props, root.$store, emit);
+        getMusicList();
+
+        return {
+            musicList,
+            getMusicList,
+        }
+    }
+    /*
+    
     data(){
         return {
             userName: this.$store.state.userName,
@@ -40,7 +73,7 @@ export default {
     methods: {
         getMusicList() {
             const id = this.groupName === 'lounge' ? 'lounge' : this.$store.state.login.dealiName;
-            
+
             firebase.database()
                 .ref(`music/${id}/${this.groupName}`)
                 .on('value', (snapshot) => {
@@ -49,7 +82,7 @@ export default {
                     this.$emit('input', this.musicList);
             });
         },
-    }
+    }*/
 }
 </script>
 

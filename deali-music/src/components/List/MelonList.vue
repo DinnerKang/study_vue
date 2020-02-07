@@ -2,7 +2,7 @@
     <ul class="melon_list_area">
         <li class="update_date">
             <div class="title">
-                멜론 차트
+                인기 차트 TOP 100
             </div>
             <div class="update_area">
                 최근 업데이트 : {{updateDate | getDate}}

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="'lounge'" :is-list="false" />
+        <music-list v-model="myMusicList" :group-name="'lounge'" :is-list="true" />
     </div>
 </template>
 
