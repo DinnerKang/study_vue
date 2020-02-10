@@ -27,8 +27,15 @@ const mutations = {
     },
 };
 
+const getters = {
+    getUserStatus (state) {
+        return state;
+    }
+}
+
 export default {
     namespaced: true,
     state,
     mutations,
+    getters,
 };

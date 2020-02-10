@@ -10,79 +10,111 @@ import * as firebase from "firebase/app";
 import "firebase/database";
 import MusicList from "../components/MyPage/MusicList";
 import { addVideoStatus } from "@/service/Firebase";
+import { ref, watch, onMounted } from "@vue/composition-api";
+
+
+const youtubeData = () => {
+    const myMusicList = ref([]);
+    let player = ref({});
+    let isReady = ref(false);
+
+
+    const onYouTubeIframeAPIReady = () => {
+        player.value = new YT.Player("player", {
+            playerVars: { origin: "https://vue-pwa-776e7.firebaseapp.com" },
+            height: "360",
+            width: "640",
+            events: {
+                onReady: addPlayList,
+                onStateChange: stateChange
+            }
+        });
+    };
+
+    const addPlayList = () => {
+        const playList = myMusicList.value.map(item => item.videoId);
+        player.value.cuePlaylist({
+            playlist: playList,
+        });
+        isReady.value = true;
+    };
+
+    const stateChange = (event) => {
+        if (event.data === 1 || event.data === 2) {
+            const playTime = player.value.getDuration();
+            const data = {
+                status: event.data,
+                playTime,
+                videoName: myMusicList.value.filter(
+                    item =>
+                        item.videoId === player.value.getVideoData()["video_id"]
+                )[0].musicName,
+            };
+            addVideoStatus(data);
+        }
+    };
+
+    return {
+        player,
+        myMusicList,
+        isReady,
+        onYouTubeIframeAPIReady
+    }
+};
+
+
+const youtubeStatus = () => {
+    let musicStatus = ref(0);
+
+    const observeLoungeStatus = () => {
+        firebase
+            .database()
+            .ref(`control/lounge`)
+            .on("value", snapshot => {
+                musicStatus.value = snapshot.val();
+            });
+    };
+
+    return {
+        observeLoungeStatus,
+        musicStatus,
+    }
+};
+
 
 export default {
     name: "Lounge",
     components: {
         MusicList
     },
-    data() {
-        return {
-            player: {},
-            myMusicList: [],
-            musicStatus: {},
-            isReady: false
-        };
-    },
-    watch: {
-        myMusicList() {
-            this.onYouTubeIframeAPIReady();
-        },
-        musicStatus(newValue) {
-            if (!this.isReady) return;
-            if (newValue.status === "start") return this.player.playVideo();
-            if (newValue.status === "stop") return this.player.pauseVideo();
-            if (newValue.status === "prev") return this.player.previousVideo();
-            if (newValue.status === "next") return this.player.nextVideo();
-        }
-    },
-    mounted() {
-        this.observeLoungeStatus();
-    },
-    methods: {
-        onYouTubeIframeAPIReady() {
-            if (this.myMusicList.length === 0) return;
-            this.player = new YT.Player("player", {
-                playerVars: { origin: "https://vue-pwa-776e7.firebaseapp.com" },
-                height: "360",
-                width: "640",
-                events: {
-                    onReady: this.addPlayList,
-                    onStateChange: this.stateChange
-                }
-            });
-        },
-        addPlayList() {
-            const playList = this.myMusicList.map(item => item.videoId);
-            this.player.cuePlaylist({
-                playlist: playList
-            });
-            this.isReady = true;
-        },
-        stateChange(event) {
-            if (event.data === 1 || event.data === 2) {
-                const playTime = this.player.getDuration();
-                const data = {
-                    status: event.data,
-                    playTime,
-                    videoName: this.myMusicList.filter(
-                        item =>
-                            item.videoId === this.player.getVideoData()["video_id"]
-                    )[0].musicName,
-                };
-                addVideoStatus(data);
-            }
-        },
-        observeLoungeStatus() {
-            firebase
-                .database()
-                .ref(`control/lounge`)
-                .on("value", snapshot => {
-                    this.musicStatus = snapshot.val();
-                });
+    setup() {
+        const { player, myMusicList, isReady, onYouTubeIframeAPIReady } = youtubeData();
+        const { observeLoungeStatus, musicStatus } = youtubeStatus();
+
+        watch(musicStatus, (newValue) => {
+            if (!isReady.value) return;
+
+            if (newValue.status === "start") return player.value.playVideo();
+            if (newValue.status === "stop") return player.value.pauseVideo();
+            if (newValue.status === "prev") return player.value.previousVideo();
+            if (newValue.status === "next") return player.value.nextVideo();
+        });
+
+        watch(myMusicList, () => {
+            if (myMusicList.value.length === 0) return;
+            onYouTubeIframeAPIReady();
+        });
+
+        onMounted(()=> observeLoungeStatus());
+
+        return{
+            player,
+            myMusicList,
+            musicStatus,
         }
     }
-};
+}
+
 </script>
 
 <style lang="scss" scoped>

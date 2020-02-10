@@ -27,8 +27,8 @@ const setMusicList = (props, store, emit) => {
         firebase.database()
             .ref(`music/${id}/${props.groupName}`)
             .on('value', (snapshot) => {
-                musicList = Object.values(snapshot.val());
-                emit('input', musicList);
+                musicList.value = Object.values(snapshot.val());
+                emit('input', musicList.value);
         });
     }
 
@@ -60,7 +60,7 @@ export default {
         }
     }
     /*
-    
+
     data(){
         return {
             userName: this.$store.state.userName,

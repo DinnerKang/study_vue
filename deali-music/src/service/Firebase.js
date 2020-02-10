@@ -49,3 +49,10 @@ export function addMyGroup(data) {
         groupName : data.groupName,
     });
 }
+
+export function editMyGroupName(data) {
+    console.log(data);
+    /*firebase.database().ref(`group/${data.userId}`).update({
+        groupName
+    })*/
+}
