@@ -5,12 +5,12 @@
             <ul>
                 <li class="group_area" v-for="(list, idx) in groupList"
                     :key="idx" >
-                    <div @click="clickPlayList(list.groupName)">{{list.groupName}}</div>
-                    <button type="button" @click="clickEdit(list.groupName)">수정</button>
+                    <div @click="clickPlayList(list)">{{list}}</div>
+                    <button type="button" @click="clickEdit(idx)">수정</button>
                 </li>
 
                 <li class="group_area">
-                    <div @click="clickAddGroup">+</div>
+                    <div @click="clickAddGroup(groupList)">+</div>
                 </li>
             </ul>
         </div>
@@ -39,11 +39,12 @@ const myGroup = (userName, userState) => {
                         const defaultData = {
                             groupName: 'default',
                             userId: userName.value,
+                            idx : 0,
                         }
                         addMyGroup(defaultData);
                         return;
                     }
-                    state.groupList = Object.values(res);
+                    state.groupList = res;
                 });
         }
     };
@@ -65,20 +66,21 @@ const clickEvent = (userName, userState, router) => {
         });
     };
 
-    const clickAddGroup = () => {
+    const clickAddGroup = (groupList) => {
         if (userState.value !== '딜리언즈') return alert('딜리언즈만 추가가 가능합니다.');
+        console.log(groupList);
         const data = {
-            groupName: 'test',
+            idx: groupList.length,
+            groupName: '기본 그룹',
             userId: userName.value,
         }
         addMyGroup(data);
     };
 
-    const clickEdit = (groupName) => {
-        console.log(groupName);
+    const clickEdit = (idx) => {
         const data = {
-            beforeName: groupName,
-            afterName: '123',
+            idx: idx,
+            groupName: '수정 테스트ㅌㅌ',
             userId: userName.value,
         };
         editMyGroupName(data);

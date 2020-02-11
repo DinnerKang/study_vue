@@ -45,14 +45,14 @@ export function registMusic(data) {
 export function addMyGroup(data) {
     if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
 
-    firebase.database().ref(`group/${data.userId}`).push().set({
-        groupName : data.groupName,
+    firebase.database().ref(`group/${data.userId}`).update({
+        [data.idx] : data.groupName,
     });
 }
 
 export function editMyGroupName(data) {
     console.log(data);
-    /*firebase.database().ref(`group/${data.userId}`).update({
-        groupName
-    })*/
+    firebase.database().ref(`group/${data.userId}`).update({
+        [data.idx] : data.groupName
+    })
 }
