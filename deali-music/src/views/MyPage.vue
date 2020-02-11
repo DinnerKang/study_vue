@@ -3,14 +3,15 @@
         <div>
             <h2>내 그룹 설정</h2>
             <ul>
-                <li class="group_area" v-for="(list, idx) in groupList"
+                <li class="group_area" v-for="(list, idx) in Object.values(groupData)"
                     :key="idx" >
-                    <div @click="clickPlayList(list)">{{list}}</div>
-                    <button type="button" @click="clickEdit(idx)">수정</button>
+                    <div @click="clickPlayList(list.groupName)">{{list.groupName}}</div>
+                    <button type="button" @click="clickEdit(list.groupName, groupData)">수정</button>
+                    <button type="button" @click="clickMakeAlbum(list.groupName, groupData)">DJ</button>
                 </li>
 
                 <li class="group_area">
-                    <div @click="clickAddGroup(groupList)">+</div>
+                    <div @click="clickAddGroup">+</div>
                 </li>
             </ul>
         </div>
@@ -21,11 +22,11 @@
 import { reactive, toRefs, computed, watch } from "@vue/composition-api";
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { addMyGroup, editMyGroupName } from '@/service/Firebase';
+import { addMyGroup, editMyGroupName, addAlbum } from '@/service/Firebase';
 
 const myGroup = (userName, userState) => {
     const state = reactive({
-        groupList: [],
+        groupData: {},
     });
 
     const getMyGroup = () => {
@@ -44,7 +45,7 @@ const myGroup = (userName, userState) => {
                         addMyGroup(defaultData);
                         return;
                     }
-                    state.groupList = res;
+                    state.groupData = res;
                 });
         }
     };
@@ -66,30 +67,50 @@ const clickEvent = (userName, userState, router) => {
         });
     };
 
-    const clickAddGroup = (groupList) => {
+    const clickAddGroup = () => {
         if (userState.value !== '딜리언즈') return alert('딜리언즈만 추가가 가능합니다.');
-        console.log(groupList);
         const data = {
-            idx: groupList.length,
             groupName: '기본 그룹',
             userId: userName.value,
-        }
+        };
         addMyGroup(data);
     };
 
-    const clickEdit = (idx) => {
+    const clickEdit = (beforeName, groupData) => {
+
+        const arr = Object.keys(groupData).map(function(key) {
+            return {[key]: groupData[key]};
+        });
+        const res = arr.filter(i=> Object.values(i)[0].groupName === beforeName);
+
         const data = {
-            idx: idx,
-            groupName: '수정 테스트ㅌㅌ',
+            key: Object.keys(res[0]),
+            groupName: 'abc',
             userId: userName.value,
         };
         editMyGroupName(data);
-    }
+    };
+
+    const clickMakeAlbum = (beforeName, groupData) => {
+        const arr = Object.keys(groupData).map(function(key) {
+            return {[key]: groupData[key]};
+        });
+        const res = arr.filter(i=> Object.values(i)[0].groupName === beforeName);
+
+        const data = {
+            key: Object.keys(res[0]),
+            userId: userName.value,
+            isDJ: true,
+        };
+
+        addAlbum(data);
+    };
 
     return {
         clickPlayList,
         clickAddGroup,
         clickEdit,
+        clickMakeAlbum,
     }
 }
 
@@ -99,8 +120,8 @@ export default {
         const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
 
-        const { getMyGroup, groupList } = myGroup(userName, userState);
-        const { clickPlayList, clickAddGroup, clickEdit } = clickEvent(userName, userState, root.$router);
+        const { getMyGroup, groupData } = myGroup(userName, userState);
+        const { clickPlayList, clickAddGroup, clickEdit, clickMakeAlbum } = clickEvent(userName, userState, root.$router);
 
 
         watch(userName, () =>{
@@ -108,10 +129,11 @@ export default {
         });
 
         return {
-            groupList,
+            groupData,
             clickPlayList,
             clickAddGroup,
             clickEdit,
+            clickMakeAlbum,
         };
     }
 };

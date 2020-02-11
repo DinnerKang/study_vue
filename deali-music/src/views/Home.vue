@@ -12,24 +12,27 @@
         <melon-list></melon-list>
       </article>
     </section>
+    <dj-list></dj-list>
   </div>
 </template>
 
 <script>
 import MelonList from '../components/List/MelonList';
 import musicController from '@/components/MusicController';
+import DjList from "../components/List/DjList";
 
 export default {
   components: {
     MelonList,
     musicController,
+    DjList
   },
 }
 </script>
 <style lang="scss" scoped>
   .home{
     text-align: center;
-    
+
     .melon_container{
       width: 50%;
     }
