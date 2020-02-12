@@ -59,30 +59,6 @@ export default {
             getMusicList,
         }
     }
-    /*
-
-    data(){
-        return {
-            userName: this.$store.state.userName,
-            musicList: [],
-        };
-    },
-    created() {
-        this.getMusicList();
-    },
-    methods: {
-        getMusicList() {
-            const id = this.groupName === 'lounge' ? 'lounge' : this.$store.state.login.dealiName;
-
-            firebase.database()
-                .ref(`music/${id}/${this.groupName}`)
-                .on('value', (snapshot) => {
-                    this.musicList = Object.values(snapshot.val());
-                    console.log(snapshot.val());
-                    this.$emit('input', this.musicList);
-            });
-        },
-    }*/
 }
 </script>
 

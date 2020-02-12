@@ -8,19 +8,57 @@
                     <h3>{{list.snippet.title}}</h3>
                     <div class="sub_text">
                         <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
-                        <button class="btn" @click="registData(list)">담기</button>
-                        <button class="btn" @click="registData(list, 'default')">기본에 담기</button>
+                        <button class="btn" @click="clickRegist(list)">담기</button>
+                        <button class="btn" @click="clickRegist(list, 'default')">기본에 담기</button>
                     </div>
                 </div>
             </li>
           </ul>
+          {{ groupList }}
       </article>
     </section>
 </template>
 
 <script>
-import { registMusic } from '@/service/Firebase';
+import { registMusic, getGroupList } from '@/service/Firebase';
+import { computed, ref } from '@vue/composition-api';
 
+const clickEvent = (userInfo) => {
+    
+    const clickRegist = (item, groupName='lounge') => {
+        const musicName = item.snippet.title;
+        const videoId = item.id.videoId;
+        const registDate = String(new Date());
+
+        const id = groupName === 'lounge' ? 'lounge' : userInfo.value.dealiName;
+        const data = {
+            musicName,
+            videoId,
+            registDate,
+            userId: id,
+            userName: userInfo.value.userName,
+            groupName,
+        };
+        
+        registMusic(data);
+    }
+
+    return {
+        clickRegist,
+    }
+};
+
+const groupData = (userInfo) => {
+    const groupList = ref([]);
+
+    getGroupList(userInfo.value.dealiName).on('value', snapshot=>{
+            groupList.value = Object.values(snapshot.val());
+    });
+
+    return {
+        groupList,
+    }
+};
 
 export default {
     name: 'MusicRegist',
@@ -29,33 +67,16 @@ export default {
             type: [Object, String],
         }
     },
-    data() {
-        return {
-            userId: this.$store.state.login.dealiName,
-            userName: this.$store.state.login.userName,
-            searchText: '',
+    setup(props, { root }) {
+        const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
+        const { clickRegist } = clickEvent(userInfo);
+        const { groupList } = groupData(userInfo);
+    
+        return{
+            clickRegist,
+            groupList,
         }
     },
-    methods: {
-        registData(item, groupName='lounge') {
-            const musicName = item.snippet.title;
-            const videoId = item.id.videoId;
-            const registDate = String(new Date());
-
-            const id = groupName === 'lounge' ? 'lounge' : this.userId;
-
-            const data = {
-                musicName,
-                videoId,
-                registDate,
-                userId: id,
-                userName: this.userName,
-                groupName,
-            };
-            
-            registMusic(data);
-        },
-    }
 }
 </script>
 
