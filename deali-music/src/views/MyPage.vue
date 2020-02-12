@@ -22,7 +22,7 @@
 import { reactive, toRefs, computed, watch } from "@vue/composition-api";
 import * as firebase from "firebase/app";
 import "firebase/database";
-import { addMyGroup, editMyGroupName, addAlbum } from '@/service/Firebase';
+import { addMyGroup, addAlbum, editMyGroupName } from '@/service/Group';
 
 const myGroup = (userName, userState) => {
     const state = reactive({

@@ -9,7 +9,7 @@
 import * as firebase from "firebase/app";
 import "firebase/database";
 import MusicList from "../components/MyPage/MusicList";
-import { addVideoStatus } from "@/service/Firebase";
+import { addVideoStatus } from "@/service/Status";
 import { ref, watch, onMounted } from "@vue/composition-api";
 
 
@@ -17,11 +17,15 @@ const youtubeData = () => {
     const myMusicList = ref([]);
     let player = ref({});
     let isReady = ref(false);
+    let playList = ref([]);
 
 
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
-            playerVars: { origin: "https://vue-pwa-776e7.firebaseapp.com" },
+            playerVars: { 
+                origin: "https://vue-pwa-776e7.firebaseapp.com",
+                loop: 1, 
+            },
             height: "360",
             width: "640",
             events: {
@@ -32,11 +36,20 @@ const youtubeData = () => {
     };
 
     const addPlayList = () => {
-        const playList = myMusicList.value.map(item => item.videoId);
+        playList.value = myMusicList.value.map(item => item.videoId);
         player.value.cuePlaylist({
-            playlist: playList,
+            playlist: playList.value,
         });
         isReady.value = true;
+    };
+
+    const updatePlayList = (myMusicList) => {
+        player.value.cuePlaylist({
+            playlist: myMusicList.value[0].videoId,
+        });
+        setTimeout(()=>{
+            player.value.playVideo();
+        }, 1000);
     };
 
     const stateChange = (event) => {
@@ -58,7 +71,8 @@ const youtubeData = () => {
         player,
         myMusicList,
         isReady,
-        onYouTubeIframeAPIReady
+        onYouTubeIframeAPIReady,
+        updatePlayList,
     }
 };
 
@@ -88,7 +102,7 @@ export default {
         MusicList
     },
     setup() {
-        const { player, myMusicList, isReady, onYouTubeIframeAPIReady } = youtubeData();
+        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, updatePlayList } = youtubeData();
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
 
         watch(musicStatus, (newValue) => {
@@ -102,7 +116,12 @@ export default {
 
         watch(myMusicList, () => {
             if (myMusicList.value.length === 0) return;
-            onYouTubeIframeAPIReady();
+            
+            if (isReady.value === true) {
+                updatePlayList(myMusicList);
+            } else {
+                onYouTubeIframeAPIReady();
+            }
         });
 
         onMounted(()=> observeLoungeStatus());

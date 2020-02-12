@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { registMusic, getGroupList } from '@/service/Firebase';
+import { registMusic } from '@/service/Music';
+import { getGroupList } from '@/service/Group';
 import { computed, ref } from '@vue/composition-api';
 
 const clickEvent = (userInfo) => {

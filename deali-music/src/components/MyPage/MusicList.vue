@@ -27,7 +27,7 @@ const setMusicList = (props, store, emit) => {
         firebase.database()
             .ref(`music/${id}/${props.groupName}`)
             .on('value', (snapshot) => {
-                musicList.value = Object.values(snapshot.val());
+                musicList.value = Object.values(snapshot.val()).reverse();
                 emit('input', musicList.value);
         });
     }
