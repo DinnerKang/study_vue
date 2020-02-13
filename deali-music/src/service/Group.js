@@ -13,6 +13,7 @@ export function getGroup() {
     return firebase.database().ref('group');
 }
 
+
 // WRITE
 
 export function addMyGroup(data) {
