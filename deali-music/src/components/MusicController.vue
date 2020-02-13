@@ -15,19 +15,15 @@
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/database";
 import { ref } from "@vue/composition-api";
-import { videoController } from '@/service/Firebase.js';
+import { videoController } from '@/service/Control';
+import { getLoungeStatus } from '@/service/Status';
 
 const controlVideo = () => {
   let videoStatus = ref({});
 
-  firebase
-        .database()
-        .ref(`status/lounge`)
-        .on("value", snapshot => {
-          videoStatus.value = snapshot.val();
+  getLoungeStatus().on("value", snapshot => {
+      videoStatus.value = snapshot.val();
   });
 
   const videoControl = (state) => {

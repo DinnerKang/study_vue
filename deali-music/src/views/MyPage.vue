@@ -20,8 +20,7 @@
 
 <script>
 import { reactive, toRefs, computed, watch } from "@vue/composition-api";
-import * as firebase from "firebase/app";
-import "firebase/database";
+import { getGroupList } from '@/service/Group';
 import { addMyGroup, addAlbum, editMyGroupName } from '@/service/Group';
 
 const myGroup = (userName, userState) => {
@@ -31,9 +30,7 @@ const myGroup = (userName, userState) => {
 
     const getMyGroup = () => {
         if (userState.value === '딜리언즈') {
-            firebase
-                .database()
-                .ref(`group/${userName.value}`)
+            getGroupList(userName.value)
                 .on("value", snapshot => {
                     const res = snapshot.val();
                     if (res === null) {

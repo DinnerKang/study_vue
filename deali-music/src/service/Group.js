@@ -9,6 +9,10 @@ export function getGroupList(name) {
     return firebase.database().ref(`group/${name}`);
 }
 
+export function getGroup() {
+    return firebase.database().ref('group');
+}
+
 // WRITE
 
 export function addMyGroup(data) {

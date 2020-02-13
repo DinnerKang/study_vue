@@ -13,8 +13,7 @@
 </template>
 
 <script>
-import * as firebase from 'firebase/app';
-import 'firebase/database';
+import { getMusicListByGroup } from '@/service/Music';
 import { ref } from '@vue/composition-api';
 
 const setMusicList = (props, store, emit) => {
@@ -22,11 +21,8 @@ const setMusicList = (props, store, emit) => {
     const id = props.groupName === 'lounge' ? 'lounge' : store.state.login.dealiName;
     let musicList = ref([]);
 
-
     const getMusicList = () => {
-        firebase.database()
-            .ref(`music/${id}/${props.groupName}`)
-            .on('value', (snapshot) => {
+        getMusicListByGroup(id, props.groupName).on('value', (snapshot) => {
                 musicList.value = Object.values(snapshot.val()).reverse();
                 emit('input', musicList.value);
         });

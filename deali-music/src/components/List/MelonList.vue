@@ -20,10 +20,8 @@
 
 <script>
 import { reactive, toRefs } from '@vue/composition-api';
-import * as firebase from 'firebase/app';
-import 'firebase/database';
-import { getMelonChart } from '../../service/AWS';
-import { updateMelon } from '../../service/Firebase';
+import { getMelonChart } from '@/service/AWS';
+import { getMelonChartList, updateMelon } from '@/service/Melon';
 
 const getMelon = (store) => {
 
@@ -32,12 +30,10 @@ const getMelon = (store) => {
         updateDate: '',
     });
 
-    firebase.database()
-                .ref(`melon`)
-                .on('value', (snapshot) => {
-                    const res = snapshot.val();
-                    state.melonList = res.result;
-                    state.updateDate = res.registDate;
+    getMelonChartList().on('value', (snapshot) => {
+        const res = snapshot.val();
+        state.melonList = res.result;
+        state.updateDate = res.registDate;
     });
 
     const updateMelonChart = async() => {

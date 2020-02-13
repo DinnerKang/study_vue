@@ -6,10 +6,9 @@
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/database";
 import MusicList from "../components/MyPage/MusicList";
 import { addVideoStatus } from "@/service/Status";
+import { getLoungeStatus } from '@/service/Control';
 import { ref, watch, onMounted } from "@vue/composition-api";
 
 
@@ -81,12 +80,9 @@ const youtubeStatus = () => {
     let musicStatus = ref(0);
 
     const observeLoungeStatus = () => {
-        firebase
-            .database()
-            .ref(`control/lounge`)
-            .on("value", snapshot => {
-                musicStatus.value = snapshot.val();
-            });
+        getLoungeStatus().on("value", snapshot => {
+            musicStatus.value = snapshot.val();
+        });
     };
 
     return {
