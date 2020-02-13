@@ -5,8 +5,8 @@ import Store from '@/store';
 
 // Read
 
-export function getMusicListByGroup(id, groupName) {
-    return firebase.database().ref(`music/${id}/${groupName}`);
+export function getMusicListByGroup(data) {
+    return firebase.database().ref(`music/${data.id}/${data.groupName}`);
 }
 
 
@@ -24,3 +24,8 @@ export function registMusic(data) {
     return alert('저장했습니다.');
 }
 
+// Delete
+
+export function deleteMusic(data, key) {
+    firebase.database().ref(`music/${data.id}/${data.groupName}`).child(key).remove();
+}

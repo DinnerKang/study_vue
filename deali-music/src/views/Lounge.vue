@@ -40,12 +40,7 @@ const youtubeData = () => {
             playlist: playList.value,
         });
         isReady.value = true;
-    };
 
-    const updatePlayList = (myMusicList) => {
-        player.value.cuePlaylist({
-            playlist: myMusicList.value[0].videoId,
-        });
         setTimeout(()=>{
             player.value.playVideo();
         }, 1000);
@@ -71,7 +66,7 @@ const youtubeData = () => {
         myMusicList,
         isReady,
         onYouTubeIframeAPIReady,
-        updatePlayList,
+        addPlayList,
     }
 };
 
@@ -98,7 +93,7 @@ export default {
         MusicList
     },
     setup() {
-        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, updatePlayList } = youtubeData();
+        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
 
         watch(musicStatus, (newValue) => {
@@ -114,7 +109,7 @@ export default {
             if (myMusicList.value.length === 0) return;
             
             if (isReady.value === true) {
-                updatePlayList(myMusicList);
+                addPlayList();
             } else {
                 onYouTubeIframeAPIReady();
             }

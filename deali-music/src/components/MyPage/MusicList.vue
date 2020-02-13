@@ -4,6 +4,7 @@
         <ul>
           <li class="myMusic_list" v-for="(list, idx) in musicList" :key="idx">
             <div class="music_name">음악 : {{list.musicName}}</div>
+            <button @click="removeMusic(idx)">삭제</button>
           </li>
         </ul>
       </article>
@@ -13,7 +14,7 @@
 </template>
 
 <script>
-import { getMusicListByGroup } from '@/service/Music';
+import { getMusicListByGroup, deleteMusic } from '@/service/Music';
 import { ref } from '@vue/composition-api';
 
 const setMusicList = (props, store, emit) => {
@@ -22,15 +23,33 @@ const setMusicList = (props, store, emit) => {
     let musicList = ref([]);
 
     const getMusicList = () => {
-        getMusicListByGroup(id, props.groupName).on('value', (snapshot) => {
+        const data = {
+          id,
+          groupName: props.groupName,
+        };
+
+        getMusicListByGroup(data).on('value', (snapshot) => {
                 musicList.value = Object.values(snapshot.val()).reverse();
                 emit('input', musicList.value);
+        });
+    }
+
+    const removeMusic = (idx) => {
+        const data = {
+            id,
+            groupName: props.groupName,
+        };
+        
+        getMusicListByGroup(data).orderByKey().once('value', snapshot => {
+            const key = Object.keys(snapshot.val()).reverse()[idx];
+            deleteMusic(data, key);
         });
     }
 
     return {
         getMusicList,
         musicList,
+        removeMusic,
     }
 }
 
@@ -47,12 +66,13 @@ export default {
       }
     },
     setup(props, { root, emit }){
-        const { getMusicList, musicList } = setMusicList(props, root.$store, emit);
+        const { getMusicList, musicList, removeMusic } = setMusicList(props, root.$store, emit);
         getMusicList();
 
         return {
             musicList,
             getMusicList,
+            removeMusic,
         }
     }
 }
