@@ -6,8 +6,8 @@
                 <li class="group_area" v-for="(list, idx) in Object.values(groupData)"
                     :key="idx" >
                     <div @click="clickPlayList(list.groupName)">{{list.groupName}}</div>
-                    <button type="button" @click="clickEdit(list.groupName, groupData)">수정</button>
-                    <button type="button" @click="clickMakeAlbum(list.groupName, groupData)">DJ</button>
+                    <button type="button" @click="clickEdit(idx, groupData)">수정</button>
+                    <button type="button" @click="clickMakeShow(list.groupName, groupData)">공개</button>
                 </li>
 
                 <li class="group_area">
@@ -73,31 +73,22 @@ const clickEvent = (userName, userState, router) => {
         addMyGroup(data);
     };
 
-    const clickEdit = (beforeName, groupData) => {
-
-        const arr = Object.keys(groupData).map(function(key) {
-            return {[key]: groupData[key]};
-        });
-        const res = arr.filter(i=> Object.values(i)[0].groupName === beforeName);
-
+    const clickEdit = (idx, groupData) => {
+        const key = Object.keys(groupData)[idx];
         const data = {
-            key: Object.keys(res[0]),
-            groupName: 'abc',
+            key: key,
+            groupName: '수정한거6',
             userId: userName.value,
         };
         editMyGroupName(data);
     };
 
-    const clickMakeAlbum = (beforeName, groupData) => {
-        const arr = Object.keys(groupData).map(function(key) {
-            return {[key]: groupData[key]};
-        });
-        const res = arr.filter(i=> Object.values(i)[0].groupName === beforeName);
-
+    const clickMakeShow = (idx, groupData) => {
+        const key = Object.keys(groupData)[idx];
         const data = {
-            key: Object.keys(res[0]),
+            key: key,
             userId: userName.value,
-            isDJ: true,
+            isShow: true,
         };
 
         addAlbum(data);
@@ -107,7 +98,7 @@ const clickEvent = (userName, userState, router) => {
         clickPlayList,
         clickAddGroup,
         clickEdit,
-        clickMakeAlbum,
+        clickMakeShow,
     }
 }
 
@@ -118,7 +109,7 @@ export default {
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
 
         const { getMyGroup, groupData } = myGroup(userName, userState);
-        const { clickPlayList, clickAddGroup, clickEdit, clickMakeAlbum } = clickEvent(userName, userState, root.$router);
+        const { clickPlayList, clickAddGroup, clickEdit, clickMakeShow } = clickEvent(userName, userState, root.$router);
 
 
         watch(userName, () =>{
@@ -130,7 +121,7 @@ export default {
             clickPlayList,
             clickAddGroup,
             clickEdit,
-            clickMakeAlbum,
+            clickMakeShow,
         };
     }
 };
