@@ -7,7 +7,7 @@
                     :key="idx" >
                     <div @click="clickPlayList(list.groupName)">{{list.groupName}}</div>
                     <button type="button" @click="clickEdit(idx, groupData)">수정</button>
-                    <button type="button" @click="clickMakeShow(list.groupName, groupData)">공개</button>
+                    <button type="button" @click="clickMakeShow(idx, groupData)">공개</button>
                 </li>
 
                 <li class="group_area">

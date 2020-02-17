@@ -28,9 +28,9 @@ export function addMyGroup(data) {
 // UPDATE
 
 export function addAlbum(data) {
-    const key = data.key + '/isDJ';
+    const key = data.key + '/isShow';
     firebase.database().ref(`group/${data.userId}`).update({
-        [key] : data.isDJ,
+        [key] : data.isShow,
     });
 }
 

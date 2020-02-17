@@ -1,20 +1,23 @@
 <template>
   <div class="home">
-    <header-menu></header-menu>
+    <header-component></header-component>
     <search-bar class="search_bar"></search-bar>
     <router-view class="main"/>
+    <footer-component></footer-component>
   </div>
 </template>
 
 <script>
-import headerMenu from '../components/Header';
+import headerComponent from '../components/Header';
 import SearchBar from '../components/Search/SearchBar';
+import footerComponent from '../components/Footer';
 
 export default {
   name: 'Main',
   components: {
-    headerMenu,
+    headerComponent,
     SearchBar,
+    footerComponent,
   },
 }
 </script>

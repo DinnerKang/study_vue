@@ -4,25 +4,18 @@
       <router-link to="/myPage">마이페이지</router-link>
     </div>
     <music-controller class="music_control_container"></music-controller>
-    <section class="melon_container">
-      <article>
-        <melon-list></melon-list>
-      </article>
-    </section>
-    <dj-list></dj-list>
+    <show-list></show-list>
   </div>
 </template>
 
 <script>
-import MelonList from '../components/List/MelonList';
 import musicController from '@/components/MusicController';
-import DjList from "../components/List/DjList";
+import ShowList from "../components/List/ShowList";
 
 export default {
   components: {
-    MelonList,
     musicController,
-    DjList
+    ShowList
   },
 }
 </script>
@@ -30,9 +23,6 @@ export default {
   .home{
     text-align: center;
 
-    .melon_container{
-      width: 50%;
-    }
     .music_control_container{
       float: right;
       width: 300px;
