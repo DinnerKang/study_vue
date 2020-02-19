@@ -1,0 +1,128 @@
+[debug] [2020-02-19T10:56:25.223Z] ----------------------------------------------------------------------
+[debug] [2020-02-19T10:56:25.224Z] Command:       /Users/dinner/.nvm/versions/node/v12.6.0/bin/node /Users/dinner/.nvm/versions/node/v12.6.0/bin/firebase deploy
+[debug] [2020-02-19T10:56:25.224Z] CLI Version:   7.9.0
+[debug] [2020-02-19T10:56:25.224Z] Platform:      darwin
+[debug] [2020-02-19T10:56:25.224Z] Node Version:  v12.6.0
+[debug] [2020-02-19T10:56:25.225Z] Time:          Wed Feb 19 2020 19:56:25 GMT+0900 (GMT+09:00)
+[debug] [2020-02-19T10:56:25.225Z] ----------------------------------------------------------------------
+[debug] [2020-02-19T10:56:25.225Z] 
+[debug] [2020-02-19T10:56:25.231Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-19T10:56:25.231Z] > authorizing via signed-in user
+[debug] [2020-02-19T10:56:25.231Z] [iam] checking project vue-pwa-776e7 for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2020-02-19T10:56:25.232Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2020-02-19T10:56:25.232Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2020-02-19T10:56:25.555Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-19T10:56:25.570Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/vue-pwa-776e7:testIamPermissions  
+
+[debug] [2020-02-19T10:56:25.961Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-19T10:56:25.963Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/vue-pwa-776e7  
+ 
+[debug] [2020-02-19T10:56:26.870Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'vue-pwa-776e7'...
+[info] 
+[info] i  deploying database, hosting
+[info] i  database: checking rules syntax...
+[debug] [2020-02-19T10:56:26.874Z] >>> HTTP REQUEST PUT https://vue-pwa-776e7.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+[debug] [2020-02-19T10:56:28.311Z] <<< HTTP RESPONSE 200
+[info] ✔  database: rules syntax for database vue-pwa-776e7 is valid
+[debug] [2020-02-19T10:56:28.313Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/vue-pwa-776e7/versions  
+
+[debug] [2020-02-19T10:56:30.158Z] <<< HTTP RESPONSE 200
+[info] i  hosting[vue-pwa-776e7]: beginning deploy...
+[info] i  hosting[vue-pwa-776e7]: found 18 files in dist
+[debug] [2020-02-19T10:56:30.297Z] [hosting] hash cache [ZGlzdA] stored for 18 files
+[debug] [2020-02-19T10:56:30.297Z] [hosting][hash queue][FINAL]
+[debug] [2020-02-19T10:56:30.297Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/vue-pwa-776e7/versions/971224f77ec59d9e:populateFiles  
+ <request body omitted>
+[debug] [2020-02-19T10:56:32.100Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-19T10:56:32.101Z] [hosting][populate queue][FINAL]
+[debug] [2020-02-19T10:56:32.102Z] [hosting] uploads queued: 1
+[debug] [2020-02-19T10:56:35.484Z] [hosting][upload queue][FINAL]
+[info] ✔  hosting[vue-pwa-776e7]: file upload complete
+[debug] [2020-02-19T10:56:35.485Z] [hosting] deploy completed after 5326ms
+[info] i  database: releasing rules...
+[debug] [2020-02-19T10:56:35.706Z] >>> HTTP REQUEST PUT https://vue-pwa-776e7.firebaseio.com/.settings/rules.json  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+[debug] [2020-02-19T10:56:48.698Z] Error: connect ETIMEDOUT 35.201.97.85:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1056:14)
+[error] 
+[error] Error: Server Error. connect ETIMEDOUT 35.201.97.85:443
+[debug] [2020-02-19T10:56:55.246Z] ----------------------------------------------------------------------
+[debug] [2020-02-19T10:56:55.247Z] Command:       /Users/dinner/.nvm/versions/node/v12.6.0/bin/node /Users/dinner/.nvm/versions/node/v12.6.0/bin/firebase deploy
+[debug] [2020-02-19T10:56:55.247Z] CLI Version:   7.9.0
+[debug] [2020-02-19T10:56:55.247Z] Platform:      darwin
+[debug] [2020-02-19T10:56:55.247Z] Node Version:  v12.6.0
+[debug] [2020-02-19T10:56:55.248Z] Time:          Wed Feb 19 2020 19:56:55 GMT+0900 (GMT+09:00)
+[debug] [2020-02-19T10:56:55.248Z] ----------------------------------------------------------------------
+[debug] [2020-02-19T10:56:55.248Z] 
+[debug] [2020-02-19T10:56:55.252Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-19T10:56:55.253Z] > authorizing via signed-in user
+[debug] [2020-02-19T10:56:55.253Z] [iam] checking project vue-pwa-776e7 for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2020-02-19T10:56:55.254Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/vue-pwa-776e7:testIamPermissions  
+
+[debug] [2020-02-19T10:56:56.477Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-19T10:56:56.479Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/vue-pwa-776e7  
+ 
+[debug] [2020-02-19T10:56:57.002Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'vue-pwa-776e7'...
+[info] 
+[info] i  deploying database, hosting
+[info] i  database: checking rules syntax...
+[debug] [2020-02-19T10:56:57.006Z] >>> HTTP REQUEST PUT https://vue-pwa-776e7.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+[debug] [2020-02-19T10:57:09.956Z] Error: connect ETIMEDOUT 35.201.97.85:443
+    at TCPConnectWrap.afterConnect [as oncomplete] (net.js:1056:14)
+[error] 
+[error] Error: Server Error. connect ETIMEDOUT 35.201.97.85:443
+[debug] [2020-02-19T10:57:25.584Z] ----------------------------------------------------------------------
+[debug] [2020-02-19T10:57:25.586Z] Command:       /Users/dinner/.nvm/versions/node/v12.6.0/bin/node /Users/dinner/.nvm/versions/node/v12.6.0/bin/firebase deploy
+[debug] [2020-02-19T10:57:25.586Z] CLI Version:   7.9.0
+[debug] [2020-02-19T10:57:25.586Z] Platform:      darwin
+[debug] [2020-02-19T10:57:25.586Z] Node Version:  v12.6.0
+[debug] [2020-02-19T10:57:25.586Z] Time:          Wed Feb 19 2020 19:57:25 GMT+0900 (GMT+09:00)
+[debug] [2020-02-19T10:57:25.586Z] ----------------------------------------------------------------------
+[debug] [2020-02-19T10:57:25.586Z] 
+[debug] [2020-02-19T10:57:25.591Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-19T10:57:25.591Z] > authorizing via signed-in user
+[debug] [2020-02-19T10:57:25.591Z] [iam] checking project vue-pwa-776e7 for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2020-02-19T10:57:25.592Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/vue-pwa-776e7:testIamPermissions  
+
+[debug] [2020-02-19T10:57:26.955Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-19T10:57:26.957Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/vue-pwa-776e7  
+ 
+[debug] [2020-02-19T10:57:27.807Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Deploying to 'vue-pwa-776e7'...
+[info] 
+[info] i  deploying database, hosting
+[info] i  database: checking rules syntax...
+[debug] [2020-02-19T10:57:27.811Z] >>> HTTP REQUEST PUT https://vue-pwa-776e7.firebaseio.com/.settings/rules.json?dryRun=true  
+ {
+  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}

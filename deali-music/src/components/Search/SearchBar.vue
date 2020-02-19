@@ -2,7 +2,7 @@
     <div class="search_container">
         <input type="text" class="search_text" v-model="searchText" placeholder="검색어" 
                     @keyup.enter="clickSearchBtn" />
-        <img :src="youtubeBtnImg" class="youtube_btn" alt="유튜브 검색" @click="clickSearchBtn" />
+        <button class="youtube_btn" @click="clickSearchBtn">검색</button>
     </div>
 </template>
 
@@ -39,11 +39,9 @@ const searchYoutube = (router) => {
 export default {
     setup(props, { root }) {
 
-        const youtubeBtnImg = require('../../assets/youtube.jpg');
         const { clickSearchBtn, searchText } = searchYoutube(root.$router);
         
         return {
-            youtubeBtnImg,
             clickSearchBtn,
             searchText,
         };
@@ -53,10 +51,11 @@ export default {
 
 <style lang="scss" scoped>
 .search_container{
-    width: 50%;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
-    border: 1px solid red;
+    border: 1px solid #000;
     margin: 0 auto;
 
     .search_text{

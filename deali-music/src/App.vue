@@ -16,7 +16,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
  ul, li{
    list-style: none;
    margin: 0;

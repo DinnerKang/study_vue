@@ -1,10 +1,13 @@
 <template>
     <header>
         <div class="header_container">
-            <div class="user_area">
-                {{userName}}  {{userState}}
+            <div class="logo_area">
+                로고
             </div>
-            <div>
+            <div class="search_area">
+                <search-bar />
+            </div>
+            <div class="info_area">
                 <button v-if="!userState" type="button" class="login_btn" @click="userLogin">로그인</button>
                 <button v-else type="button" class="login_btn" @click="userLogout">로그아웃</button>
             </div>
@@ -16,6 +19,7 @@
 import { computed } from '@vue/composition-api';
 import * as firebase from 'firebase/app';
 import "firebase/auth";
+import SearchBar from '../Search/SearchBar';
 
 const getUserInfo = (store) => {
     let userName = computed(() => store.state.login.userName || '로그인을 하셔야 서비스를 이용하실 수 있습니다.');
@@ -43,6 +47,9 @@ const getUserInfo = (store) => {
 }
 
 export default {
+    components: {
+        SearchBar,
+    },
     setup(props, { root }) {
         const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store);
 
@@ -60,7 +67,6 @@ export default {
     header{
         width: 100%;
         height: 40px;
-        border-bottom: 1px solid gray;
 
         .header_container{
             width: 100%;
@@ -71,13 +77,20 @@ export default {
             align-items: center;
             justify-content: space-between;
 
-            .user_area{
-                width: 500px;
+            .logo_area{
+                width: 80px;
+                height: 20px;
             }
+            .search_area{
+                width: 500px;
+                height: 30px;
+            }
+            .info_area{
+                width: 100px;
+            }
+
             .login_btn{
                 width: 100px;
-                border: 1px solid gray;
-                background-color: #fff;
             }
         }
         
