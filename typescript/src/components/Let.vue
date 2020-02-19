@@ -1,25 +1,37 @@
 <template>
   <div class="hello">
-    {{a}} <br />
-    {{c}}
+    hi
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-const enum DoorState {
-  Open,
-  Close,
-  Ajar,
-}
+
 
 @Component
 export default class HelloWorld extends Vue {
 
-  a = DoorState.Open;
-  c = DoorState['Close'];
+  clickEvent() {
+      let a = 2;
+        console.log('1 :', a);
+      if (a==2) {
+          let a = 123; 
+          console.log('2 :', a);
+      }
+      console.log('3 :', a);
+  }
+
+  concatString(a,b, c?) {
+      console.log(a + b + c);
+  }
   
+  created() {
+      this.clickEvent();
+
+      this.concatString('a', 'b', 'c');
+      this.concatString('a', 'b');
+  }
 }
 </script>
 
