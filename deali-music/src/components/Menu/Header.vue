@@ -2,14 +2,18 @@
     <header>
         <div class="header_container">
             <div class="logo_area">
-                로고
+                Dealibeat
             </div>
             <div class="search_area">
                 <search-bar />
             </div>
             <div class="info_area">
                 <button v-if="!userState" type="button" class="login_btn" @click="userLogin">로그인</button>
-                <button v-else type="button" class="login_btn" @click="userLogout">로그아웃</button>
+                <div class="logout_area" v-else>
+                    <div class="name_area"><strong>{{userName}}</strong>님</div>
+                    <router-link to="/myPage" class="page_link">마이페이지</router-link>
+                    <button type="button" class="login_btn" @click="userLogout">로그아웃</button>
+                </div>
             </div>
         </div>
     </header>
@@ -66,7 +70,7 @@ export default {
 <style lang="scss" scoped>
     header{
         width: 100%;
-        height: 40px;
+        height: 56px;
 
         .header_container{
             width: 100%;
@@ -76,21 +80,48 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            font-size:12px;
 
             .logo_area{
-                width: 80px;
-                height: 20px;
+                width: 150px;
+                height: 30px;
+                display: flex;
+                align-items: center;
             }
             .search_area{
-                width: 500px;
+                width: 630px;
                 height: 30px;
             }
             .info_area{
-                width: 100px;
-            }
+                width: 245px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                color: $Gray600;
 
+                .logout_area{
+                    width: 100%;
+                    display: flex;
+                    height: 100%;
+                    align-items: center;
+                    justify-content: flex-end;
+                    
+                    .name_area{
+                        width: 110px;
+                        text-align: center;
+                    }
+                }
+            }  
+            .page_link {
+                color: $Gray600;
+            }
             .login_btn{
-                width: 100px;
+                border: none;
+                background-color: #fff;
+                margin-left: 24px;
+                cursor: pointer;
+                color: $Gray600;
             }
         }
         

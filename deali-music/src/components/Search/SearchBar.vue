@@ -1,8 +1,9 @@
 <template>
     <div class="search_container">
-        <input type="text" class="search_text" v-model="searchText" placeholder="검색어" 
+        <input type="text" class="search_text" v-model="searchText" placeholder="검색어를 입력하세요." 
                     @keyup.enter="clickSearchBtn" />
-        <button class="youtube_btn" @click="clickSearchBtn">검색</button>
+        <button class="search_btn" @click="clickSearchBtn">검색</button>
+        <img :src="searchIcon" class="search_icon" alt="검색창" />
     </div>
 </template>
 
@@ -12,6 +13,7 @@ import { ref } from '@vue/composition-api';
 const searchYoutube = (router) => {
     
     const searchText = ref('');
+    const searchIcon = require('@/assets/icons/search-black.png');
     let searchDelay = true;
 
 
@@ -32,6 +34,7 @@ const searchYoutube = (router) => {
     return {
         clickSearchBtn,
         searchText,
+        searchIcon,
     }
 }
 
@@ -39,40 +42,56 @@ const searchYoutube = (router) => {
 export default {
     setup(props, { root }) {
 
-        const { clickSearchBtn, searchText } = searchYoutube(root.$router);
+        const { clickSearchBtn, searchText, searchIcon } = searchYoutube(root.$router);
         
         return {
             clickSearchBtn,
             searchText,
+            searchIcon,
         };
     },
 };
 </script>
 
 <style lang="scss" scoped>
+::placeholder{
+    color: $Gray400;
+}
+
 .search_container{
+    position: relative;
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
-    border: 1px solid #000;
+    justify-content: space-between;
+    border: 1px solid $Gray400;
     margin: 0 auto;
+    padding: 0 12px 0 32px;
+    box-sizing: border-box;
+    border-radius: 4px;
 
     .search_text{
-        width: calc(100% - 56px);
-        height: 32px;
+        width: calc(100% - 35px);
+        height: 26px;
         border: none;
-        padding-left:12px;
 
         &:focus{
             outline: none;
         }
     }
 
-    .youtube_btn{
-        width: 56px;
-        height: 32px;
+    .search_btn{
+        background-color: $White;
+        border: none;
+        height: 26px;
+        color: $Gray400;
         cursor: pointer;
+    }
+    .search_icon{
+        position: absolute;
+        left: 6px;
+        width: 20px;
     }
 }
 </style>
