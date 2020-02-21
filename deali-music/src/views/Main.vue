@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div>
     <header-menu></header-menu>
     <router-view class="main"/>
     <footer-component></footer-component>
@@ -8,7 +8,7 @@
 
 <script>
 import HeaderMenu from '../components/Menu/Header';
-import footerComponent from '../components/Footer';
+import footerComponent from '../components/Menu/Footer';
 
 export default {
   name: 'Main',
@@ -22,7 +22,6 @@ export default {
 <style lang="scss" scoped>
 
   .main{
-    max-width: 1024px;
-    margin: 60px auto 0;
+    width: 1024px;
   }
 </style>
