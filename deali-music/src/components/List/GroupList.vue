@@ -1,16 +1,17 @@
 <template>
-    <div>
-        <div class="group_container" 
+    <div >
+        <div class="group_container"
+            @click="clickGroup"
             :style="{ width : `${width}px`, height: `${height}px`}">
             
             <div class="bottom_area" v-if="!isOutside">
-                <div class="main_text">죽어어어</div>
-                <div class="sub_text">123213</div>
+                <div class="main_text">{{list.groupName}}</div>
+                <div class="sub_text">{{list.description}}</div>
             </div>
         </div>
         <div class="outside_area" v-if="isOutside">
-            <div class="main_text">죽어어어</div>
-            <div class="sub_text">123213</div>
+            <div class="main_text">{{list.groupName}}</div>
+            <div class="sub_text">{{list.description}}</div>
         </div>
     </div>
     
@@ -19,6 +20,15 @@
 <script>
 export default {
     props: {
+        list: {
+            type: [Object, String],
+            default: () => {
+                return {
+                    groupName : '',
+                    description: '',
+                }
+            }
+        },
         width: {
             type: String,
             default: '480',
@@ -31,6 +41,21 @@ export default {
             type:Boolean,
             default: false,
         }
+    },
+    setup(props, { root }) {
+        const clickGroup = () => {
+            if (!props.list.groupName) return;
+
+            root.$router.push({
+                path: '/playPage',
+                query: {
+                    groupName: props.list.groupName
+            },
+        });
+        }
+        return {
+            clickGroup,
+        }
     }
 }
 </script>
@@ -42,6 +67,7 @@ export default {
         background-color: #000;
         color: $White;
         position: relative;
+        cursor: pointer;
 
         .bottom_area{
             position: absolute;

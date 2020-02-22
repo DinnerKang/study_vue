@@ -43,7 +43,6 @@ const myGroup = (store) => {
   getGroupList(store.state.login.dealiName).on('value', snapshot => {
       if (store.state.dealiName === '') return;
       playList.value = Object.values(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
-      console.log(playList);
   });
 
   return {
