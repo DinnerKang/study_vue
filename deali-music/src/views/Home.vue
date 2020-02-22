@@ -5,11 +5,8 @@
         마이 플레이리스트
       </h2>
       <div class="group_list">
-        <article >
-          <group-list></group-list>
-        </article>
-        <article>
-          <group-list></group-list>
+        <article v-for="(list, idx) in playList" :key="idx">
+          <group-list :list="list"></group-list>
         </article>
       </div>
     </section>
@@ -36,11 +33,35 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api';
 import GroupList from '@/components/List/GroupList';
+import { getGroupList } from '@/service/Group';
+
+const myGroup = (store) => {
+  const playList = ref([]);
+  console.log(store.state.login.dealiName);
+  getGroupList(store.state.login.dealiName).on('value', snapshot => {
+      if (store.state.dealiName === '') return;
+      playList.value = Object.values(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
+      console.log(playList);
+  });
+
+  return {
+    playList,
+  }
+};
+
 
 export default {
   components: {
     GroupList,
+  },
+  setup(props, { root }) {
+    const { playList } = myGroup(root.$store);
+
+    return {
+      playList,
+    }
   }
 }
 </script>

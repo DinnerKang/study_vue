@@ -73,8 +73,7 @@ export default {
         height: 56px;
 
         .header_container{
-            width: 100%;
-            max-width: 1024px;
+            width: 1024px;
             height: 100%;
             margin: 0 auto;
             display: flex;
@@ -108,20 +107,22 @@ export default {
                     justify-content: flex-end;
                     
                     .name_area{
-                        width: 110px;
+                        width: 100px;
                         text-align: center;
                     }
                 }
             }  
             .page_link {
                 color: $Gray600;
+                width: 70px;
             }
             .login_btn{
                 border: none;
                 background-color: #fff;
-                margin-left: 24px;
+                margin-left: 20px;
                 cursor: pointer;
                 color: $Gray600;
+                width: 70px;
             }
         }
         

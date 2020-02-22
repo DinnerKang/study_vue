@@ -86,6 +86,7 @@ export default {
         border: none;
         height: 26px;
         color: $Gray400;
+        width: 40px;
         cursor: pointer;
     }
     .search_icon{
