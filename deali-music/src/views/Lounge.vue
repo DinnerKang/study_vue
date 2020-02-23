@@ -7,7 +7,7 @@
 
 <script>
 import MusicList from "../components/MyPage/MusicList";
-import { addVideoStatus } from "@/service/Status";
+import { addVideoStatus, updateVideoTime } from "@/service/Status";
 import { getLoungeStatus } from '@/service/Control';
 import { ref, watch, onMounted } from "@vue/composition-api";
 
@@ -48,17 +48,32 @@ const youtubeData = () => {
 
     const stateChange = (event) => {
         if (event.data === 1 || event.data === 2) {
-            const playTime = player.value.getDuration();
+            
             const data = {
                 status: event.data,
-                playTime,
+                playTime: player.value.getDuration(),
                 videoName: myMusicList.value.filter(
                     item =>
                         item.videoId === player.value.getVideoData()["video_id"]
                 )[0].musicName,
             };
             addVideoStatus(data);
+
+            // 시간 흐르는 이벤트
+            if (event.data === 1) {
+                const timer = setInterval(()=> {
+                    updateTimer(player);
+                    if (event.data !== 1) clearInterval(timer);
+                }, 1000);
+            }
         }
+    };
+
+    const updateTimer = (player) => {
+        const data = {
+            currentTime: player.value.getCurrentTime(),
+        }
+        updateVideoTime(data);
     };
 
     return {

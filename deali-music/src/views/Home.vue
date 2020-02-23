@@ -39,7 +39,7 @@ import { getGroupList } from '@/service/Group';
 
 const myGroup = (store) => {
   const playList = ref([]);
-  console.log(store.state.login.dealiName);
+  
   getGroupList(store.state.login.dealiName).on('value', snapshot => {
       if (store.state.dealiName === '') return;
       playList.value = Object.values(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);

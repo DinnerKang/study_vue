@@ -17,3 +17,11 @@ export function addVideoStatus(data) {
         videoName: data.videoName,
     });
 }
+
+// Update
+
+export function updateVideoTime(data) {
+    firebase.database().ref('status/lounge').update({
+        currentTime: data.currentTime,
+    })
+}

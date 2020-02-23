@@ -15,9 +15,13 @@
                 <img class="icon_btn next_btn" :src="nextIcon" @click="videoControl('next')" alt="다음곡" />
                 <img class="icon_btn play_icon" :src="randomIcon" alt="랜덤재생" />
                 <div class="bar_area">
-                    <div>00:00</div>
-                    <div class="bar"></div>
-                    <div>00:00</div>
+                    <div>{{ videoStatus.currentTime | getTime }}</div>
+                    <div class="percent_area">
+                        <div class="bar" />
+                        <div class="percent_bar" 
+                            :style="{ width : videoStatus.currentTime / videoStatus.playTime * 300 +'px' }" />
+                    </div>
+                    <div>{{ videoStatus.playTime | getTime}}</div>
                 </div>
             </div>
             <div class="option_area">
@@ -25,17 +29,6 @@
                 <img class="option_icon" :src="menuIcon" alt="메뉴" />
             </div>
         </div>
-        
-        
-        <!--
-        <div>{{ videoStatus.videoName }} ({{ videoStatus.status === 1 ? '재생중' : '정지' }})</div>
-        <div>{{ videoStatus.playTime | getTime}}</div>
-        <div>
-            <button type="button" @click="videoControl('stop')">정지</button>
-            <button type="button" @click="videoControl('prev')">이전곡</button>
-            <button type="button" @click="videoControl('next')">다음곡</button>
-        </div>
-        -->
     </footer>
 </template>
 
@@ -45,10 +38,11 @@ import { videoController } from "@/service/Control";
 import { getLoungeStatus } from "@/service/Status";
 
 const controlVideo = () => {
-    let videoStatus = ref({});
+    const videoStatus = ref({});
 
     getLoungeStatus().on("value", snapshot => {
         videoStatus.value = snapshot.val();
+        console.log();
     });
 
     const videoControl = state => {
@@ -57,9 +51,10 @@ const controlVideo = () => {
 
     return {
         videoControl,
-        videoStatus
+        videoStatus,
     };
 };
+
 
 const iconData = () => {
     const startIcon = require('../../assets/icons/start-white.png');
@@ -102,8 +97,7 @@ footer {
     color: $White;
     
     .footer_area{
-        width: 100%;
-        max-width: 1024px;
+        width: 1024px;
         height: 100%;
         margin: 0 auto;
         position: relative;
@@ -165,12 +159,27 @@ footer {
             align-items: center;
             color: $Gray600;
 
-            .bar{
+            .percent_area{
+                position: relative;
+                margin: 0 10px;
                 width: 300px;
                 height: 2px;
-                background-color: $Gray600;
-                margin: 0 10px;
+
+                .bar{
+                    position: absolute;
+                    width: 300px;
+                    height: 2px;
+                    background-color: $Gray600;
+                }
+                .percent_bar{
+                    position: absolute;
+                    width: 0px;
+                    height: 2px;
+                    background-color: red;
+                    z-index: 1;
+                }
             }
+            
         }
     }
     .option_area{
