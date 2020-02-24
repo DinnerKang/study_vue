@@ -104,7 +104,7 @@ export default {
         const getOriginList = (payload) => {
             originMusicList.value = payload;
         };
-        
+
         watch(musicStatus, (newValue) => {
             if (!isReady.value) return;
 

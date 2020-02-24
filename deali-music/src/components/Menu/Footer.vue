@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { ref } from "@vue/composition-api";
+import { ref, onMounted, onBeforeUnmount } from "@vue/composition-api";
 import { videoController, updatePlayStyle } from "@/service/Control";
 import { getLoungeStatus } from "@/service/Status";
 
@@ -62,21 +62,25 @@ const controlVideo = () => {
     const playStyle = ref("Straight");
     const playerStart = ref(false);
 
-    getLoungeStatus().on("value", snapshot => {
-        if (videoStatus.value === snapshot.val()) return;
-        videoStatus.value = snapshot.val();
-        console.log(snapshot.val());
-        // currentTime이 새로고침 할 경우 정확하지 않음
-        const timer = setInterval(()=> {
-            if (videoStatus.value.status !== 1) {
-                playerStart.value = true;
-                console.log('stop');
-                return clearInterval(timer);
-            }
-            console.log('start');
-            videoStatus.value.currentTime += 1;
-        }, 1000);
-    });
+    const getStatus = () => {
+        console.log('hi');
+        getLoungeStatus().on("value", snapshot => {
+            videoStatus.value = snapshot.val();
+            console.log(snapshot.val());
+            // currentTime이 새로고침 할 경우 정확하지 않음
+            const timer = setInterval(()=> {
+                if (videoStatus.value.status === 2) {
+                    playerStart.value = true;
+                    console.log('stop');
+                    return clearInterval(timer);
+                }
+                if (videoStatus.value.status === 1) {
+                    console.log('start');
+                    videoStatus.value.currentTime += 1;
+                }
+            }, 1000);
+        });
+    };
 
     const videoControl = state => {
         videoController(state, playStyle.value);
@@ -98,7 +102,8 @@ const controlVideo = () => {
         randomPlay,
         straightPlay,
         playStyle,
-        playerStart
+        playerStart,
+        getStatus,
     };
 };
 
@@ -133,7 +138,13 @@ export default {
             straightPlay,
             playStyle,
             playerStart,
+            getStatus,
         } = controlVideo();
+
+        onMounted(()=> getStatus());
+        onBeforeUnmount(()=> {
+            getLoungeStatus().off();
+        });
 
         return {
             videoControl,
