@@ -20,7 +20,8 @@ import { ref } from '@vue/composition-api';
 const setMusicList = (props, store, emit) => {
 
     const id = props.groupName === 'lounge' ? 'lounge' : store.state.login.dealiName;
-    let musicList = ref([]);
+    const musicList = ref([]);
+    const originList = ref([]);
 
     const getMusicList = () => {
         const data = {
@@ -30,7 +31,9 @@ const setMusicList = (props, store, emit) => {
 
         getMusicListByGroup(data).on('value', (snapshot) => {
                 musicList.value = Object.values(snapshot.val()).reverse();
+                originList.value = Object.values(snapshot.val()).reverse();
                 emit('input', musicList.value);
+                emit('origin-list', originList.value);
         });
     }
 

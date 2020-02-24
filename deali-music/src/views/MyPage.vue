@@ -1,5 +1,5 @@
 <template>
-    <article class="myPage_container">
+    <section class="myPage_container">
         <div>
             <h2>내 그룹 설정</h2>
             <ul>
@@ -15,13 +15,18 @@
                 </li>
             </ul>
         </div>
-    </article>
+        <modal :isOpen="false" @close-modal="isOpen=false">
+            <div>머리</div>
+            <div>몸통</div>
+        </modal>
+    </section>
 </template>
 
 <script>
 import { reactive, toRefs, computed, watch } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { addMyGroup, addAlbum, editMyGroupName } from '@/service/Group';
+import Modal  from '@/components/Common/Modal';
 
 const myGroup = (userName, userState) => {
     const state = reactive({
@@ -65,12 +70,13 @@ const clickEvent = (userName, userState, router) => {
     };
 
     const clickAddGroup = () => {
-        if (userState.value !== '딜리언즈') return alert('딜리언즈만 추가가 가능합니다.');
+        
+        /*
         const data = {
             groupName: '기본 그룹',
             userId: userName.value,
         };
-        addMyGroup(data);
+        addMyGroup(data); */
     };
 
     const clickEdit = (idx, groupData) => {
@@ -104,6 +110,9 @@ const clickEvent = (userName, userState, router) => {
 
 export default {
     name: "MyPage",
+    components: {
+        Modal,
+    },
     setup(props, { root }) {
         const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
@@ -127,6 +136,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+
+    .myPage_container{
+        margin: 0 auto;
+
+
+    }
   .group_area{
     width: 200px;
     height: 100px;

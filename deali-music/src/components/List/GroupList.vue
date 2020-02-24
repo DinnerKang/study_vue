@@ -19,6 +19,7 @@
 
 <script>
 export default {
+    name: 'GroupList',
     props: {
         list: {
             type: [Object, String],

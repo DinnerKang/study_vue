@@ -2,7 +2,7 @@
   <div class="home">
     <section class="my_play_list">
       <h2>
-        마이 플레이리스트
+        나의 플레이리스트
       </h2>
       <div class="group_list">
         <article v-for="(list, idx) in playList" :key="idx">
@@ -12,20 +12,11 @@
     </section>
     <section class="recomend_play_list">
       <h2>
-        추천 플레이리스트
+        공개 플레이리스트
       </h2>
       <div class="group_list">
-        <article >
-          <group-list :width="'208'" :height="'90'" :is-outside="true"></group-list>
-        </article>
-        <article>
-          <group-list :width="'208'" :height="'90'" :is-outside="true"></group-list>
-        </article>
-        <article>
-          <group-list :width="'208'" :height="'90'" :is-outside="true"></group-list>
-        </article>
-        <article>
-          <group-list :width="'208'" :height="'90'" :is-outside="true"></group-list>
+        <article v-for="(list, idx) in groupList" :key="idx">
+          <group-list :width="'208'" :height="'90'" :is-outside="true" :list="list"></group-list>
         </article>
       </div>
     </section>
@@ -35,7 +26,7 @@
 <script>
 import { ref } from '@vue/composition-api';
 import GroupList from '@/components/List/GroupList';
-import { getGroupList } from '@/service/Group';
+import { getGroupList, getGroup } from '@/service/Group';
 
 const myGroup = (store) => {
   const playList = ref([]);
@@ -50,6 +41,31 @@ const myGroup = (store) => {
   }
 };
 
+const openGroup = () => {
+  const groupList = ref([]);
+
+  getGroup().once("value", snapshot => {
+    const keys = Object.keys(snapshot.val());
+    keys.map(item => {
+      getGroup()
+        .child(item)
+        .orderByChild("isShow")
+        .equalTo(true)
+        .on("child_added", snapshot => {
+          const data = snapshot.val();
+          groupList.value.push({
+              name: item,
+              groupName: data.groupName,
+              description: data.description,
+          });
+        });
+    });
+  });
+
+  return {
+    groupList,
+  }
+};
 
 export default {
   components: {
@@ -57,9 +73,11 @@ export default {
   },
   setup(props, { root }) {
     const { playList } = myGroup(root.$store);
+    const { groupList } = openGroup();
 
     return {
       playList,
+      groupList,
     }
   }
 }

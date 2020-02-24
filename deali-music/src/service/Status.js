@@ -11,17 +11,10 @@ export function getLoungeStatus() {
 // Write
 
 export function addVideoStatus(data) {
-    firebase.database().ref('status/lounge').set({
+    return firebase.database().ref('status/lounge').set({
         status: data.status,
+        currentTime: data.currentTime,
         playTime: data.playTime,
         videoName: data.videoName,
     });
-}
-
-// Update
-
-export function updateVideoTime(data) {
-    firebase.database().ref('status/lounge').update({
-        currentTime: data.currentTime,
-    })
 }

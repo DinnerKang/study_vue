@@ -9,7 +9,7 @@
                     <div class="sub_text">
                         <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
                         <button class="btn" @click="clickRegist(list)">담기</button>
-                        <button class="btn" @click="clickRegist(list, 'default')">기본에 담기</button>
+                        <button class="btn" @click="clickRegist(list, '다비치 모음')">특정한곳 담기</button>
                     </div>
                 </div>
             </li>

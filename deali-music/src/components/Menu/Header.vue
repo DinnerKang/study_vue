@@ -115,6 +115,8 @@ export default {
             .page_link {
                 color: $Gray600;
                 width: 70px;
+                text-align: center;
+                font-size:12px;
             }
             .login_btn{
                 border: none;
@@ -123,6 +125,8 @@ export default {
                 cursor: pointer;
                 color: $Gray600;
                 width: 70px;
+                text-align: center;
+                font-size:12px;
             }
         }
         

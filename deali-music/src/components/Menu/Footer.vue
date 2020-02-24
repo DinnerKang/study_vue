@@ -2,24 +2,44 @@
     <footer class="myPage_container">
         <div class="footer_area">
             <div class="name_area">
-                <div class="picture_area">
-                </div>
-                <div class="music_name_area">
-                    {{ videoStatus.videoName }}
-                </div>
+                <div class="picture_area"></div>
+                <div class="music_name_area">{{ videoStatus.videoName }}</div>
             </div>
             <div class="controll_area">
-                <img class="icon_btn play_icon" :src="straightIcon" alt="그냥재생" />
+                <img
+                    class="icon_btn play_icon"
+                    :src="playStyle === 'Straight' ? straightWhiteIcon : straightGrayIcon"
+                    @click="straightPlay"
+                    alt="그냥재생"
+                />
                 <img class="icon_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
-                <img class="icon_btn start_icon" :src="startIcon" @click="videoControl('start')" alt="시작" />
-                <img class="icon_btn next_btn" :src="nextIcon" @click="videoControl('next')" alt="다음곡" />
-                <img class="icon_btn play_icon" :src="randomIcon" alt="랜덤재생" />
+                <img
+                    class="icon_btn start_icon"
+                    :src="startIcon"
+                    @click="videoControl('start')"
+                    alt="시작"
+                />
+                <img
+                    class="icon_btn next_btn"
+                    :src="nextIcon"
+                    @click="videoControl('next')"
+                    alt="다음곡"
+                />
+                <img
+                    class="icon_btn play_icon"
+                    :src="playStyle === 'Random' ? randomWhiteIcon : randomGrayIcon"
+                    alt="랜덤재생"
+                    @click="randomPlay"
+                />
                 <div class="bar_area">
-                    <div>{{ videoStatus.currentTime | getTime }}</div>
+                    <div>{{ videoStatus.currentTime | getTime(playerStart) }}</div>
                     <div class="percent_area">
                         <div class="bar" />
-                        <div class="percent_bar" 
-                            :style="{ width : videoStatus.currentTime / videoStatus.playTime * 300 +'px' }" />
+                        <div
+                            class="percent_bar"
+                            v-if="playerStart"
+                            :style="{ width : videoStatus.currentTime / videoStatus.playTime * 300 +'px' }"
+                        />
                     </div>
                     <div>{{ videoStatus.playTime | getTime}}</div>
                 </div>
@@ -34,54 +54,95 @@
 
 <script>
 import { ref } from "@vue/composition-api";
-import { videoController } from "@/service/Control";
+import { videoController, updatePlayStyle } from "@/service/Control";
 import { getLoungeStatus } from "@/service/Status";
 
 const controlVideo = () => {
     const videoStatus = ref({});
+    const playStyle = ref("Straight");
+    const playerStart = ref(false);
 
     getLoungeStatus().on("value", snapshot => {
+        if (videoStatus.value === snapshot.val()) return;
         videoStatus.value = snapshot.val();
-        console.log();
+        console.log(snapshot.val());
+        // currentTime이 새로고침 할 경우 정확하지 않음
+        const timer = setInterval(()=> {
+            if (videoStatus.value.status !== 1) {
+                playerStart.value = true;
+                console.log('stop');
+                return clearInterval(timer);
+            }
+            console.log('start');
+            videoStatus.value.currentTime += 1;
+        }, 1000);
     });
 
     const videoControl = state => {
-        videoController(state);
+        videoController(state, playStyle.value);
+    };
+
+    const randomPlay = () => {
+        playStyle.value = "Random";
+        updatePlayStyle(playStyle.value);
+    };
+
+    const straightPlay = () => {
+        playStyle.value = "Straight";
+        updatePlayStyle(playStyle.value);
     };
 
     return {
         videoControl,
         videoStatus,
+        randomPlay,
+        straightPlay,
+        playStyle,
+        playerStart
     };
 };
 
-
 const iconData = () => {
-    const startIcon = require('../../assets/icons/start-white.png');
-    const menuIcon= require('../../assets/icons/menu-white.png');
-    const soundIcon = require('../../assets/icons/sound-white.png');
-    const nextIcon = require('../../assets/icons/prev-white.png');
-    const straightIcon = require('../../assets/icons/straight-gray.png');
-    const randomIcon = require('../../assets/icons/random-gray.png');
+    const startIcon = require("../../assets/icons/start-white.png");
+    const menuIcon = require("../../assets/icons/menu-white.png");
+    const soundIcon = require("../../assets/icons/sound-white.png");
+    const nextIcon = require("../../assets/icons/prev-white.png");
+    const straightGrayIcon = require("../../assets/icons/straight-gray.png");
+    const straightWhiteIcon = require("../../assets/icons/straight-white.png");
+    const randomGrayIcon = require("../../assets/icons/random-gray.png");
+    const randomWhiteIcon = require("../../assets/icons/random-white.png");
 
     return {
         startIcon,
         menuIcon,
         soundIcon,
         nextIcon,
-        straightIcon,
-        randomIcon,
-    }
-}
+        straightGrayIcon,
+        straightWhiteIcon,
+        randomGrayIcon,
+        randomWhiteIcon
+    };
+};
 
 export default {
     setup() {
-        const { videoControl, videoStatus } = controlVideo();
-        
+        const {
+            videoControl,
+            videoStatus,
+            randomPlay,
+            straightPlay,
+            playStyle,
+            playerStart,
+        } = controlVideo();
+
         return {
             videoControl,
             videoStatus,
-            ...iconData(),
+            randomPlay,
+            straightPlay,
+            playStyle,
+            playerStart,
+            ...iconData()
         };
     }
 };
@@ -95,8 +156,8 @@ footer {
     height: 72px;
     background-color: #000;
     color: $White;
-    
-    .footer_area{
+
+    .footer_area {
         width: 1024px;
         height: 100%;
         margin: 0 auto;
@@ -106,42 +167,42 @@ footer {
         justify-content: space-between;
     }
 
-    .name_area{
-        padding-left:24px;
+    .name_area {
+        padding-left: 24px;
         display: flex;
         align-items: center;
         color: $Gray400;
         font-size: 12px;
 
-        .picture_area{
+        .picture_area {
             width: 36px;
             height: 36px;
             border: 1px solid;
             margin-right: 24px;
             color: $Gray600;
         }
-        .music_name_area{
+        .music_name_area {
             overflow: hidden;
             text-overflow: ellipsis;
             width: 200px;
             white-space: nowrap;
         }
     }
-    .icon_btn{
+    .icon_btn {
         width: 20px;
         cursor: pointer;
     }
-    .start_icon{
+    .start_icon {
         margin: 0 32px;
     }
-    .next_btn{
-        transform: rotate( 180deg );
+    .next_btn {
+        transform: rotate(180deg);
     }
-    .play_icon{
+    .play_icon {
         margin: 0 40px;
     }
 
-    .controll_area{
+    .controll_area {
         width: 400px;
         height: 100%;
         position: absolute;
@@ -151,7 +212,7 @@ footer {
         align-items: center;
         justify-content: center;
 
-        .bar_area{
+        .bar_area {
             position: absolute;
             bottom: 4px;
             font-size: 10px;
@@ -159,19 +220,19 @@ footer {
             align-items: center;
             color: $Gray600;
 
-            .percent_area{
+            .percent_area {
                 position: relative;
                 margin: 0 10px;
                 width: 300px;
                 height: 2px;
 
-                .bar{
+                .bar {
                     position: absolute;
                     width: 300px;
                     height: 2px;
                     background-color: $Gray600;
                 }
-                .percent_bar{
+                .percent_bar {
                     position: absolute;
                     width: 0px;
                     height: 2px;
@@ -179,15 +240,14 @@ footer {
                     z-index: 1;
                 }
             }
-            
         }
     }
-    .option_area{
+    .option_area {
         padding-right: 24px;
         display: flex;
         justify-content: space-between;
 
-        .option_icon{
+        .option_icon {
             width: 24px;
             cursor: pointer;
             margin-left: 24px;

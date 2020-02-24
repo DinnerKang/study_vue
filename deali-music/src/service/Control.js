@@ -5,16 +5,16 @@ import Store from '@/store';
 
 // Read
 
-export function getLoungeStatus() {
+export function getControlLoungeStatus() {
     return firebase.database().ref('control/lounge');
 }
 
 // Write
 
-export function videoController(status) {
-    if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
+export function videoController(status, playStyle) {
     firebase.database().ref(`control/lounge`).set({
         status,
+        playStyle,
         date: String(new Date()),
     });
 
@@ -24,3 +24,11 @@ export function videoController(status) {
     });
 }
 
+
+// Update
+
+export function updatePlayStyle(string) {
+    return firebase.database().ref('control/lounge').update({
+        playStyle: string,
+    });
+}

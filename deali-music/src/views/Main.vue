@@ -2,13 +2,14 @@
   <div>
     <header-menu></header-menu>
     <router-view class="main"/>
-    <footer-component></footer-component>
+    <footer-component v-if="isFooter"></footer-component>
   </div>
 </template>
 
 <script>
 import HeaderMenu from '../components/Menu/Header';
 import footerComponent from '../components/Menu/Footer';
+import { computed } from '@vue/composition-api';
 
 export default {
   name: 'Main',
@@ -16,6 +17,14 @@ export default {
     HeaderMenu,
     footerComponent,
   },
+  setup(props, { root }) {
+    const store = root.$store;
+    const isFooter = computed(()=> store.getters['menu/getFooter']);
+
+    return {
+      isFooter
+    }
+  }
 }
 </script>
 

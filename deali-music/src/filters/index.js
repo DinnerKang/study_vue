@@ -34,9 +34,8 @@ export default {
         return `${YYYY}-${MM}-${DD} ${hh}:${mm}`;
     },
 
-    getTime(value) {
-        if (!value) return '00:00';
-
+    getTime(value, option=true) {
+        if (!value || !option) return '--:--';
         let result = 0, mm = 0, ss = 0;
         if (value > 60) mm = Math.floor(value / 60);
         ss = Math.floor(value) - (60 * mm);

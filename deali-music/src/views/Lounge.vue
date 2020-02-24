@@ -1,24 +1,25 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="'lounge'" :is-list="true" />
+        <music-list v-model="myMusicList" @origin-list="getOriginList" :group-name="'lounge'" :is-list="true" />
     </div>
 </template>
 
 <script>
 import MusicList from "../components/MyPage/MusicList";
-import { addVideoStatus, updateVideoTime } from "@/service/Status";
-import { getLoungeStatus } from '@/service/Control';
+import { addVideoStatus } from "@/service/Status";
+import { getControlLoungeStatus } from '@/service/Control';
 import { ref, watch, onMounted } from "@vue/composition-api";
 
 
 const youtubeData = () => {
     const myMusicList = ref([]);
+
     let player = ref({});
     let isReady = ref(false);
     let playList = ref([]);
-
-
+    
+    
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
             playerVars: { 
@@ -51,6 +52,7 @@ const youtubeData = () => {
             
             const data = {
                 status: event.data,
+                currentTime: player.value.getCurrentTime(),
                 playTime: player.value.getDuration(),
                 videoName: myMusicList.value.filter(
                     item =>
@@ -58,23 +60,9 @@ const youtubeData = () => {
                 )[0].musicName,
             };
             addVideoStatus(data);
-
-            // 시간 흐르는 이벤트
-            if (event.data === 1) {
-                const timer = setInterval(()=> {
-                    updateTimer(player);
-                    if (event.data !== 1) clearInterval(timer);
-                }, 1000);
-            }
         }
     };
 
-    const updateTimer = (player) => {
-        const data = {
-            currentTime: player.value.getCurrentTime(),
-        }
-        updateVideoTime(data);
-    };
 
     return {
         player,
@@ -87,10 +75,10 @@ const youtubeData = () => {
 
 
 const youtubeStatus = () => {
-    let musicStatus = ref(0);
+    let musicStatus = ref({});
 
     const observeLoungeStatus = () => {
-        getLoungeStatus().on("value", snapshot => {
+        getControlLoungeStatus().on("value", snapshot => {
             musicStatus.value = snapshot.val();
         });
     };
@@ -107,12 +95,24 @@ export default {
     components: {
         MusicList
     },
-    setup() {
-        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
+    setup(props, { root }) {
+        const playStyle = ref('Straight');
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
+        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
+        const originMusicList = ref([]);
 
+        const getOriginList = (payload) => {
+            originMusicList.value = payload;
+        };
+        
         watch(musicStatus, (newValue) => {
             if (!isReady.value) return;
+
+            if (playStyle.value !== newValue.playStyle) {
+                playStyle.value = newValue.playStyle;
+                if (playStyle.value === 'Random') return myMusicList.value.sort(()=> Math.random() - Math.random());
+                if (playStyle.value === 'Straight') return myMusicList.value = originMusicList.value;
+            }
 
             if (newValue.status === "start") return player.value.playVideo();
             if (newValue.status === "stop") return player.value.pauseVideo();
@@ -130,12 +130,16 @@ export default {
             }
         });
 
-        onMounted(()=> observeLoungeStatus());
+        root.$store.commit('menu/disableFooter');
+        onMounted(()=> {
+            observeLoungeStatus();
+        });
 
         return{
             player,
             myMusicList,
             musicStatus,
+            getOriginList,
         }
     }
 }
