@@ -160,10 +160,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    min-width: 1024px;
     height: 72px;
     background-color: #000;
     color: $White;
@@ -259,7 +256,7 @@ footer {
         justify-content: space-between;
 
         .option_icon {
-            width: 24px;
+            width: 20px;
             cursor: pointer;
             margin-left: 24px;
         }

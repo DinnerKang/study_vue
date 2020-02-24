@@ -69,7 +69,7 @@ export default {
 
 <style lang="scss" scoped>
     header{
-        width: 100%;
+        min-width: 1024px;
         height: 56px;
 
         .header_container{
