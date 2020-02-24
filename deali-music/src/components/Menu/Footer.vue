@@ -57,28 +57,27 @@ import { ref, onMounted, onBeforeUnmount } from "@vue/composition-api";
 import { videoController, updatePlayStyle } from "@/service/Control";
 import { getLoungeStatus } from "@/service/Status";
 
+let timer = null;
 const controlVideo = () => {
     const videoStatus = ref({});
     const playStyle = ref("Straight");
     const playerStart = ref(false);
 
     const getStatus = () => {
-        console.log('hi');
         getLoungeStatus().on("value", snapshot => {
             videoStatus.value = snapshot.val();
-            console.log(snapshot.val());
-            // currentTime이 새로고침 할 경우 정확하지 않음
-            const timer = setInterval(()=> {
-                if (videoStatus.value.status === 2) {
-                    playerStart.value = true;
-                    console.log('stop');
-                    return clearInterval(timer);
+
+            if (videoStatus.value.status === 1) {
+                if (timer===null) {
+                    timer = setInterval(() =>{
+                        videoStatus.value.currentTime += 1;
+                    }, 1000);
                 }
-                if (videoStatus.value.status === 1) {
-                    console.log('start');
-                    videoStatus.value.currentTime += 1;
-                }
-            }, 1000);
+            } else {
+                playerStart.value = true;
+                clearInterval(timer);
+                timer = null;
+            }
         });
     };
 
@@ -128,6 +127,7 @@ const iconData = () => {
         randomWhiteIcon
     };
 };
+
 
 export default {
     setup() {
