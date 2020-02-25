@@ -26,12 +26,13 @@
 <script>
 import { ref, computed } from '@vue/composition-api';
 import GroupList from '@/components/List/GroupList';
-import { getGroupList, getGroup } from '@/service/Group';
+import { getGroupList, getOpenGroup } from '@/service/Group';
 
 const myGroup = (store) => {
   const playList = ref([]);
   
   getGroupList(store.state.login.dealiName).on('value', snapshot => {
+      if (!snapshot.val()) return;
       if (store.state.dealiName === '') return;
       playList.value = Object.values(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
   });
@@ -43,27 +44,16 @@ const myGroup = (store) => {
 
 const openGroup = () => {
   const groupList = ref([]);
-
-
-  getGroup().once("value", snapshot => {
-    const keys = Object.keys(snapshot.val());
-    keys.map(item => {
-      getGroup()
-        .child(item)
-        .orderByChild("isShow")
-        .equalTo(true)
-        .on("child_added", snapshot => {
-          const data = snapshot.val();
-          groupList.value.push({
-              name: item,
-              groupName: data.groupName,
-              description: data.description,
-          });
-        });
-    });
+  const likeGroupList = ref([]);
+  
+  getOpenGroup().once('value', snapshot => {
+    if (!snapshot.val()) return;
+    groupList.value = Object.values(snapshot.val());
   });
+  
   return {
     groupList,
+    likeGroupList,
   }
 };
 
@@ -72,9 +62,9 @@ export default {
     GroupList,
   },
   setup(props, { root }) {
-    const { playList } = myGroup(root.$store);
-    const { groupList } = openGroup();
     const isLogin = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
+    const { playList } = myGroup(root.$store);
+    const { groupList } = openGroup(isLogin);
 
     return {
       playList,

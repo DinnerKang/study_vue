@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, watch } from "@vue/composition-api";
+import { reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
-import { addMyGroup, addAlbum, editMyGroupName } from '@/service/Group';
+import { addMyGroup, addShowGroup, editMyGroupName } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
 
 const myGroup = (userName, userState) => {
@@ -41,7 +41,7 @@ const myGroup = (userName, userState) => {
                     if (res === null) {
                         const defaultData = {
                             groupName: 'default',
-                            userId: userName.value,
+                            dealiName: userName.value,
                             idx : 0,
                         }
                         addMyGroup(defaultData);
@@ -73,7 +73,7 @@ const clickEvent = (userName, userState, router) => {
         
         const data = {
             groupName: '기본 그룹',
-            userId: userName.value,
+            dealiName: userName.value,
         };
         addMyGroup(data);
     };
@@ -90,13 +90,14 @@ const clickEvent = (userName, userState, router) => {
 
     const clickMakeShow = (idx, groupData) => {
         const key = Object.keys(groupData)[idx];
+        const value = Object.values(groupData)[idx];
+        console.log(value);
         const data = {
-            key: key,
-            userId: userName.value,
-            isShow: true,
+            targetKey: key,
+            groupName: value.groupName,
+            dealiName: userName.value,
         };
-
-        addAlbum(data);
+        addShowGroup(data);
     };
 
     return {
@@ -122,6 +123,10 @@ export default {
 
         watch(userName, () =>{
             getMyGroup();
+        });
+
+        onBeforeUnmount(()=> {
+            getGroupList().off();
         });
 
         return {

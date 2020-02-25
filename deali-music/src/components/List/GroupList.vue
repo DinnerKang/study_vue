@@ -24,10 +24,12 @@
 import { addLikeGroup } from '@/service/Group';
 
 const iconList = () => {
-    const heartIcon = require('../../assets/icons/Heart-01.png');
+    const liketIcon = require('../../assets/icons/Heart-01.png');
+    const heartIcon = require('../../assets/icons/Heart-02.png');
 
     return {
         heartIcon,
+        liketIcon,
     }
 };
 
@@ -71,7 +73,7 @@ export default {
         const clickLikeGroup = (list) => {
             const data = {
                 dealiName: root.$store.state.login.dealiName,
-                targetId: list.name,
+                myKey: list.myKey,
                 groupName: list.groupName,
             }
             addLikeGroup(data);

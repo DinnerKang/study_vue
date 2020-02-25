@@ -6,43 +6,47 @@ import 'firebase/database';
 // READ
 
 export function getGroupList(name) {
-    return firebase.database().ref(`group/music/${name}`);
+    return firebase.database().ref(`group/all/${name}`);
 }
 
-export function getGroup() {
-    return firebase.database().ref('group/music');
+export function getOpenGroup() {
+    return firebase.database().ref('group/showGroup');
 }
-
 
 // WRITE
 
 export function addMyGroup(data) {
     // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
     
-    firebase.database().ref(`group/music/${data.userId}`).push({
+    firebase.database().ref(`group/all/${data.dealiName}`).push({
         groupName : data.groupName,
     });
 }
 
 export function addLikeGroup(data) {
-    return firebase.database().ref(`group/${data.dealiName}/likes/${data.targetId}`).push({
-        groupName: data.groupName,
+    return firebase.database().ref(`group/showGroup/${data.myKey}/likes`).update({
+        [data.dealiName] : true,
     });
 }
 
 
 // UPDATE
 
-export function addAlbum(data) {
-    const key = data.key + '/isShow';
-    firebase.database().ref(`group/music/${data.userId}`).update({
-        [key] : data.isShow,
+export function addShowGroup(data) {
+    const ref = firebase.database().ref('group/showGroup/');
+    const myKey = ref.push().key;
+
+    return ref.child(myKey).set({
+        myKey: myKey,
+        targetKey: data.targetKey,
+        dealiName: data.dealiName,
+        groupName: data.groupName,
     });
 }
 
 export function editMyGroupName(data) {
     const key = data.key + '/groupName';
-    firebase.database().ref(`group/music/${data.userId}`).update({
+    firebase.database().ref(`group/all/${data.userId}`).update({
         [key] : data.groupName
     });
 }
