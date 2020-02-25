@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <section class="my_play_list" v-if="isLogin">
+    <section class="my_play_list">
       <h2>
         나의 플레이리스트
       </h2>
@@ -16,7 +16,7 @@
       </h2>
       <div class="recomend_group_list">
         <article v-for="(list, idx) in groupList" :key="idx">
-          <group-list :width="'208'" :height="'90'" :is-outside="true" :list="list"></group-list>
+          <group-list :width="'238'" :height="'180'" :is-outside="true" :list="list"></group-list>
         </article>
       </div>
     </section>
@@ -107,9 +107,10 @@ export default {
 
     .recomend_group_list{
       display: grid;
-      gap: 10px 64px;
+      gap: 10px 24px;
       grid-template-rows: 150px;
       grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 300px;
     }
   }
 </style>

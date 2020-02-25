@@ -6,12 +6,6 @@
                 <div class="music_name_area">{{ videoStatus.videoName }}</div>
             </div>
             <div class="controll_area">
-                <img
-                    class="icon_btn play_icon"
-                    :src="playStyle === 'Straight' ? straightWhiteIcon : straightGrayIcon"
-                    @click="straightPlay"
-                    alt="그냥재생"
-                />
                 <img class="icon_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
                 <img
                     class="icon_btn start_icon"
@@ -24,12 +18,6 @@
                     :src="nextIcon"
                     @click="videoControl('next')"
                     alt="다음곡"
-                />
-                <img
-                    class="icon_btn play_icon"
-                    :src="playStyle === 'Random' ? randomWhiteIcon : randomGrayIcon"
-                    alt="랜덤재생"
-                    @click="randomPlay"
                 />
                 <div class="bar_area">
                     <div>{{ videoStatus.currentTime | getTime(playerStart) }}</div>
@@ -111,20 +99,12 @@ const iconData = () => {
     const menuIcon = require("../../assets/icons/menu-white.png");
     const soundIcon = require("../../assets/icons/sound-white.png");
     const nextIcon = require("../../assets/icons/prev-white.png");
-    const straightGrayIcon = require("../../assets/icons/straight-gray.png");
-    const straightWhiteIcon = require("../../assets/icons/straight-white.png");
-    const randomGrayIcon = require("../../assets/icons/random-gray.png");
-    const randomWhiteIcon = require("../../assets/icons/random-white.png");
 
     return {
         startIcon,
         menuIcon,
         soundIcon,
         nextIcon,
-        straightGrayIcon,
-        straightWhiteIcon,
-        randomGrayIcon,
-        randomWhiteIcon
     };
 };
 
@@ -247,7 +227,7 @@ footer {
                     position: absolute;
                     width: 0px;
                     height: 2px;
-                    background-color: red;
+                    background-color: $Main;
                     z-index: 1;
                 }
             }

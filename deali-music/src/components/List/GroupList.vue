@@ -12,7 +12,7 @@
         <div class="outside_area" v-if="isOutside">
             <div class="main_text">
                 <span>{{list.groupName}}</span>
-                <span class="img_area" @click="clickLikeGroup(list)">하트</span>
+                <img class="img_area" :src="heartIcon" @click="clickLikeGroup(list)" alt="하트" />
             </div>
             <div class="sub_text">{{list.description}}</div>
         </div>
@@ -22,6 +22,14 @@
 
 <script>
 import { addLikeGroup } from '@/service/Group';
+
+const iconList = () => {
+    const heartIcon = require('../../assets/icons/Heart-01.png');
+
+    return {
+        heartIcon,
+    }
+};
 
 export default {
     name: 'GroupList',
@@ -37,11 +45,11 @@ export default {
         },
         width: {
             type: String,
-            default: '480',
+            default: '500',
         },
         height: {
             type: String,
-            default: '360',
+            default: '375',
         },
         isOutside: {
             type:Boolean,
@@ -69,9 +77,12 @@ export default {
             addLikeGroup(data);
         }
 
+        
+
         return {
             clickGroup,
             clickLikeGroup,
+            ...iconList(),
         }
     }
 }
@@ -79,7 +90,7 @@ export default {
 
 <style lang="scss" scoped>
     .group_container{
-        border:1px solid #000;
+        border: none;
         border-radius: 8px;
         background-color: #000;
         color: $White;
@@ -107,13 +118,17 @@ export default {
             color: $Black;
 
             .main_text{
-                display: block;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
                 font-size: 15px;
                 font-weight: bold;
                 margin: 16px 0 8px;
 
                 .img_area{
-                    float:right;
+                    width: 19px;
+                    height: 19px;
+                    cursor: pointer;
                 }
             }
             .sub_text{
