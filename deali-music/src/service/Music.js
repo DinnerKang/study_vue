@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
-import Store from '@/store';
+// import Store from '@/store';
 
 
 // Read
@@ -13,7 +13,7 @@ export function getMusicListByGroup(data) {
 // Write
 
 export function registMusic(data) {
-    if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
+    // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
 
     firebase.database().ref(`music/${data.userId}/${data.groupName}`).push({
         musicName: data.musicName,

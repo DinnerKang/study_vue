@@ -10,7 +10,10 @@
             </div>
         </div>
         <div class="outside_area" v-if="isOutside">
-            <div class="main_text">{{list.groupName}}</div>
+            <div class="main_text">
+                <span>{{list.groupName}}</span>
+                <span class="img_area" @click="clickLikeGroup(list)">하트</span>
+            </div>
             <div class="sub_text">{{list.description}}</div>
         </div>
     </div>
@@ -18,6 +21,8 @@
 </template>
 
 <script>
+import { addLikeGroup } from '@/service/Group';
+
 export default {
     name: 'GroupList',
     props: {
@@ -51,11 +56,22 @@ export default {
                 path: '/playPage',
                 query: {
                     groupName: props.list.groupName
-            },
-        });
+                },
+            });
         }
+
+        const clickLikeGroup = (list) => {
+            const data = {
+                dealiName: root.$store.state.login.dealiName,
+                targetId: list.name,
+                groupName: list.groupName,
+            }
+            addLikeGroup(data);
+        }
+
         return {
             clickGroup,
+            clickLikeGroup,
         }
     }
 }
@@ -95,6 +111,10 @@ export default {
                 font-size: 15px;
                 font-weight: bold;
                 margin: 16px 0 8px;
+
+                .img_area{
+                    float:right;
+                }
             }
             .sub_text{
                 font-size: 12px;

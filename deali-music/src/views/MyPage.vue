@@ -71,12 +71,11 @@ const clickEvent = (userName, userState, router) => {
 
     const clickAddGroup = () => {
         
-        /*
         const data = {
             groupName: '기본 그룹',
             userId: userName.value,
         };
-        addMyGroup(data); */
+        addMyGroup(data);
     };
 
     const clickEdit = (idx, groupData) => {

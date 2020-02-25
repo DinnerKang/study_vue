@@ -160,6 +160,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     min-width: 1024px;
     height: 72px;
     background-color: #000;
@@ -257,9 +260,16 @@ footer {
 
         .option_icon {
             width: 20px;
+            height: 20px;
             cursor: pointer;
             margin-left: 24px;
         }
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    footer{
+        position: absolute;
     }
 }
 </style>

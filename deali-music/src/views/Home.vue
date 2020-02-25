@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <section class="my_play_list">
+    <section class="my_play_list" v-if="isLogin">
       <h2>
         나의 플레이리스트
       </h2>
@@ -14,7 +14,7 @@
       <h2>
         공개 플레이리스트
       </h2>
-      <div class="group_list">
+      <div class="recomend_group_list">
         <article v-for="(list, idx) in groupList" :key="idx">
           <group-list :width="'208'" :height="'90'" :is-outside="true" :list="list"></group-list>
         </article>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
+import { ref, computed } from '@vue/composition-api';
 import GroupList from '@/components/List/GroupList';
 import { getGroupList, getGroup } from '@/service/Group';
 
@@ -44,6 +44,7 @@ const myGroup = (store) => {
 const openGroup = () => {
   const groupList = ref([]);
 
+
   getGroup().once("value", snapshot => {
     const keys = Object.keys(snapshot.val());
     keys.map(item => {
@@ -61,7 +62,6 @@ const openGroup = () => {
         });
     });
   });
-
   return {
     groupList,
   }
@@ -74,10 +74,12 @@ export default {
   setup(props, { root }) {
     const { playList } = myGroup(root.$store);
     const { groupList } = openGroup();
+    const isLogin = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
 
     return {
       playList,
       groupList,
+      isLogin,
     }
   }
 }
@@ -101,6 +103,13 @@ export default {
     }
     .my_play_list{
       margin-bottom: 48px;
+    }
+
+    .recomend_group_list{
+      display: grid;
+      gap: 10px 64px;
+      grid-template-rows: 150px;
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 </style>
