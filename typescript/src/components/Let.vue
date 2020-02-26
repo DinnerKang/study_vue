@@ -7,7 +7,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-
+class simpleClass {
+    id: number;
+    print() : void {
+      console.log('hi', this.id);
+    }
+  }
 
 @Component
 export default class HelloWorld extends Vue {
@@ -26,11 +31,12 @@ export default class HelloWorld extends Vue {
       console.log(a + b + c);
   }
   
+  
   created() {
       this.clickEvent();
-
-      this.concatString('a', 'b', 'c');
-      this.concatString('a', 'b');
+      let mySimple = new simpleClass();
+      mySimple.id = 1;
+      mySimple.print();
   }
 }
 </script>
