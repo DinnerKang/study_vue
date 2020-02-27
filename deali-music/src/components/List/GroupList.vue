@@ -1,28 +1,21 @@
 <template>
     <div >
         <div class="group_container"
-            @click="clickGroup"
+            @click="clickGroup(groupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
-            <img v-if="groupThumbnail" class="youtube_img" :src="groupThumbnail" alt="유튜브 사진" />
-            <div class="bottom_area" v-if="!isOutside">
-                <div class="main_text">{{list.groupName}}</div>
-                <div class="sub_text">{{list.description}}</div>
+            <img v-if="musicData.thumbnails" class="youtube_img" :src="musicData.thumbnails" alt="유튜브 사진" />
+            <div class="bottom_area">
+                <div class="main_text">{{groupData.groupName}}</div>
+                <div class="sub_text">{{groupData.description }}</div>
             </div>
-        </div>
-        <div class="outside_area" v-if="isOutside">
-            <div class="main_text">
-                <span>{{list.groupName}}</span>
-                <img class="img_area" :src="heartIcon" @click="clickLikeGroup(list)" alt="하트" />
-            </div>
-            <div class="sub_text">{{list.description}}</div>
         </div>
     </div>
-    
 </template>
 
 <script>
 import { computed, ref } from '@vue/composition-api';
-import { addLikeGroup, getGroupListByKey } from '@/service/Group';
+import { getGroupListByKey } from '@/service/Group';
+import { getMusicListByGroup } from '@/service/Music';
 
 const iconList = () => {
     const liketIcon = require('../../assets/icons/Heart-01.png');
@@ -34,42 +27,70 @@ const iconList = () => {
     }
 };
 
-const getGroupData = (userInfo, list) => {
+const getMusicData = (userInfo, groupKey) => {
+    const musicData = ref({});
+    const data = {
+        dealiName: userInfo.value.dealiName,
+        groupKey: groupKey,
+        groupName: '',
+    }
+
+    getMusicListByGroup(data).once('value', snapshot => {
+        musicData.value = Object.values(Object.values(snapshot.val())[0])[0];
+    });
+
+    return {
+        musicData,
+    }
+};
+
+const getGroupData = (userInfo, groupKey) => {
     const groupData = ref({});
-    const key = Object.keys(list)[0];
 
     const data = {
         dealiName: userInfo.value.dealiName,
-        key: key,
+        key: groupKey,
     }
-
-    getGroupListByKey(data).once('value', ()=>{
-        // console.log(snapshot.val());
+    getGroupListByKey(data).once('value', snapshot =>{
+        groupData.value = snapshot.val();
     });
+
     return {
         groupData,
     }
 };
 
-const getThumbnails = (list) => {
-    const groupThumbnail = ref('');
-    groupThumbnail.value = Object.values(list)[0].thumbnails;
-    return {
-        groupThumbnail,
+const clickEvent = (userInfo, router) => {
+
+    const clickGroup = (groupData) => {
+        router.push({
+            path: `/playPage`,
+            query: {
+                groupName: groupData.groupName,
+                groupKey: groupData.myKey,
+            },
+        });
     }
-};
+
+    const clickLikeGroup = (list) => {
+        const data = {
+            dealiName: userInfo.dealiName,
+            myKey: list.myKey,
+            groupName: list.groupName,
+        }
+        addLikeGroup(data);
+    }
+    return {
+        clickGroup,
+        clickLikeGroup,
+    }
+}
 
 export default {
     name: 'GroupList',
     props: {
-        list: {
-            type: [Object, String],
-            default: () => {
-                return {
-                    groupName : '',
-                    description: '',
-                }
-            }
+        groupKey: {
+            type: String,
         },
         width: {
             type: String,
@@ -79,43 +100,18 @@ export default {
             type: String,
             default: '375',
         },
-        isOutside: {
-            type:Boolean,
-            default: false,
-        }
     },
     setup(props, { root }) {
         const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
-        const list = Object.values(props.list)[0];
 
-        const clickGroup = () => {
-            if (!props.list.groupName) return;
-
-            root.$router.push({
-                path: '/playPage',
-                query: {
-                    groupName: props.list.groupName
-                },
-            });
-        }
-
-        const clickLikeGroup = (list) => {
-            const data = {
-                dealiName: userInfo.dealiName,
-                myKey: list.myKey,
-                groupName: list.groupName,
-            }
-            addLikeGroup(data);
-        }
-
-        const { groupThumbnail } = getThumbnails(list);
-        const { groupData } = getGroupData(userInfo, list);
+        const { musicData } = getMusicData(userInfo, props.groupKey);
+        const { groupData } = getGroupData(userInfo, props.groupKey);
+        const { clickGroup } = clickEvent(userInfo, root.$router);
 
         return {
-            clickGroup,
-            clickLikeGroup,
-            groupThumbnail,
+            musicData,
             groupData,
+            clickGroup,
             ...iconList(),
         }
     }
@@ -148,29 +144,8 @@ export default {
             }
             .sub_text{
                 font-size: 12px;
+                height: 16px;
             }
         }
     }
-    .outside_area{
-            color: $Black;
-
-            .main_text{
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                font-size: 15px;
-                font-weight: bold;
-                margin: 16px 0 8px;
-
-                .img_area{
-                    width: 19px;
-                    height: 19px;
-                    cursor: pointer;
-                }
-            }
-            .sub_text{
-                font-size: 12px;
-                color: $Gray600;
-            }
-        }
 </style>

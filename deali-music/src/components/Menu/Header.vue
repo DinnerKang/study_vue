@@ -39,7 +39,7 @@ const getUserInfo = (store) => {
     }
 
     const userLogout = () => {
-        store.commit('logoutUser');
+        store.commit('login/logoutUser');
     }
     
     return { 

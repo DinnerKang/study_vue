@@ -12,12 +12,6 @@ export function getMusicListByGroup(data) {
 
 // Write
 
-export function initRegistMusic(data) {
-    return firebase.database().ref(`music/${data.dealiName}/${data.groupKey}`).set({
-        [data.groupName] : '',
-    });
-}
-
 export function registMusic(data) {
     // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
     firebase.database().ref(`music/${data.dealiName}/${data.groupKey}/${data.groupName}`).push({

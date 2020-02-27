@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="groupName" :is-list="true" />
+        <music-list v-model="myMusicList" :group-name="groupName" :groupKey="groupKey" :is-list="true" />
     </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
     name: 'PlayPage',
     components: {MusicList},
     setup(props, { root }){
+        const { groupKey } = root.$route.query;
         const { groupName } = root.$route.query;
         const { player, myMusicList, onYouTubeIframeAPIReady } = youtubeData();
 
@@ -52,6 +53,7 @@ export default {
 
         return {
             groupName,
+            groupKey,
             myMusicList,
             player,
             onYouTubeIframeAPIReady,

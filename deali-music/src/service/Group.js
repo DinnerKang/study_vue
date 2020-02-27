@@ -5,11 +5,12 @@ import 'firebase/database';
 
 // READ
 
-export function getGroupList(name) {
-    return firebase.database().ref(`group/all/${name}`);
+export function getGroupList(dealiName) {
+    return firebase.database().ref(`group/all/${dealiName}`);
 }
+
 export function getGroupListByKey(data) {
-    return firebase.database().ref(`group/all/${data.dealiName}`);
+    return firebase.database().ref(`group/all/${data.dealiName}/${data.key}`);
 }
 
 export function getOpenGroup() {
@@ -23,12 +24,11 @@ export function addMyGroup(data) {
     const ref = firebase.database().ref(`group/all/${data.dealiName}`);
     const myKey = ref.push().key;
 
-    ref.child(myKey).set({
+    return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,
         myKey: myKey,
     });
-    return myKey;
 }
 
 export function addLikeGroup(data) {

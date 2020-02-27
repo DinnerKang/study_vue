@@ -26,7 +26,7 @@
 import { reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { addMyGroup, addShowGroup, editMyGroupName } from '@/service/Group';
-import { initRegistMusic } from '@/service/Music';
+// import { initRegistMusic } from '@/service/Music';
 import Modal  from '@/components/Common/Modal';
 
 const myGroup = (userName, userState) => {
@@ -77,13 +77,7 @@ const clickEvent = (userName, userState, router) => {
             dealiName: userName.value,
         };
         try {
-            const groupKey = await addMyGroup(data);
-            const initGroup = {
-                dealiName: userName.value,
-                groupKey: groupKey,
-                groupName: data.groupName,
-            };
-            initRegistMusic(initGroup);
+            await addMyGroup(data);
         } catch (e) {
             console.log(e);
         }

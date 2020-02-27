@@ -5,8 +5,8 @@
         나의 플레이리스트
       </h2>
       <div class="group_list">
-        <article v-for="(list, idx) in myGroupList" :key="idx">
-          <group-list :list="list"></group-list>
+        <article v-for="data in myGroupKeys" :key="data">
+          <group-list :groupKey="data"></group-list>
         </article>
       </div>
     </section>
@@ -24,17 +24,15 @@
 </template>
 
 <script>
-import { ref, computed } from '@vue/composition-api';
+import { ref, computed, watch } from '@vue/composition-api';
 import GroupList from '@/components/List/GroupList';
 import { getOpenGroup } from '@/service/Group';
 import { getMusicListByGroup } from '@/service/Music';
 
 const myGroup = (userInfo) => {
-  const myGroupList = ref([]);
-  
+  const myGroupKeys = ref([]);
   
   const getMyGroupList = () => {
-
     const data = {
       dealiName: userInfo.value.dealiName,
       groupKey: '',
@@ -42,18 +40,14 @@ const myGroup = (userInfo) => {
     };
 
     getMusicListByGroup(data).on('value', snapshot =>{
-        let randomGroup = Object.values(snapshot.val());
-        randomGroup = randomGroup.filter(i => Object.values(i)[0] !== '').sort(()=> Math.random() - Math.random()).splice(0,2);
-        
-        const test = [];//.map(val => Object.values(val)).filter(i => Object.values(i)[0] !== '');
-        console.log(test);
-        
-        myGroupList.value = randomGroup;
+        const keys = Object.keys(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
+        myGroupKeys.value = keys;
     });
   };
+  
 
   return {
-    myGroupList,
+    myGroupKeys,
     getMyGroupList,
   }
 };
@@ -81,15 +75,18 @@ export default {
   setup(props, { root }) {
     const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
     const isLogin = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
-    const { myGroupList, getMyGroupList } = myGroup(userInfo);
+    const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
     const { groupList } = openGroup(isLogin);
 
-    getMyGroupList();
+    watch(isLogin, newValue => {
+       if (newValue) getMyGroupList();
+    });
 
     return {
-      myGroupList,
+      myGroupKeys,
       groupList,
       isLogin,
+      userInfo,
     }
   }
 }
