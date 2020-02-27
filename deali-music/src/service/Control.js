@@ -11,10 +11,9 @@ export function getControlLoungeStatus() {
 
 // Write
 
-export function videoController(status, playStyle) {
+export function videoController(status) {
     firebase.database().ref(`control/lounge`).set({
         status,
-        playStyle,
         date: String(new Date()),
     });
 
@@ -24,11 +23,3 @@ export function videoController(status, playStyle) {
     });
 }
 
-
-// Update
-
-export function updatePlayStyle(string) {
-    return firebase.database().ref('control/lounge').update({
-        playStyle: string,
-    });
-}

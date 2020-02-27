@@ -1,7 +1,7 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" @origin-list="getOriginList" :group-name="'lounge'" :is-list="true" />
+        <music-list v-model="myMusicList" :group-name="'lounge'" :is-list="true" />
     </div>
 </template>
 
@@ -96,23 +96,11 @@ export default {
         MusicList
     },
     setup(props, { root }) {
-        const playStyle = ref('Straight');
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
         const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
-        const originMusicList = ref([]);
-
-        const getOriginList = (payload) => {
-            originMusicList.value = payload;
-        };
 
         watch(musicStatus, (newValue) => {
             if (!isReady.value) return;
-
-            if (playStyle.value !== newValue.playStyle) {
-                playStyle.value = newValue.playStyle;
-                if (playStyle.value === 'Random') return myMusicList.value.sort(()=> Math.random() - Math.random());
-                if (playStyle.value === 'Straight') return myMusicList.value = originMusicList.value;
-            }
 
             if (newValue.status === "start") return player.value.playVideo();
             if (newValue.status === "stop") return player.value.pauseVideo();
@@ -139,7 +127,6 @@ export default {
             player,
             myMusicList,
             musicStatus,
-            getOriginList,
         }
     }
 }

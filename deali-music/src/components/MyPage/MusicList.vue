@@ -19,27 +19,24 @@ import { ref } from '@vue/composition-api';
 
 const setMusicList = (props, store, emit) => {
 
-    const id = props.groupName === 'lounge' ? 'lounge' : store.state.login.dealiName;
+    const dealiName = props.groupName === 'lounge' ? 'lounge' : store.state.login.dealiName;
     const musicList = ref([]);
-    const originList = ref([]);
 
     const getMusicList = () => {
         const data = {
-          id,
+          dealiName,
           groupName: props.groupName,
         };
 
         getMusicListByGroup(data).on('value', (snapshot) => {
                 musicList.value = Object.values(snapshot.val()).reverse();
-                originList.value = Object.values(snapshot.val()).reverse();
                 emit('input', musicList.value);
-                emit('origin-list', originList.value);
         });
     }
 
     const removeMusic = (idx) => {
         const data = {
-            id,
+            dealiName,
             groupName: props.groupName,
         };
         

@@ -8,6 +8,9 @@ import 'firebase/database';
 export function getGroupList(name) {
     return firebase.database().ref(`group/all/${name}`);
 }
+export function getGroupListByKey(data) {
+    return firebase.database().ref(`group/all/${data.dealiName}`);
+}
 
 export function getOpenGroup() {
     return firebase.database().ref('group/showGroup');
@@ -17,10 +20,15 @@ export function getOpenGroup() {
 
 export function addMyGroup(data) {
     // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
-    
-    firebase.database().ref(`group/all/${data.dealiName}`).push({
+    const ref = firebase.database().ref(`group/all/${data.dealiName}`);
+    const myKey = ref.push().key;
+
+    ref.child(myKey).set({
         groupName : data.groupName,
+        description: data.description,
+        myKey: myKey,
     });
+    return myKey;
 }
 
 export function addLikeGroup(data) {

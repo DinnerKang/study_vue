@@ -8,10 +8,17 @@
             <div class="controll_area">
                 <img class="icon_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
                 <img
+                    v-if="videoStatus.status!==1"
                     class="icon_btn start_icon"
                     :src="startIcon"
                     @click="videoControl('start')"
                     alt="시작"
+                />
+                <img v-else
+                    class="icon_btn start_icon"
+                    :src="stopIcon"
+                    @click="videoControl('stop')"
+                    alt="중지"
                 />
                 <img
                     class="icon_btn next_btn"
@@ -42,13 +49,12 @@
 
 <script>
 import { ref, onMounted, onBeforeUnmount } from "@vue/composition-api";
-import { videoController, updatePlayStyle } from "@/service/Control";
+import { videoController } from "@/service/Control";
 import { getLoungeStatus } from "@/service/Status";
 
 let timer = null;
 const controlVideo = () => {
     const videoStatus = ref({});
-    const playStyle = ref("Straight");
     const playerStart = ref(false);
 
     const getStatus = () => {
@@ -70,25 +76,12 @@ const controlVideo = () => {
     };
 
     const videoControl = state => {
-        videoController(state, playStyle.value);
-    };
-
-    const randomPlay = () => {
-        playStyle.value = "Random";
-        updatePlayStyle(playStyle.value);
-    };
-
-    const straightPlay = () => {
-        playStyle.value = "Straight";
-        updatePlayStyle(playStyle.value);
+        videoController(state);
     };
 
     return {
         videoControl,
         videoStatus,
-        randomPlay,
-        straightPlay,
-        playStyle,
         playerStart,
         getStatus,
     };
@@ -99,12 +92,14 @@ const iconData = () => {
     const menuIcon = require("../../assets/icons/menu-white.png");
     const soundIcon = require("../../assets/icons/sound-white.png");
     const nextIcon = require("../../assets/icons/prev-white.png");
+    const stopIcon = require('../../assets/icons/stop-white.png');
 
     return {
         startIcon,
         menuIcon,
         soundIcon,
         nextIcon,
+        stopIcon,
     };
 };
 
@@ -114,9 +109,6 @@ export default {
         const {
             videoControl,
             videoStatus,
-            randomPlay,
-            straightPlay,
-            playStyle,
             playerStart,
             getStatus,
         } = controlVideo();
@@ -129,9 +121,6 @@ export default {
         return {
             videoControl,
             videoStatus,
-            randomPlay,
-            straightPlay,
-            playStyle,
             playerStart,
             ...iconData()
         };
@@ -249,7 +238,7 @@ footer {
 
 @media screen and (max-width: 1024px) {
     footer{
-        position: absolute;
+        position: static;
     }
 }
 </style>

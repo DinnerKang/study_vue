@@ -5,7 +5,7 @@
         나의 플레이리스트
       </h2>
       <div class="group_list">
-        <article v-for="(list, idx) in playList" :key="idx">
+        <article v-for="(list, idx) in myGroupList" :key="idx">
           <group-list :list="list"></group-list>
         </article>
       </div>
@@ -14,10 +14,10 @@
       <h2>
         공개 플레이리스트
       </h2>
-      <div class="recomend_group_list">
+      <div class="recomend_group_list"><!--
         <article v-for="(list, idx) in groupList" :key="idx">
           <group-list :width="'238'" :height="'180'" :is-outside="true" :list="list"></group-list>
-        </article>
+        </article>-->
       </div>
     </section>
   </div>
@@ -26,19 +26,35 @@
 <script>
 import { ref, computed } from '@vue/composition-api';
 import GroupList from '@/components/List/GroupList';
-import { getGroupList, getOpenGroup } from '@/service/Group';
+import { getOpenGroup } from '@/service/Group';
+import { getMusicListByGroup } from '@/service/Music';
 
-const myGroup = (store) => {
-  const playList = ref([]);
+const myGroup = (userInfo) => {
+  const myGroupList = ref([]);
   
-  getGroupList(store.state.login.dealiName).on('value', snapshot => {
-      if (!snapshot.val()) return;
-      if (store.state.dealiName === '') return;
-      playList.value = Object.values(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
-  });
+  
+  const getMyGroupList = () => {
+
+    const data = {
+      dealiName: userInfo.value.dealiName,
+      groupKey: '',
+      groupName: '',
+    };
+
+    getMusicListByGroup(data).on('value', snapshot =>{
+        let randomGroup = Object.values(snapshot.val());
+        randomGroup = randomGroup.filter(i => Object.values(i)[0] !== '').sort(()=> Math.random() - Math.random()).splice(0,2);
+        
+        const test = [];//.map(val => Object.values(val)).filter(i => Object.values(i)[0] !== '');
+        console.log(test);
+        
+        myGroupList.value = randomGroup;
+    });
+  };
 
   return {
-    playList,
+    myGroupList,
+    getMyGroupList,
   }
 };
 
@@ -58,16 +74,20 @@ const openGroup = () => {
 };
 
 export default {
+  name: 'Home',
   components: {
     GroupList,
   },
   setup(props, { root }) {
+    const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
     const isLogin = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
-    const { playList } = myGroup(root.$store);
+    const { myGroupList, getMyGroupList } = myGroup(userInfo);
     const { groupList } = openGroup(isLogin);
 
+    getMyGroupList();
+
     return {
-      playList,
+      myGroupList,
       groupList,
       isLogin,
     }

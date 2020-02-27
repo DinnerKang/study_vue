@@ -3,7 +3,7 @@
         <div class="group_container"
             @click="clickGroup"
             :style="{ width : `${width}px`, height: `${height}px`}">
-            
+            <img v-if="groupThumbnail" class="youtube_img" :src="groupThumbnail" alt="유튜브 사진" />
             <div class="bottom_area" v-if="!isOutside">
                 <div class="main_text">{{list.groupName}}</div>
                 <div class="sub_text">{{list.description}}</div>
@@ -21,7 +21,8 @@
 </template>
 
 <script>
-import { addLikeGroup } from '@/service/Group';
+import { computed, ref } from '@vue/composition-api';
+import { addLikeGroup, getGroupListByKey } from '@/service/Group';
 
 const iconList = () => {
     const liketIcon = require('../../assets/icons/Heart-01.png');
@@ -30,6 +31,31 @@ const iconList = () => {
     return {
         heartIcon,
         liketIcon,
+    }
+};
+
+const getGroupData = (userInfo, list) => {
+    const groupData = ref({});
+    const key = Object.keys(list)[0];
+
+    const data = {
+        dealiName: userInfo.value.dealiName,
+        key: key,
+    }
+
+    getGroupListByKey(data).once('value', ()=>{
+        // console.log(snapshot.val());
+    });
+    return {
+        groupData,
+    }
+};
+
+const getThumbnails = (list) => {
+    const groupThumbnail = ref('');
+    groupThumbnail.value = Object.values(list)[0].thumbnails;
+    return {
+        groupThumbnail,
     }
 };
 
@@ -59,6 +85,9 @@ export default {
         }
     },
     setup(props, { root }) {
+        const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
+        const list = Object.values(props.list)[0];
+
         const clickGroup = () => {
             if (!props.list.groupName) return;
 
@@ -72,18 +101,21 @@ export default {
 
         const clickLikeGroup = (list) => {
             const data = {
-                dealiName: root.$store.state.login.dealiName,
+                dealiName: userInfo.dealiName,
                 myKey: list.myKey,
                 groupName: list.groupName,
             }
             addLikeGroup(data);
         }
 
-        
+        const { groupThumbnail } = getThumbnails(list);
+        const { groupData } = getGroupData(userInfo, list);
 
         return {
             clickGroup,
             clickLikeGroup,
+            groupThumbnail,
+            groupData,
             ...iconList(),
         }
     }
@@ -94,10 +126,13 @@ export default {
     .group_container{
         border: none;
         border-radius: 8px;
-        background-color: #000;
         color: $White;
         position: relative;
         cursor: pointer;
+
+        .youtube_img{
+            width: 100%;
+        }
 
         .bottom_area{
             position: absolute;

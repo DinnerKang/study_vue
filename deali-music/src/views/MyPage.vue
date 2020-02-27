@@ -26,6 +26,7 @@
 import { reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { addMyGroup, addShowGroup, editMyGroupName } from '@/service/Group';
+import { initRegistMusic } from '@/service/Music';
 import Modal  from '@/components/Common/Modal';
 
 const myGroup = (userName, userState) => {
@@ -42,7 +43,6 @@ const myGroup = (userName, userState) => {
                         const defaultData = {
                             groupName: 'default',
                             dealiName: userName.value,
-                            idx : 0,
                         }
                         addMyGroup(defaultData);
                         return;
@@ -69,13 +69,24 @@ const clickEvent = (userName, userState, router) => {
         });
     };
 
-    const clickAddGroup = () => {
+    const clickAddGroup = async () => {
         
         const data = {
-            groupName: '기본 그룹',
+            groupName: 'default4',
+            description: '설명충',
             dealiName: userName.value,
         };
-        addMyGroup(data);
+        try {
+            const groupKey = await addMyGroup(data);
+            const initGroup = {
+                dealiName: userName.value,
+                groupKey: groupKey,
+                groupName: data.groupName,
+            };
+            initRegistMusic(initGroup);
+        } catch (e) {
+            console.log(e);
+        }
     };
 
     const clickEdit = (idx, groupData) => {
@@ -89,11 +100,9 @@ const clickEvent = (userName, userState, router) => {
     };
 
     const clickMakeShow = (idx, groupData) => {
-        const key = Object.keys(groupData)[idx];
         const value = Object.values(groupData)[idx];
-        console.log(value);
         const data = {
-            targetKey: key,
+            targetKey: value.myKey,
             groupName: value.groupName,
             dealiName: userName.value,
         };

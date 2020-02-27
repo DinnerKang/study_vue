@@ -9,12 +9,13 @@
                     <div class="sub_text">
                         <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
                         <button class="btn" @click="clickRegist(list)">담기</button>
-                        <button class="btn" @click="clickRegist(list, 'default')">특정한곳 담기</button>
+                        <div v-for="(btn, idx) in groupList" :key="idx">
+                            <button class="btn" @click="clickRegist(list, btn)">{{btn.groupName}}</button>
+                        </div>
                     </div>
                 </div>
             </li>
           </ul>
-          {{ groupList }}
       </article>
     </section>
 </template>
@@ -26,19 +27,22 @@ import { computed, ref } from '@vue/composition-api';
 
 const clickEvent = (userInfo) => {
     
-    const clickRegist = (item, groupName='lounge') => {
-        const musicName = item.snippet.title;
-        const videoId = item.id.videoId;
-        const registDate = String(new Date());
+    const clickRegist = (item, groupData='lounge') => {
 
-        const id = groupName === 'lounge' ? 'lounge' : userInfo.value.dealiName;
+        console.log(item, groupData);
+
+        const dealiName = groupData === 'lounge' ? 'lounge' : userInfo.value.dealiName;
+        console.log(dealiName);
         const data = {
-            musicName,
-            videoId,
-            registDate,
-            userId: id,
+            thumbnails: item.snippet.thumbnails.high.url,
+            musicName: item.snippet.title,
+            videoId: item.id.videoId,
+            registDate: String(new Date()),
             userName: userInfo.value.userName,
-            groupName,
+            
+            dealiName: dealiName,
+            groupKey: groupData.myKey || '',
+            groupName: groupData.groupName || 'lounge',
         };
         
         registMusic(data);
