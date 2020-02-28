@@ -26,13 +26,12 @@ const setMusicList = (props, store, emit) => {
         const data = {
           dealiName,
           groupName: props.groupName,
-          groupKey: props.groupKey,
+          groupKey: props.groupKey || '',
         };
 
         getMusicListByGroup(data).on('value', (snapshot) => {
-          console.log(snapshot.val());
-                musicList.value = Object.values(snapshot.val()).reverse();
-                emit('input', musicList.value);
+              musicList.value = Object.values(snapshot.val()).reverse();
+              emit('input', musicList.value);
         });
     }
 

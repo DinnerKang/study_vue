@@ -17,15 +17,7 @@ import { computed, ref } from '@vue/composition-api';
 import { getGroupListByKey } from '@/service/Group';
 import { getMusicListByGroup } from '@/service/Music';
 
-const iconList = () => {
-    const liketIcon = require('../../assets/icons/Heart-01.png');
-    const heartIcon = require('../../assets/icons/Heart-02.png');
 
-    return {
-        heartIcon,
-        liketIcon,
-    }
-};
 
 const getMusicData = (userInfo, groupKey) => {
     const musicData = ref({});
@@ -72,17 +64,8 @@ const clickEvent = (userInfo, router) => {
         });
     }
 
-    const clickLikeGroup = (list) => {
-        const data = {
-            dealiName: userInfo.dealiName,
-            myKey: list.myKey,
-            groupName: list.groupName,
-        }
-        addLikeGroup(data);
-    }
     return {
         clickGroup,
-        clickLikeGroup,
     }
 }
 
@@ -112,7 +95,6 @@ export default {
             musicData,
             groupData,
             clickGroup,
-            ...iconList(),
         }
     }
 }

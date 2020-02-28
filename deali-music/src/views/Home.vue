@@ -6,7 +6,7 @@
       </h2>
       <div class="group_list">
         <article v-for="data in myGroupKeys" :key="data">
-          <group-list :groupKey="data"></group-list>
+          <my-group-list :groupKey="data"></my-group-list>
         </article>
       </div>
     </section>
@@ -14,10 +14,10 @@
       <h2>
         공개 플레이리스트
       </h2>
-      <div class="recomend_group_list"><!--
-        <article v-for="(list, idx) in groupList" :key="idx">
-          <group-list :width="'238'" :height="'180'" :is-outside="true" :list="list"></group-list>
-        </article>-->
+      <div class="recomend_group_list">
+        <article v-for="(list, idx) in openGroupList" :key="idx">
+          <open-group-list :openGroupData="list"></open-group-list>
+        </article>
       </div>
     </section>
   </div>
@@ -25,7 +25,8 @@
 
 <script>
 import { ref, computed, watch } from '@vue/composition-api';
-import GroupList from '@/components/List/GroupList';
+import MyGroupList from '@/components/List/MyGroupList';
+import openGroupList from '@/components/List/OpenGroupList';
 import { getOpenGroup } from '@/service/Group';
 import { getMusicListByGroup } from '@/service/Music';
 
@@ -53,16 +54,16 @@ const myGroup = (userInfo) => {
 };
 
 const openGroup = () => {
-  const groupList = ref([]);
+  const openGroupList = ref([]);
   const likeGroupList = ref([]);
   
-  getOpenGroup().once('value', snapshot => {
+  getOpenGroup().on('value', snapshot => {
     if (!snapshot.val()) return;
-    groupList.value = Object.values(snapshot.val());
+    openGroupList.value = Object.values(snapshot.val());
   });
   
   return {
-    groupList,
+    openGroupList,
     likeGroupList,
   }
 };
@@ -70,13 +71,14 @@ const openGroup = () => {
 export default {
   name: 'Home',
   components: {
-    GroupList,
+    MyGroupList,
+    openGroupList,
   },
   setup(props, { root }) {
     const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
     const isLogin = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
     const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
-    const { groupList } = openGroup(isLogin);
+    const { openGroupList } = openGroup(isLogin);
 
     watch(isLogin, newValue => {
        if (newValue) getMyGroupList();
@@ -84,7 +86,7 @@ export default {
 
     return {
       myGroupKeys,
-      groupList,
+      openGroupList,
       isLogin,
       userInfo,
     }

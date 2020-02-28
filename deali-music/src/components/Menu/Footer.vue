@@ -33,7 +33,7 @@
                         <div
                             class="percent_bar"
                             v-if="playerStart"
-                            :style="{ width : videoStatus.currentTime / videoStatus.playTime * 300 +'px' }"
+                            :style="{ width : videoStatus.currentTime / videoStatus.playTime * 100 +'%' }"
                         />
                     </div>
                     <div>{{ videoStatus.playTime | getTime}}</div>

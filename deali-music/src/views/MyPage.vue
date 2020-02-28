@@ -2,6 +2,7 @@
     <section class="myPage_container">
         <div>
             <h2>내 그룹 설정</h2>
+            <button @click="isModal=true">그룹 추가</button>
             <ul>
                 <li class="group_area" v-for="(list, idx) in Object.values(groupData)"
                     :key="idx" >
@@ -9,21 +10,18 @@
                     <button type="button" @click="clickEdit(idx, groupData)">수정</button>
                     <button type="button" @click="clickMakeShow(idx, groupData)">공개</button>
                 </li>
-
-                <li class="group_area">
-                    <div @click="clickAddGroup">+</div>
-                </li>
             </ul>
         </div>
-        <modal :isOpen="false" @close-modal="isOpen=false">
-            <div>머리</div>
-            <div>몸통</div>
+        <modal :isOpen="isModal" @close-modal="isModal=false">
+            <input type="text" v-model="groupName" placeholder="그룹이름" />
+            <input type="text" v-model="groupDescription" placeholder="그룹설명" />
+            <button type="button" @click="saveGroup">저장</button>
         </modal>
     </section>
 </template>
 
 <script>
-import { reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
+import { ref, reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { addMyGroup, addShowGroup, editMyGroupName } from '@/service/Group';
 // import { initRegistMusic } from '@/service/Music';
@@ -69,20 +67,6 @@ const clickEvent = (userName, userState, router) => {
         });
     };
 
-    const clickAddGroup = async () => {
-        
-        const data = {
-            groupName: 'default4',
-            description: '설명충',
-            dealiName: userName.value,
-        };
-        try {
-            await addMyGroup(data);
-        } catch (e) {
-            console.log(e);
-        }
-    };
-
     const clickEdit = (idx, groupData) => {
         const key = Object.keys(groupData)[idx];
         const data = {
@@ -105,9 +89,32 @@ const clickEvent = (userName, userState, router) => {
 
     return {
         clickPlayList,
-        clickAddGroup,
         clickEdit,
         clickMakeShow,
+    }
+}
+
+const modalEvent = (userInfo) => {
+    const isModal = ref(false);
+    const groupName = ref('');
+    const groupDescription = ref('');
+
+    const saveGroup = () => {
+        if (!groupName) return alert('이름을 적어주세요.');
+        const data = {
+            dealiName: userInfo.value.dealiName,
+            groupName: groupName.value,
+            description: groupDescription.value,
+        };
+        addMyGroup(data);
+        isModal.value = false;
+    };
+
+    return {
+        isModal,
+        groupName,
+        groupDescription,
+        saveGroup,
     }
 }
 
@@ -117,11 +124,11 @@ export default {
         Modal,
     },
     setup(props, { root }) {
+        const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
-
         const { getMyGroup, groupData } = myGroup(userName, userState);
-        const { clickPlayList, clickAddGroup, clickEdit, clickMakeShow } = clickEvent(userName, userState, root.$router);
+        const { clickPlayList, clickEdit, clickMakeShow } = clickEvent(userName, userState, root.$router);
 
 
         watch(userName, () =>{
@@ -135,9 +142,9 @@ export default {
         return {
             groupData,
             clickPlayList,
-            clickAddGroup,
             clickEdit,
             clickMakeShow,
+            ...modalEvent(userInfo),
         };
     }
 };

@@ -32,6 +32,7 @@ export function addMyGroup(data) {
 }
 
 export function addLikeGroup(data) {
+    console.log('1', data);
     return firebase.database().ref(`group/showGroup/${data.myKey}/likes`).update({
         [data.dealiName] : true,
     });
@@ -57,4 +58,10 @@ export function editMyGroupName(data) {
     firebase.database().ref(`group/all/${data.userId}`).update({
         [key] : data.groupName
     });
+}
+
+// Delete
+
+export function deleteLikeGroup(data) {
+    return firebase.database().ref(`group/showGroup/${data.myKey}/likes/${data.dealiName}`).remove();
 }
