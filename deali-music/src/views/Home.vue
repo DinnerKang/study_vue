@@ -117,7 +117,7 @@ export default {
     .recomend_group_list{
       display: grid;
       gap: 10px 24px;
-      grid-template-rows: 150px;
+      grid-template-rows: 250px;
       grid-template-columns: repeat(4, 1fr);
       margin-bottom: 300px;
     }

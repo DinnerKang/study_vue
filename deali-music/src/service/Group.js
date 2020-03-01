@@ -24,6 +24,16 @@ export function addMyGroup(data) {
     const ref = firebase.database().ref(`group/all/${data.dealiName}`);
     const myKey = ref.push().key;
 
+    if (data.isShow === "1") {
+        const data1 = {
+            targetKey: myKey,
+            dealiName: data.dealiName,
+            groupName: data.groupName,
+        };
+        addShowGroup(data1);
+    }
+
+
     return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,

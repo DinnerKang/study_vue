@@ -15,6 +15,11 @@
         <modal :isOpen="isModal" @close-modal="isModal=false">
             <input type="text" v-model="groupName" placeholder="그룹이름" />
             <input type="text" v-model="groupDescription" placeholder="그룹설명" />
+            <div>
+                <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />공개
+                <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
+            </div>
+            
             <button type="button" @click="saveGroup">저장</button>
         </modal>
     </section>
@@ -24,7 +29,6 @@
 import { ref, reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { addMyGroup, addShowGroup, editMyGroupName } from '@/service/Group';
-// import { initRegistMusic } from '@/service/Music';
 import Modal  from '@/components/Common/Modal';
 
 const myGroup = (userName, userState) => {
@@ -98,6 +102,7 @@ const modalEvent = (userInfo) => {
     const isModal = ref(false);
     const groupName = ref('');
     const groupDescription = ref('');
+    const openGroup = ref(0);
 
     const saveGroup = () => {
         if (!groupName) return alert('이름을 적어주세요.');
@@ -105,6 +110,7 @@ const modalEvent = (userInfo) => {
             dealiName: userInfo.value.dealiName,
             groupName: groupName.value,
             description: groupDescription.value,
+            isShow: openGroup.value,
         };
         addMyGroup(data);
         isModal.value = false;
@@ -114,6 +120,7 @@ const modalEvent = (userInfo) => {
         isModal,
         groupName,
         groupDescription,
+        openGroup,
         saveGroup,
     }
 }
