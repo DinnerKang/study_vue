@@ -25,8 +25,8 @@
             </div>
             <button type="button" @click="saveGroup">저장</button>
             
-            <div v-for="(url, idx) in thumbnailLists" :key="idx">
-                <img :src="url" alt="사진" />
+            <div v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
+                <img style="width:238px; height: 180px;" :src="url" alt="사진" />
             </div>
         </modal>
     </section>
@@ -146,6 +146,10 @@ const thumbnailsData = () => {
         }
     };
 
+    const clickThumbnail = idx => {
+        console.log(idx);
+    };
+
     const fileChange = () => {
         const file = refs.imgFile.files[0];
         uploadThumbnail(file);
@@ -155,6 +159,7 @@ const thumbnailsData = () => {
         thumbnailLists,
         fileChange,
         getThumbnails,
+        clickThumbnail,
     }
 }
 
