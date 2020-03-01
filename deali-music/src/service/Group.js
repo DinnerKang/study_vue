@@ -33,7 +33,6 @@ export function addMyGroup(data) {
         addShowGroup(data1);
     }
 
-
     return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,
@@ -42,11 +41,11 @@ export function addMyGroup(data) {
 }
 
 export function addLikeGroup(data) {
-    console.log('1', data);
     return firebase.database().ref(`group/showGroup/${data.myKey}/likes`).update({
         [data.dealiName] : true,
     });
 }
+
 
 
 // UPDATE
