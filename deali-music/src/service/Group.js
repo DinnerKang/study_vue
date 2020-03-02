@@ -2,7 +2,6 @@ import * as firebase from 'firebase/app';
 import 'firebase/database';
 // import Store from '@/store';
 
-
 // READ
 
 export function getGroupList(dealiName) {
@@ -17,6 +16,10 @@ export function getOpenGroup() {
     return firebase.database().ref('group/showGroup');
 }
 
+export function getMyLikeGroupList() {
+    return firebase.database().ref('group');
+}
+
 // WRITE
 
 export function addMyGroup(data) {
@@ -26,7 +29,6 @@ export function addMyGroup(data) {
 
     if (data.isShow === "1") {
         const data1 = {
-            targetKey: myKey,
             dealiName: data.dealiName,
             groupName: data.groupName,
         };
@@ -36,6 +38,7 @@ export function addMyGroup(data) {
     return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,
+        thumbnail: data.thumbnail,
         myKey: myKey,
     });
 }
@@ -54,7 +57,7 @@ export function addShowGroup(data) {
     const ref = firebase.database().ref('group/showGroup/');
     const myKey = ref.push().key;
 
-    return ref.child(myKey).set({
+    return ref.child(data.targetKey).set({
         myKey: myKey,
         targetKey: data.targetKey,
         dealiName: data.dealiName,
@@ -73,4 +76,14 @@ export function editMyGroupName(data) {
 
 export function deleteLikeGroup(data) {
     return firebase.database().ref(`group/showGroup/${data.myKey}/likes/${data.dealiName}`).remove();
+}
+
+export function deleteOpenGroup(data) {
+    return firebase.database().ref(`group/showGroup/${data.myKey}`).remove();
+}
+
+export function deleteMyGroup(data) {
+    firebase.database().ref(`group/all/${data.dealiName}/${data.myKey}`).remove();
+    firebase.database().ref(`music/${data.dealiName}/${data.myKey}`).remove();
+    return deleteOpenGroup(data);
 }

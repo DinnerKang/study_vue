@@ -9,12 +9,19 @@
                     <div @click="clickPlayList(list.groupName)">{{list.groupName}}</div>
                     <button type="button" @click="clickEdit(idx, groupData)">수정</button>
                     <button type="button" @click="clickMakeShow(idx, groupData)">공개</button>
+                    <button type="button" @click="clickDelete(idx, groupData)">삭제</button>
                 </li>
             </ul>
         </div>
         <modal :isOpen="isModal" @close-modal="isModal=false">
+            <div class="group_container">
+                <div class="group_img_area">
+                    <img v-if="selectThumbnail" :src="selectThumbnail" style="width:100%; height:100%" alt="선택한 사진"/>
+                </div>
+            </div>
+            
             <div>
-                <button type="button" @click="getThumbnails">파일 읽기</button>
+                <button type="button" @click="getThumbnails">이미지 부르기</button>
                 <input type="file" ref="imgFile" @change="fileChange" />
             </div>
             <input type="text" v-model="groupName" placeholder="그룹이름" />
@@ -23,10 +30,10 @@
                 <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />공개
                 <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
             </div>
-            <button type="button" @click="saveGroup">저장</button>
+            <button type="button" @click="saveGroup(selectThumbnail)">저장</button>
             
             <div v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
-                <img style="width:238px; height: 180px;" :src="url" alt="사진" />
+                <img style="width:238px; height: 180px; cursor:pointer" :src="url" alt="사진" />
             </div>
         </modal>
     </section>
@@ -36,7 +43,7 @@
 import { ref, reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { readFolderLists, getThumbnail, uploadThumbnail } from '@/service/Storage';
-import { addMyGroup, addShowGroup, editMyGroupName } from '@/service/Group';
+import { addMyGroup, addShowGroup, editMyGroupName, deleteMyGroup } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
 
 const myGroup = (userName, userState) => {
@@ -99,26 +106,37 @@ const clickEvent = (userName, userState, router) => {
         addShowGroup(data);
     };
 
+    const clickDelete = (idx, groupData) => {
+        const value = Object.values(groupData)[idx];
+        const data = {
+            dealiName: userName.value,
+            myKey: value.myKey,
+        }
+        deleteMyGroup(data);
+    };
+
     return {
         clickPlayList,
         clickEdit,
         clickMakeShow,
+        clickDelete,
     }
 }
 
 const modalEvent = (userInfo) => {
-    const isModal = ref(false);
+    const isModal = ref(true);
     const groupName = ref('');
     const groupDescription = ref('');
     const openGroup = ref(0);
 
-    const saveGroup = () => {
+    const saveGroup = (selectThumbnail) => {
         if (!groupName) return alert('이름을 적어주세요.');
         
         const data = {
             dealiName: userInfo.value.dealiName,
             groupName: groupName.value,
             description: groupDescription.value,
+            thumbnail: selectThumbnail,
             isShow: openGroup.value,
         };
         addMyGroup(data);
@@ -136,6 +154,7 @@ const modalEvent = (userInfo) => {
 
 const thumbnailsData = () => {
     const thumbnailLists = ref([]);
+    const selectThumbnail = ref('');
     
     const getThumbnails = async() => {
         const { items } = await readFolderLists();
@@ -148,6 +167,7 @@ const thumbnailsData = () => {
 
     const clickThumbnail = idx => {
         console.log(idx);
+        selectThumbnail.value = thumbnailLists.value[idx];
     };
 
     const fileChange = () => {
@@ -160,6 +180,7 @@ const thumbnailsData = () => {
         fileChange,
         getThumbnails,
         clickThumbnail,
+        selectThumbnail,
     }
 }
 
@@ -173,8 +194,8 @@ export default {
         const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
         const { getMyGroup, groupData } = myGroup(userName, userState);
-        const { clickPlayList, clickEdit, clickMakeShow } = clickEvent(userName, userState, root.$router);
-        const { thumbnailLists, fileChange, getThumbnails } = thumbnailsData(refs);
+        const { clickPlayList, clickEdit, clickMakeShow, clickDelete } = clickEvent(userName, userState, root.$router);
+        const { thumbnailLists, fileChange, getThumbnails, selectThumbnail, clickThumbnail } = thumbnailsData(refs);
 
         watch(userName, () =>{
             getMyGroup();
@@ -192,6 +213,9 @@ export default {
             thumbnailLists,
             fileChange,
             getThumbnails,
+            selectThumbnail,
+            clickDelete,
+            clickThumbnail,
             ...modalEvent(userInfo, refs),
         };
     }
@@ -211,4 +235,15 @@ export default {
     justify-content: center;
     cursor: pointer;
   }
+  
+    .group_container{
+        padding: 20px;
+
+        .group_img_area{
+            width: 238px;
+            height: 180px;
+            border: 1px solid $Black;
+        }
+    }
+  
 </style>

@@ -3,6 +3,7 @@
         <div class="group_container"
             @click="clickGroup(openGroupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
+            <img v-if="groupData.thumbnail" :src="groupData.thumbnail" style="width:100%; height:100%" alt="썸네일"/>
         </div>
         <div class="outside_area">
             <div class="main_text">
@@ -97,9 +98,13 @@ export default {
         const { isLike, notIcon, likeIcon } = iconList();
         const likeUser = computed(() =>  props.openGroupData.likes);
 
-        watch(likeUser, () => {
-            if (!likeUser.value) return isLike.value = false;
-            if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) isLike.value = true;
+        watch(() => {
+            if (!likeUser.value || !userInfo.value.dealiName) return isLike.value = false;
+            if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
+                isLike.value = true;
+            } else {
+                isLike.value = false;
+            }
         });
 
         return {

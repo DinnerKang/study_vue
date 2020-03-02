@@ -30,6 +30,7 @@ const setMusicList = (props, store, emit) => {
         };
 
         getMusicListByGroup(data).on('value', (snapshot) => {
+            if (!snapshot.val()) return;
               musicList.value = Object.values(snapshot.val()).reverse();
               emit('input', musicList.value);
         });

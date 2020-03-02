@@ -41,6 +41,7 @@ const myGroup = (userInfo) => {
     };
 
     getMusicListByGroup(data).on('value', snapshot =>{
+        if (!snapshot.val()) return;
         const keys = Object.keys(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
         myGroupKeys.value = keys;
     });
