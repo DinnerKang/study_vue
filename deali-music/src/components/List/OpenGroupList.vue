@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div class="group_container"
+        <div class="group_container open_group_container"
             @click="clickGroup(openGroupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
-            <img v-if="groupData.thumbnail" :src="groupData.thumbnail" style="width:100%; height:100%" alt="썸네일"/>
+            <img v-if="groupData.thumbnail" :src="groupData.thumbnail" alt="썸네일"/>
         </div>
         <div class="outside_area">
             <div class="main_text">
@@ -49,7 +49,7 @@ const clickEvent = (userInfo, router) => {
     const clickLikeGroup = (openGroupData, isLike) => {
         const data = {
             dealiName: userInfo.value.dealiName,
-            myKey: openGroupData.myKey,
+            targetKey: openGroupData.targetKey,
         };
         if (isLike === false) {
             addLikeGroup(data);

@@ -1,15 +1,14 @@
 <template>
     <section class="myPage_container">
         <div>
-            <h2 ref="test">내 그룹 설정</h2>
+            <h2>내 그룹 설정</h2>
             <button @click="isModal=true">그룹 추가</button>
-            <ul>
-                <li class="group_area" v-for="(list, idx) in Object.values(groupData)"
-                    :key="idx" >
-                    <div @click="clickPlayList(list.groupName)">{{list.groupName}}</div>
-                    <button type="button" @click="clickEdit(idx, groupData)">수정</button>
-                    <button type="button" @click="clickMakeShow(idx, groupData)">공개</button>
-                    <button type="button" @click="clickDelete(idx, groupData)">삭제</button>
+            <ul class="my_group_list">
+                <li  v-for="list in Object.keys(groupData)" :key="list">
+                    <my-group-list :group-key="list" :bottomPadding="'8px 24px'"
+                            :width="'238'" :height="'180'" :group-thumbnail="true">
+                        
+                    </my-group-list>
                 </li>
             </ul>
         </div>
@@ -32,8 +31,8 @@
             </div>
             <button type="button" @click="saveGroup(selectThumbnail)">저장</button>
             
-            <div v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
-                <img style="width:238px; height: 180px; cursor:pointer" :src="url" alt="사진" />
+            <div class="open_group_container" v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
+                <img :src="url" alt="사진" />
             </div>
         </modal>
     </section>
@@ -43,8 +42,9 @@
 import { ref, reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList } from '@/service/Group';
 import { readFolderLists, getThumbnail, uploadThumbnail } from '@/service/Storage';
-import { addMyGroup, addShowGroup, editMyGroupName, deleteMyGroup } from '@/service/Group';
+import { addMyGroup } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
+import MyGroupList from '@/components/List/MyGroupList';
 
 const myGroup = (userName, userState) => {
     const state = reactive({
@@ -75,56 +75,8 @@ const myGroup = (userName, userState) => {
     };
 };
 
-const clickEvent = (userName, userState, router) => {
-
-    const clickPlayList = (groupName) => {
-        router.push({
-            path: '/playPage',
-            query: {
-                groupName: groupName
-            },
-        });
-    };
-
-    const clickEdit = (idx, groupData) => {
-        const key = Object.keys(groupData)[idx];
-        const data = {
-            key: key,
-            groupName: '수정한거6',
-            userId: userName.value,
-        };
-        editMyGroupName(data);
-    };
-
-    const clickMakeShow = (idx, groupData) => {
-        const value = Object.values(groupData)[idx];
-        const data = {
-            targetKey: value.myKey,
-            groupName: value.groupName,
-            dealiName: userName.value,
-        };
-        addShowGroup(data);
-    };
-
-    const clickDelete = (idx, groupData) => {
-        const value = Object.values(groupData)[idx];
-        const data = {
-            dealiName: userName.value,
-            myKey: value.myKey,
-        }
-        deleteMyGroup(data);
-    };
-
-    return {
-        clickPlayList,
-        clickEdit,
-        clickMakeShow,
-        clickDelete,
-    }
-}
-
 const modalEvent = (userInfo) => {
-    const isModal = ref(true);
+    const isModal = ref(false);
     const groupName = ref('');
     const groupDescription = ref('');
     const openGroup = ref(0);
@@ -166,7 +118,6 @@ const thumbnailsData = () => {
     };
 
     const clickThumbnail = idx => {
-        console.log(idx);
         selectThumbnail.value = thumbnailLists.value[idx];
     };
 
@@ -188,13 +139,13 @@ export default {
     name: "MyPage",
     components: {
         Modal,
+        MyGroupList,
     },
     setup(props, { root, refs }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
         const { getMyGroup, groupData } = myGroup(userName, userState);
-        const { clickPlayList, clickEdit, clickMakeShow, clickDelete } = clickEvent(userName, userState, root.$router);
         const { thumbnailLists, fileChange, getThumbnails, selectThumbnail, clickThumbnail } = thumbnailsData(refs);
 
         watch(userName, () =>{
@@ -207,14 +158,10 @@ export default {
 
         return {
             groupData,
-            clickPlayList,
-            clickEdit,
-            clickMakeShow,
             thumbnailLists,
             fileChange,
             getThumbnails,
             selectThumbnail,
-            clickDelete,
             clickThumbnail,
             ...modalEvent(userInfo, refs),
         };
@@ -225,6 +172,14 @@ export default {
 
     .myPage_container{
         margin: 0 auto;
+
+        .my_group_list{
+            display: grid;
+            gap: 10px 24px;
+            grid-template-rows: 250px;
+            grid-template-columns: repeat(4, 1fr);
+            margin-bottom: 300px;
+        }
     }
   .group_area{
     width: 200px;
@@ -245,5 +200,4 @@ export default {
             border: 1px solid $Black;
         }
     }
-  
 </style>

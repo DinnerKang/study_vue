@@ -1,7 +1,7 @@
 <template>
     <header>
         <div class="header_container">
-            <div class="logo_area">
+            <div class="logo_area" @click="clickLogo">
                 Dealibeat
             </div>
             <div class="search_area">
@@ -50,18 +50,31 @@ const getUserInfo = (store) => {
     }
 }
 
+const clickEvent = (router) => {
+
+    const clickLogo = () => {
+        router.push('/');
+    };
+
+    return {
+        clickLogo,
+    }
+};
+
 export default {
     components: {
         SearchBar,
     },
     setup(props, { root }) {
         const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store);
+        const { clickLogo } = clickEvent(root.$router);
 
         return {
             userName,
             userState,
             userLogin,
             userLogout,
+            clickLogo,
         };
     },
 };

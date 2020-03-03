@@ -30,4 +30,15 @@ export default {
    text-decoration: none;
    color: $Black;
  }
+ .open_group_container{
+    width:238px;
+    height: 180px; 
+    cursor:pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+    }
+ }
 </style>

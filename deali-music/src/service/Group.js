@@ -29,12 +29,12 @@ export function addMyGroup(data) {
 
     if (data.isShow === "1") {
         const data1 = {
+            targetKey: myKey,
             dealiName: data.dealiName,
             groupName: data.groupName,
         };
         addShowGroup(data1);
     }
-
     return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,
@@ -44,7 +44,7 @@ export function addMyGroup(data) {
 }
 
 export function addLikeGroup(data) {
-    return firebase.database().ref(`group/showGroup/${data.myKey}/likes`).update({
+    return firebase.database().ref(`group/showGroup/${data.targetKey}/likes`).update({
         [data.dealiName] : true,
     });
 }
@@ -54,7 +54,7 @@ export function addLikeGroup(data) {
 // UPDATE
 
 export function addShowGroup(data) {
-    const ref = firebase.database().ref('group/showGroup/');
+    const ref = firebase.database().ref('group/showGroup');
     const myKey = ref.push().key;
 
     return ref.child(data.targetKey).set({

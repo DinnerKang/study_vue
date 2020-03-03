@@ -3,10 +3,12 @@
         <div class="group_container"
             @click="clickGroup(groupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
-            <img v-if="musicData.thumbnails" class="youtube_img" :src="musicData.thumbnails" alt="유튜브 사진" />
-            <div class="bottom_area">
+            <img v-if="groupThumbnail" class="youtube_img" :src="groupData.thumbnail" alt="그룹 썸네일" />
+            <img v-else class="youtube_img" :src="musicData.thumbnails" alt="유튜브 사진" />
+            <div class="bottom_area" :style="{padding: bottomPadding, height: bottomPadding ? '30%' : '20%'}">
                 <div class="main_text">{{groupData.groupName}}</div>
                 <div class="sub_text">{{groupData.description }}</div>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -83,6 +85,13 @@ export default {
             type: String,
             default: '375',
         },
+        groupThumbnail: {
+            type: Boolean,
+            default: false,
+        },
+        bottomPadding: {
+            type: String,
+        }
     },
     setup(props, { root }) {
         const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
@@ -110,14 +119,18 @@ export default {
 
         .youtube_img{
             width: 100%;
+            height: 100%;
         }
 
         .bottom_area{
             position: absolute;
-            bottom: 24px;
-            left: 24px;
-            right: 24px;
+            height: 20%;
+            width: 100%;
+            bottom: 0px;
             color: $White;
+            padding: 24px;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.6);
 
             .main_text{
                 font-size: 15px;
