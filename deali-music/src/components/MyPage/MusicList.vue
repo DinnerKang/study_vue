@@ -43,6 +43,7 @@ const setMusicList = (props, store, emit) => {
         };
         
         getMusicListByGroup(data).orderByKey().once('value', snapshot => {
+            if (!snapshot.val()) return;
             const key = Object.keys(snapshot.val()).reverse()[idx];
             deleteMusic(data, key);
         });

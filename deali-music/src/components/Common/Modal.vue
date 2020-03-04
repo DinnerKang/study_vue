@@ -42,7 +42,7 @@ export default {
         .modal_area{
             position: absolute;
             width: 600px;
-            height: 600px;
+            height: 250px;
             left: 50%;
             top: 50%;
             transform: translate(-50%, -50%);

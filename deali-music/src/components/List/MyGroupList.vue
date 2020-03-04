@@ -30,6 +30,7 @@ const getMusicData = (userInfo, groupKey) => {
     }
 
     getMusicListByGroup(data).once('value', snapshot => {
+        if(!snapshot.val()) return;
         musicData.value = Object.values(Object.values(snapshot.val())[0])[0];
     });
 

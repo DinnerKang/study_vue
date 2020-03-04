@@ -12,27 +12,34 @@
                 </li>
             </ul>
         </div>
-        <modal :isOpen="isModal" @close-modal="isModal=false">
+        <modal :isOpen="isModal" @close-modal="closeModal">
             <div class="group_container">
                 <div class="group_img_area">
-                    <img v-if="selectThumbnail" :src="selectThumbnail" style="width:100%; height:100%" alt="선택한 사진"/>
+                    <div class="thumbnail_container" v-if="isTumbnails" @scroll.passive="onScroll">
+                        <div class="open_group_container" 
+                        v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
+                                <img :src="url" alt="사진" />
+                        </div>
+                    </div>
+                    <div class="select_thumbnail" @click="getThumbnails" v-else>
+                        <img v-if="selectThumbnail" :src="selectThumbnail" style="width:100%; height:100%" alt="선택한 사진"/>
+                        <span v-else>썸네일 선택</span>
+                    </div>
+                </div>
+                <div class="group_text_area">
+                    <label>그룹이름<input type="text" class="group_input" v-model="groupName" placeholder="그룹이름" /></label>
+                    <label>그룹설명<input type="text" class="group_input" v-model="groupDescription" placeholder="그룹설명" /></label>
+                    <div>
+                        <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />공개
+                        <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
+                    </div>
+                    <button type="button" class="save_btn" @click="saveGroup(selectThumbnail)">저장</button>
                 </div>
             </div>
             
-            <div>
-                <button type="button" @click="getThumbnails">이미지 부르기</button>
-                <input type="file" ref="imgFile" @change="fileChange" />
-            </div>
-            <input type="text" v-model="groupName" placeholder="그룹이름" />
-            <input type="text" v-model="groupDescription" placeholder="그룹설명" />
-            <div>
-                <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />공개
-                <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
-            </div>
-            <button type="button" @click="saveGroup(selectThumbnail)">저장</button>
-            
-            <div class="open_group_container" v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
-                <img :src="url" alt="사진" />
+            <div class="modal_footer" @click="$refs.imgFile.click()">
+                이미지를 추가하고 싶다면...
+                <input style="display: none;" type="file" ref="imgFile" @change="fileChange" />
             </div>
         </modal>
     </section>
@@ -75,14 +82,14 @@ const myGroup = (userName, userState) => {
     };
 };
 
-const modalEvent = (userInfo) => {
+const modalEvent = (userInfo, isTumbnails) => {
     const isModal = ref(false);
     const groupName = ref('');
     const groupDescription = ref('');
     const openGroup = ref(0);
 
     const saveGroup = (selectThumbnail) => {
-        if (!groupName) return alert('이름을 적어주세요.');
+        if (!groupName.value || !selectThumbnail.value) return alert('정보를 정확하게 입력해주세요.');
         
         const data = {
             dealiName: userInfo.value.dealiName,
@@ -95,35 +102,72 @@ const modalEvent = (userInfo) => {
         isModal.value = false;
     };
 
+    const closeModal = () => {
+        isModal.value = false;
+        groupName.value = '';
+        groupDescription.value = '';
+        openGroup.value = 0;
+        isTumbnails.value = false;
+    };
+
     return {
         isModal,
         groupName,
         groupDescription,
         openGroup,
         saveGroup,
+        closeModal,
     }
 }
 
-const thumbnailsData = () => {
+const thumbnailsData = (userInfo, refs) => {
     const thumbnailLists = ref([]);
     const selectThumbnail = ref('');
+    const isTumbnails = ref(false);
+    const fullPath = ref([]);
+    let nowImg = 0;
+    const perImg = 6;
+    let isMoreImg = true;
     
-    const getThumbnails = async() => {
+    const getThumbnails = async () => {
+        isTumbnails.value = true;
         const { items } = await readFolderLists();
-        const fullPath = items.map(i => i.fullPath);
-
-        for (let i = 0; i < fullPath.length; i += 1) {
-            thumbnailLists.value.push(await getThumbnail(fullPath[i]));
-        }
+        fullPath.value = items.map(i => i.fullPath);
+        
+        getImg();
     };
 
+    const getImg = async () => {
+        if (isMoreImg === false) return;
+        for (let i = nowImg * 6; i < perImg + nowImg * perImg; i++) {
+            if (i >= fullPath.value.length ) {
+                isMoreImg = false;
+                break;
+            }
+            thumbnailLists.value.push(await getThumbnail(fullPath.value[i]));
+        }
+
+        if (fullPath.value.length > nowImg * 6) isMoreImg = true;
+    }
+
     const clickThumbnail = idx => {
+        isTumbnails.value = false;
         selectThumbnail.value = thumbnailLists.value[idx];
     };
 
     const fileChange = () => {
-        const file = refs.imgFile.files[0];
-        uploadThumbnail(file);
+        const data = {
+            file: refs.imgFile.files[0],
+            dealiName: userInfo.value.dealiName,
+        }
+        uploadThumbnail(data);
+    };
+
+    const onScroll = (e) => {
+        if (e.target.scrollHeight - (e.target.scrollTop + 182) === 0) {
+            nowImg += 1;
+            getImg();
+        }
     };
 
     return {
@@ -132,6 +176,8 @@ const thumbnailsData = () => {
         getThumbnails,
         clickThumbnail,
         selectThumbnail,
+        isTumbnails,
+        onScroll,
     }
 }
 
@@ -146,7 +192,7 @@ export default {
         const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
         const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
         const { getMyGroup, groupData } = myGroup(userName, userState);
-        const { thumbnailLists, fileChange, getThumbnails, selectThumbnail, clickThumbnail } = thumbnailsData(refs);
+        const { thumbnailLists, fileChange, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData(userInfo, refs);
 
         watch(userName, () =>{
             getMyGroup();
@@ -163,12 +209,17 @@ export default {
             getThumbnails,
             selectThumbnail,
             clickThumbnail,
-            ...modalEvent(userInfo, refs),
+            isTumbnails,
+            onScroll,
+            ...modalEvent(userInfo, isTumbnails),
         };
     }
 };
 </script>
 <style lang="scss" scoped>
+    input:focus {
+        outline: none;
+    }
 
     .myPage_container{
         margin: 0 auto;
@@ -193,11 +244,85 @@ export default {
   
     .group_container{
         padding: 20px;
+        display: flex;
 
         .group_img_area{
             width: 238px;
             height: 180px;
             border: 1px solid $Black;
+            position: relative;
+            
+            .select_thumbnail{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
         }
+        .group_text_area{
+            margin-left: 20px;
+            position: relative;
+
+            label{
+                display: block;
+                margin-bottom: 20px;
+                font-size:12px;
+
+                .group_input{
+                    margin-left: 20px;
+                    border: none;
+                    border-bottom: 1px solid $Main;
+                }
+            }
+            .save_btn{
+                width: 100%;
+                color: $Black;
+                height: 30px;
+                border: 1px solid $Main;
+                border-radius: 16px;
+                background-color: $White;
+                position: absolute;
+                bottom: 0;
+                cursor: pointer;
+            }
+        }
+    }
+    .thumbnail_container{
+        position: absolute;
+        top: -1px;
+        width: 240px;
+        height: 182px;
+        overflow: auto;
+        display: grid;
+        z-index: 3;
+        grid-template-rows: 90px;
+        grid-template-columns: repeat(2, 1fr);
+        
+        .open_group_container{
+            width: 120px;
+            height: 90px;
+
+            img{
+                border-radius: 0;
+                cursor: pointer;
+            }
+        }
+    }
+    
+    .modal_footer{
+        position: absolute;
+        bottom: 0px;
+        left:0;
+        right: 0;
+        height: 20px;
+        background-color: $Black;
+        color: $White;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        font-size:12px;
     }
 </style>

@@ -7,14 +7,10 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "firebaseConfig.js"
-    ],
-    "rewrites": [
-      {
-        "source" : "**",
-        "destination" : "/index.html"
-      }
+      "**/node_modules/**"
     ]
+  },
+  "storage": {
+    "rules": "storage.rules"
   }
 }

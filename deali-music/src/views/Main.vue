@@ -18,9 +18,11 @@ export default {
     footerComponent,
   },
   setup(props, { root }) {
-    const store = root.$store;
-    const isFooter = computed(()=> store.getters['menu/getFooter']);
+    const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
+    const isFooter = computed(()=> root.$store.getters['menu/getFooter']);
 
+    if (!userInfo.value.dealiName) root.$store.commit('menu/disableFooter');
+    
     return {
       isFooter
     }
