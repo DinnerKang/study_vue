@@ -3,7 +3,7 @@
       <article class="music_list_container">
           <ul class="list_area">
             <li class="item_lists" v-for="(list, idx) in searchResult.items" :key="idx">  
-                <img :src='list.snippet.thumbnails.medium.url' class="thumbnails" alt="유튜브 썸네일"/>
+                <img v-if="list.snippet.thumbnails" :src='list.snippet.thumbnails.medium.url' class="thumbnails" alt="유튜브 썸네일"/>
                 <div class="text_area">
                     <h3>{{list.snippet.title}}</h3>
                     <div class="sub_text">
@@ -29,10 +29,7 @@ const clickEvent = (userInfo) => {
     
     const clickRegist = (item, groupData='lounge') => {
 
-        console.log(item, groupData);
-
         const dealiName = groupData === 'lounge' ? 'lounge' : userInfo.value.dealiName;
-        console.log(dealiName);
         const data = {
             thumbnails: item.snippet.thumbnails.high.url,
             musicName: item.snippet.title,

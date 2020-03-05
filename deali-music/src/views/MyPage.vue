@@ -53,27 +53,16 @@ import { addMyGroup } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
 import MyGroupList from '@/components/List/MyGroupList';
 
-const myGroup = (userName, userState) => {
+const myGroup = (userInfo) => {
     const state = reactive({
         groupData: {},
     });
 
     const getMyGroup = () => {
-        if (userState.value === '딜리언즈') {
-            getGroupList(userName.value)
-                .on("value", snapshot => {
-                    const res = snapshot.val();
-                    if (res === null) {
-                        const defaultData = {
-                            groupName: 'default',
-                            dealiName: userName.value,
-                        }
-                        addMyGroup(defaultData);
-                        return;
-                    }
-                    state.groupData = res;
-                });
-        }
+        getGroupList(userInfo.value.dealiName).on("value", snapshot => {
+            if (!snapshot.val()) return;
+            state.groupData = snapshot.val();
+        });
     };
 
     return {
@@ -89,7 +78,7 @@ const modalEvent = (userInfo, isTumbnails) => {
     const openGroup = ref(0);
 
     const saveGroup = (selectThumbnail) => {
-        if (!groupName.value || !selectThumbnail.value) return alert('정보를 정확하게 입력해주세요.');
+        if (!groupName.value || !selectThumbnail) return alert('정보를 정확하게 입력해주세요.');
         
         const data = {
             dealiName: userInfo.value.dealiName,
@@ -99,7 +88,7 @@ const modalEvent = (userInfo, isTumbnails) => {
             isShow: openGroup.value,
         };
         addMyGroup(data);
-        isModal.value = false;
+        closeModal();
     };
 
     const closeModal = () => {
@@ -189,12 +178,10 @@ export default {
     },
     setup(props, { root, refs }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
-        const userName = computed(()=>  root.$store.getters['login/getUserStatus'].dealiName);
-        const userState = computed(() => root.$store.getters['login/getUserStatus'].userState);
-        const { getMyGroup, groupData } = myGroup(userName, userState);
+        const { getMyGroup, groupData } = myGroup(userInfo);
         const { thumbnailLists, fileChange, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData(userInfo, refs);
 
-        watch(userName, () =>{
+        watch(userInfo.value.dealiName, () =>{
             getMyGroup();
         });
 

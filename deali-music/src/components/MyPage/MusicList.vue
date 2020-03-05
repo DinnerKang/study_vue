@@ -15,26 +15,27 @@
 
 <script>
 import { getMusicListByGroup, deleteMusic } from '@/service/Music';
-import { ref } from '@vue/composition-api';
+import { ref, computed, watch } from '@vue/composition-api';
 
-const setMusicList = (props, store, emit) => {
-
-    const dealiName = props.groupName === 'lounge' ? 'lounge' : store.state.login.dealiName;
+const setMusicList = (props, userInfo, emit) => {
     const musicList = ref([]);
 
+    
+    
     const getMusicList = () => {
+        if (!userInfo.value.dealiName) return alert('로그인 해주세요.');
         const data = {
-          dealiName,
+          dealiName : props.groupName === 'lounge' ? 'lounge' : userInfo.value.dealiName,
           groupName: props.groupName,
           groupKey: props.groupKey || '',
         };
-
+        console.log(data);
         getMusicListByGroup(data).on('value', (snapshot) => {
             if (!snapshot.val()) return;
               musicList.value = Object.values(snapshot.val()).reverse();
               emit('input', musicList.value);
         });
-    }
+    };
 
     const removeMusic = (idx) => {
         const data = {
@@ -47,7 +48,9 @@ const setMusicList = (props, store, emit) => {
             const key = Object.keys(snapshot.val()).reverse()[idx];
             deleteMusic(data, key);
         });
-    }
+    };
+
+
 
     return {
         getMusicList,
@@ -72,13 +75,21 @@ export default {
       }
     },
     setup(props, { root, emit }){
-        const { getMusicList, musicList, removeMusic } = setMusicList(props, root.$store, emit);
-        getMusicList();
+
+        const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
+        const dealiName = computed(() => root.$store.getters['login/getUserStatus'].dealiName);
+        const { getMusicList, musicList, removeMusic } = setMusicList(props, userInfo, emit);
+        
+
+        watch(dealiName, ()=>{
+          getMusicList();
+        });
 
         return {
             musicList,
-            getMusicList,
             removeMusic,
+            getMusicList,
+            userInfo,
         }
     }
 }
