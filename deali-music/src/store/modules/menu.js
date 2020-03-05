@@ -1,10 +1,13 @@
 const state = {
-    isFooter: true,
+    isFooter: false,
 };
 
 const mutations = {
     disableFooter(state) {
         state.isFooter = false;
+    },
+    ableFooter(state) {
+        state.isFooter = true;
     }
 };
 

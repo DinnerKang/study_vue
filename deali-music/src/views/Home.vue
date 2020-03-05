@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <section class="my_play_list">
+    <section class="my_play_list"  v-if="dealiName">
       <h2>
         나의 플레이리스트
       </h2>
@@ -77,18 +77,18 @@ export default {
   },
   setup(props, { root }) {
     const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
-    const isLogin = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
+    const dealiName = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
     const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
-    const { openGroupList } = openGroup(isLogin);
+    const { openGroupList } = openGroup(dealiName);
 
-    watch(isLogin, newValue => {
+    watch(dealiName, newValue => {
        if (newValue) getMyGroupList();
     });
 
     return {
       myGroupKeys,
       openGroupList,
-      isLogin,
+      dealiName,
       userInfo,
     }
   }

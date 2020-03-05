@@ -17,19 +17,21 @@
 import { getMusicListByGroup, deleteMusic } from '@/service/Music';
 import { ref, computed, watch } from '@vue/composition-api';
 
-const setMusicList = (props, userInfo, emit) => {
+const setMusicList = (props, userInfo, router ,emit) => {
     const musicList = ref([]);
 
     
     
     const getMusicList = () => {
-        if (!userInfo.value.dealiName) return alert('로그인 해주세요.');
+        if (!userInfo.value.dealiName) {
+            alert('로그인 해주세요.');
+            return router.replace('/');
+        }
         const data = {
           dealiName : props.groupName === 'lounge' ? 'lounge' : userInfo.value.dealiName,
           groupName: props.groupName,
           groupKey: props.groupKey || '',
         };
-        console.log(data);
         getMusicListByGroup(data).on('value', (snapshot) => {
             if (!snapshot.val()) return;
               musicList.value = Object.values(snapshot.val()).reverse();
@@ -78,7 +80,7 @@ export default {
 
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const dealiName = computed(() => root.$store.getters['login/getUserStatus'].dealiName);
-        const { getMusicList, musicList, removeMusic } = setMusicList(props, userInfo, emit);
+        const { getMusicList, musicList, removeMusic } = setMusicList(props, userInfo, root.$router, emit);
         
 
         watch(dealiName, ()=>{

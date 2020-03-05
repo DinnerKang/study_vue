@@ -20,7 +20,7 @@ const showYoutubeData = () => {
         key: youtubeKey,
         part: "snippet",
         q: searchText,
-        maxResult: 9
+        maxResults: 9
       };
       const { data } = await getYoutubeData(params);
       searchResult.value = data;

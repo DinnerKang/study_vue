@@ -9,7 +9,7 @@
 <script>
 import HeaderMenu from '../components/Menu/Header';
 import footerComponent from '../components/Menu/Footer';
-import { computed } from '@vue/composition-api';
+import { computed, watch } from '@vue/composition-api';
 
 export default {
   name: 'Main',
@@ -18,10 +18,16 @@ export default {
     footerComponent,
   },
   setup(props, { root }) {
-    const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
+    const userState = computed(()=> root.$store.getters['login/getUserStatus'].userState);
     const isFooter = computed(()=> root.$store.getters['menu/getFooter']);
 
-    if (!userInfo.value.dealiName) root.$store.commit('menu/disableFooter');
+    watch(userState, ()=>{
+        if(userState.value !== '딜리언즈') {
+          root.$store.commit('menu/disableFooter');
+        } else {
+          root.$store.commit('menu/ableFooter');
+        }
+    });
     
     return {
       isFooter
