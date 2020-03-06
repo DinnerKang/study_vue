@@ -30,12 +30,12 @@ const clickEvent = (userInfo) => {
     const clickRegist = (item, groupData='lounge') => {
 
         const dealiName = groupData === 'lounge' ? 'lounge' : userInfo.value.dealiName;
+        
         const data = {
             thumbnails: item.snippet.thumbnails.high.url,
             musicName: item.snippet.title,
             videoId: item.id.videoId,
             registDate: String(new Date()),
-            userName: userInfo.value.userName,
             
             dealiName: dealiName,
             groupKey: groupData.myKey || '',
@@ -50,11 +50,11 @@ const clickEvent = (userInfo) => {
     }
 };
 
-const groupData = (userInfo) => {
+const groupData = (dealiName) => {
     const groupList = ref([]);
 
-    getGroupList(userInfo.value.dealiName).on('value', snapshot=>{
-            groupList.value = Object.values(snapshot.val());
+    getGroupList(dealiName.value).on('value', snapshot=>{
+        groupList.value = Object.values(snapshot.val());
     });
 
     return {
@@ -71,12 +71,14 @@ export default {
     },
     setup(props, { root }) {
         const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
+        const dealiName = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
         const { clickRegist } = clickEvent(userInfo);
-        const { groupList } = groupData(userInfo);
+        const { groupList } = groupData(dealiName);
     
         return{
             clickRegist,
             groupList,
+            dealiName,
         }
     },
 }

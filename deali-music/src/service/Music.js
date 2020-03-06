@@ -19,7 +19,7 @@ export function registMusic(data) {
         musicName: data.musicName,
         videoId: data.videoId,
         registDate: data.registDate,
-        userName: data.userName,
+        dealiName: data.dealiName,
     });
     return alert('저장했습니다.');
 }

@@ -47,7 +47,6 @@ const myGroup = (userInfo) => {
     });
   };
   
-
   return {
     myGroupKeys,
     getMyGroupList,
@@ -97,7 +96,6 @@ export default {
 
 <style lang="scss" scoped>
   .home{
-    margin: 0 auto;
     
     section{
       margin-top: 64px;

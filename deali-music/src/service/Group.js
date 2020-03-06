@@ -17,7 +17,7 @@ export function getOpenGroup() {
 }
 
 export function getMyLikeGroupList() {
-    return firebase.database().ref('group');
+    return firebase.database().ref('group/showGroup').orderByChild();
 }
 
 // WRITE

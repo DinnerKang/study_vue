@@ -4,7 +4,7 @@
         <ul>
           <li class="myMusic_list" v-for="(list, idx) in musicList" :key="idx">
             <div class="music_name">음악 : {{list.musicName}}</div>
-            <button @click="removeMusic(idx)">삭제</button>
+            <button v-if="dealiName || '' === value[0].dealiName"  @click="removeMusic(idx)">삭제</button>
           </li>
         </ul>
       </article>
@@ -17,18 +17,16 @@
 import { getMusicListByGroup, deleteMusic } from '@/service/Music';
 import { ref, computed, watch } from '@vue/composition-api';
 
-const setMusicList = (props, userInfo, router ,emit) => {
+const setMusicList = (props, dealiName, router ,emit) => {
     const musicList = ref([]);
 
-    
-    
     const getMusicList = () => {
-        if (!userInfo.value.dealiName) {
+        if (!dealiName.value && props.groupName !== 'lounge') {
             alert('로그인 해주세요.');
             return router.replace('/');
         }
         const data = {
-          dealiName : props.groupName === 'lounge' ? 'lounge' : userInfo.value.dealiName,
+          dealiName : props.groupName === 'lounge' ? 'lounge' : dealiName.value,
           groupName: props.groupName,
           groupKey: props.groupKey || '',
         };
@@ -41,7 +39,7 @@ const setMusicList = (props, userInfo, router ,emit) => {
 
     const removeMusic = (idx) => {
         const data = {
-            dealiName,
+            dealiName: dealiName.value,
             groupName: props.groupName,
         };
         
@@ -51,8 +49,6 @@ const setMusicList = (props, userInfo, router ,emit) => {
             deleteMusic(data, key);
         });
     };
-
-
 
     return {
         getMusicList,
@@ -78,9 +74,9 @@ export default {
     },
     setup(props, { root, emit }){
 
-        const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const dealiName = computed(() => root.$store.getters['login/getUserStatus'].dealiName);
-        const { getMusicList, musicList, removeMusic } = setMusicList(props, userInfo, root.$router, emit);
+
+        const { getMusicList, musicList, removeMusic } = setMusicList(props, dealiName, root.$router, emit);
         
 
         watch(dealiName, ()=>{
@@ -91,7 +87,7 @@ export default {
             musicList,
             removeMusic,
             getMusicList,
-            userInfo,
+            dealiName,
         }
     }
 }

@@ -1,17 +1,16 @@
 <template>
     <section class="myPage_container">
-        <div>
+        <article>
             <h2>내 그룹 설정</h2>
             <button @click="isModal=true">그룹 추가</button>
             <ul class="my_group_list">
                 <li  v-for="list in Object.keys(groupData)" :key="list">
                     <my-group-list :group-key="list" :bottomPadding="'8px 24px'"
                             :width="'238'" :height="'180'" :group-thumbnail="true">
-                        
                     </my-group-list>
                 </li>
             </ul>
-        </div>
+        </article>
         <modal :isOpen="isModal" @close-modal="closeModal">
             <div class="group_container">
                 <div class="group_img_area">
@@ -36,19 +35,25 @@
                     <button type="button" class="save_btn" @click="saveGroup(selectThumbnail)">저장</button>
                 </div>
             </div>
-            
-            <div class="modal_footer" @click="$refs.imgFile.click()">
-                이미지를 추가하고 싶다면...
-                <input style="display: none;" type="file" ref="imgFile" @change="fileChange" />
-            </div>
         </modal>
+
+        <article class="my_likes">
+            <h2>내가 좋아하는 그룹</h2>
+            <ul class="my_group_list">
+                <li  v-for="list in Object.keys(groupData)" :key="list">
+                    <my-group-list :group-key="list" :bottomPadding="'8px 24px'"
+                            :width="'238'" :height="'180'" :group-thumbnail="true">
+                    </my-group-list>
+                </li>
+            </ul>
+        </article>
     </section>
 </template>
 
 <script>
 import { ref, reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
-import { getGroupList } from '@/service/Group';
-import { readFolderLists, getThumbnail, uploadThumbnail } from '@/service/Storage';
+import { getGroupList, getMyLikeGroupList } from '@/service/Group';
+import { readFolderLists, getThumbnail } from '@/service/Storage';
 import { addMyGroup } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
 import MyGroupList from '@/components/List/MyGroupList';
@@ -69,6 +74,21 @@ const myGroup = (userInfo) => {
         getMyGroup,
         ...toRefs(state),
     };
+};
+
+const likeGroup = () => {
+    const likeGroupList = ref([]);
+
+    const getLikes = () => {
+        getMyLikeGroupList().on('value', snapshot => {
+            console.log(snapshot.val());
+        });
+    };
+
+    return {
+        likeGroupList,
+        getLikes,
+    }
 };
 
 const modalEvent = (userInfo, isTumbnails) => {
@@ -109,7 +129,7 @@ const modalEvent = (userInfo, isTumbnails) => {
     }
 }
 
-const thumbnailsData = (userInfo, refs) => {
+const thumbnailsData = () => {
     const thumbnailLists = ref([]);
     const selectThumbnail = ref('');
     const isTumbnails = ref(false);
@@ -144,14 +164,6 @@ const thumbnailsData = (userInfo, refs) => {
         selectThumbnail.value = thumbnailLists.value[idx];
     };
 
-    const fileChange = () => {
-        const data = {
-            file: refs.imgFile.files[0],
-            dealiName: userInfo.value.dealiName,
-        }
-        uploadThumbnail(data);
-    };
-
     const onScroll = (e) => {
         if (e.target.scrollHeight - (e.target.scrollTop + 182) === 0) {
             nowImg += 1;
@@ -161,14 +173,21 @@ const thumbnailsData = (userInfo, refs) => {
 
     return {
         thumbnailLists,
-        fileChange,
         getThumbnails,
         clickThumbnail,
         selectThumbnail,
         isTumbnails,
         onScroll,
     }
-}
+};
+
+const iconData = () => {
+    const editIcon = require('@/assets/icons/edit-button.png');
+
+    return {
+        editIcon,
+    }
+};
 
 export default {
     name: "MyPage",
@@ -176,13 +195,15 @@ export default {
         Modal,
         MyGroupList,
     },
-    setup(props, { root, refs }) {
+    setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const { getMyGroup, groupData } = myGroup(userInfo);
-        const { thumbnailLists, fileChange, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData(userInfo, refs);
+        const { thumbnailLists, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData();
+        const { getLikes, likeGroupList } = likeGroup();
 
         watch(userInfo.value.dealiName, () =>{
             getMyGroup();
+            getLikes();
         });
 
         onBeforeUnmount(()=> {
@@ -192,13 +213,14 @@ export default {
         return {
             groupData,
             thumbnailLists,
-            fileChange,
             getThumbnails,
             selectThumbnail,
             clickThumbnail,
             isTumbnails,
             onScroll,
+            likeGroupList,
             ...modalEvent(userInfo, isTumbnails),
+            ...iconData(),
         };
     }
 };
@@ -209,14 +231,16 @@ export default {
     }
 
     .myPage_container{
-        margin: 0 auto;
 
         .my_group_list{
             display: grid;
             gap: 10px 24px;
             grid-template-rows: 250px;
             grid-template-columns: repeat(4, 1fr);
-            margin-bottom: 300px;
+        }
+
+        .my_likes{
+            margin-top: 64px;
         }
     }
   .group_area{
@@ -296,20 +320,5 @@ export default {
                 cursor: pointer;
             }
         }
-    }
-    
-    .modal_footer{
-        position: absolute;
-        bottom: 0px;
-        left:0;
-        right: 0;
-        height: 20px;
-        background-color: $Black;
-        color: $White;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        font-size:12px;
     }
 </style>
