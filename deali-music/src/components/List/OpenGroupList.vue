@@ -49,6 +49,7 @@ const clickEvent = (userInfo, router) => {
     const clickLikeGroup = (openGroupData, isLike) => {
         const data = {
             dealiName: userInfo.value.dealiName,
+            targetName: openGroupData.dealiName,
             targetKey: openGroupData.targetKey,
         };
         if (isLike === false) {

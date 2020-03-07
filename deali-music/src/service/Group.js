@@ -16,9 +16,10 @@ export function getOpenGroup() {
     return firebase.database().ref('group/showGroup');
 }
 
-export function getMyLikeGroupList() {
-    return firebase.database().ref('group/showGroup').orderByChild();
+export function getLikeGroupList(data) {
+    return firebase.database().ref(`group/likes/${data.dealiName}`);
 }
+
 
 // WRITE
 
@@ -44,6 +45,9 @@ export function addMyGroup(data) {
 }
 
 export function addLikeGroup(data) {
+    firebase.database().ref(`group/likes/${data.dealiName}`).update({
+        [data.targetKey] :  data.targetName,
+    });
     return firebase.database().ref(`group/showGroup/${data.targetKey}/likes`).update({
         [data.dealiName] : true,
     });
@@ -75,7 +79,8 @@ export function editMyGroupName(data) {
 // Delete
 
 export function deleteLikeGroup(data) {
-    return firebase.database().ref(`group/showGroup/${data.myKey}/likes/${data.dealiName}`).remove();
+    firebase.database().ref(`group/likes/${data.dealiName}/${data.targetKey}`).remove();
+    return firebase.database().ref(`group/showGroup/${data.targetKey}/likes/${data.dealiName}`).remove();
 }
 
 export function deleteOpenGroup(data) {

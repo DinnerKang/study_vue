@@ -4,9 +4,9 @@
             <h2>내 그룹 설정</h2>
             <button @click="isModal=true">그룹 추가</button>
             <ul class="my_group_list">
-                <li  v-for="list in Object.keys(groupData)" :key="list">
-                    <my-group-list :group-key="list" :bottomPadding="'8px 24px'"
-                            :width="'238'" :height="'180'" :group-thumbnail="true">
+                <li  v-for="list in groupData" :key="list">
+                    <my-group-list :group-key="list.groupKey" :target-name="list.targetName"
+                        :bottomPadding="'8px 24px'" :width="'238'" :height="'180'" :group-thumbnail="true">
                     </my-group-list>
                 </li>
             </ul>
@@ -40,9 +40,9 @@
         <article class="my_likes">
             <h2>내가 좋아하는 그룹</h2>
             <ul class="my_group_list">
-                <li  v-for="list in Object.keys(groupData)" :key="list">
-                    <my-group-list :group-key="list" :bottomPadding="'8px 24px'"
-                            :width="'238'" :height="'180'" :group-thumbnail="true">
+                <li  v-for="list in likeGroupList" :key="list">
+                    <my-group-list :group-key="list.groupKey" :target-name="list.targetName"
+                        :bottomPadding="'8px 24px'" :width="'238'" :height="'180'" :group-thumbnail="true">
                     </my-group-list>
                 </li>
             </ul>
@@ -51,43 +51,60 @@
 </template>
 
 <script>
-import { ref, reactive, toRefs, computed, watch, onBeforeUnmount } from "@vue/composition-api";
-import { getGroupList, getMyLikeGroupList } from '@/service/Group';
+import { ref, computed, watch, onBeforeUnmount } from "@vue/composition-api";
+import { getGroupList, getLikeGroupList, addMyGroup } from '@/service/Group';
 import { readFolderLists, getThumbnail } from '@/service/Storage';
-import { addMyGroup } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
 import MyGroupList from '@/components/List/MyGroupList';
 
+
 const myGroup = (userInfo) => {
-    const state = reactive({
-        groupData: {},
-    });
+    const groupData = ref([]);
 
     const getMyGroup = () => {
         getGroupList(userInfo.value.dealiName).on("value", snapshot => {
             if (!snapshot.val()) return;
-            state.groupData = snapshot.val();
+            const keys = Object.keys(snapshot.val());
+            const values = Object.values(snapshot.val());
+            for (let i = 0; i< keys.length; i+=1) {
+                groupData.value.push({
+                    targetName: userInfo.value.dealiName,
+                    groupKey: values[0].myKey,
+                });
+            }
         });
     };
 
     return {
         getMyGroup,
-        ...toRefs(state),
+        groupData,
     };
 };
 
-const likeGroup = () => {
+const likeGroup = (userInfo) => {
     const likeGroupList = ref([]);
 
-    const getLikes = () => {
-        getMyLikeGroupList().on('value', snapshot => {
-            console.log(snapshot.val());
+    const getLikeList = () => {
+        const data = {
+            dealiName: userInfo.value.dealiName,
+        };
+        
+        getLikeGroupList(data).once('value', snapshot => {
+            const keys = Object.keys(snapshot.val());
+            const targetNames = Object.values(snapshot.val());
+            
+            for (let i = 0; i< keys.length; i+=1) {
+                likeGroupList.value.push({
+                    targetName: targetNames[i],
+                    groupKey: keys[i],
+                })
+            }
         });
     };
 
     return {
         likeGroupList,
-        getLikes,
+        getLikeList,
     }
 };
 
@@ -199,11 +216,11 @@ export default {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const { getMyGroup, groupData } = myGroup(userInfo);
         const { thumbnailLists, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData();
-        const { getLikes, likeGroupList } = likeGroup();
+        const { likeGroupList, getLikeList } = likeGroup(userInfo);
 
         watch(userInfo.value.dealiName, () =>{
             getMyGroup();
-            getLikes();
+            getLikeList();
         });
 
         onBeforeUnmount(()=> {

@@ -15,16 +15,16 @@
 </template>
 
 <script>
-import { computed, ref } from '@vue/composition-api';
+import { ref } from '@vue/composition-api';
 import { getGroupListByKey } from '@/service/Group';
 import { getMusicListByGroup } from '@/service/Music';
 
 
 
-const getMusicData = (userInfo, groupKey) => {
+const getMusicData = (targetName, groupKey) => {
     const musicData = ref({});
     const data = {
-        dealiName: userInfo.value.dealiName,
+        dealiName: targetName,
         groupKey: groupKey,
         groupName: '',
     }
@@ -39,14 +39,15 @@ const getMusicData = (userInfo, groupKey) => {
     }
 };
 
-const getGroupData = (userInfo, groupKey) => {
+const getGroupData = (targetName, groupKey) => {
     const groupData = ref({});
 
     const data = {
-        dealiName: userInfo.value.dealiName,
+        dealiName: targetName,
         key: groupKey,
-    }
+    };
     getGroupListByKey(data).once('value', snapshot =>{
+        if (!snapshot.val()) return;
         groupData.value = snapshot.val();
     });
 
@@ -55,7 +56,7 @@ const getGroupData = (userInfo, groupKey) => {
     }
 };
 
-const clickEvent = (userInfo, router) => {
+const clickEvent = (router) => {
 
     const clickGroup = (groupData) => {
         router.push({
@@ -78,6 +79,9 @@ export default {
         groupKey: {
             type: String,
         },
+        targetName: {
+            type: String,
+        },
         width: {
             type: String,
             default: '500',
@@ -95,11 +99,9 @@ export default {
         }
     },
     setup(props, { root }) {
-        const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
-
-        const { musicData } = getMusicData(userInfo, props.groupKey);
-        const { groupData } = getGroupData(userInfo, props.groupKey);
-        const { clickGroup } = clickEvent(userInfo, root.$router);
+        const { musicData } = getMusicData(props.targetName, props.groupKey);
+        const { groupData } = getGroupData(props.targetName, props.groupKey);
+        const { clickGroup } = clickEvent(root.$router);
 
         return {
             musicData,
