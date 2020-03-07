@@ -5,8 +5,8 @@
         나의 플레이리스트
       </h2>
       <div class="group_list">
-        <article v-for="data in myGroupKeys" :key="data">
-          <my-group-list :groupKey="data"></my-group-list>
+        <article v-for="data in myGroupKeys" :key="data.groupKey">
+          <my-group-list :groupKey="data.groupKey" :target-name="data.targetName"></my-group-list>
         </article>
       </div>
     </section>
@@ -43,7 +43,13 @@ const myGroup = (userInfo) => {
     getMusicListByGroup(data).on('value', snapshot =>{
         if (!snapshot.val()) return;
         const keys = Object.keys(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
-        myGroupKeys.value = keys;
+        for (let i=0; i<keys.length; i+=1) {
+            myGroupKeys.value.push({
+            targetName: userInfo.value.dealiName,
+            groupKey: keys[i],
+          });
+        }
+        
     });
   };
   

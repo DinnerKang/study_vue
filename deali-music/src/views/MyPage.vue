@@ -4,7 +4,7 @@
             <h2>내 그룹 설정</h2>
             <button @click="isModal=true">그룹 추가</button>
             <ul class="my_group_list">
-                <li  v-for="list in groupData" :key="list">
+                <li  v-for="(list, idx) in groupData" :key="idx">
                     <my-group-list :group-key="list.groupKey" :target-name="list.targetName"
                         :bottomPadding="'8px 24px'" :width="'238'" :height="'180'" :group-thumbnail="true">
                     </my-group-list>
@@ -40,7 +40,7 @@
         <article class="my_likes">
             <h2>내가 좋아하는 그룹</h2>
             <ul class="my_group_list">
-                <li  v-for="list in likeGroupList" :key="list">
+                <li  v-for="list in likeGroupList" :key="list.groupKey">
                     <my-group-list :group-key="list.groupKey" :target-name="list.targetName"
                         :bottomPadding="'8px 24px'" :width="'238'" :height="'180'" :group-thumbnail="true">
                     </my-group-list>
