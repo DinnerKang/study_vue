@@ -25,8 +25,8 @@ import * as firebase from 'firebase/app';
 import "firebase/auth";
 import SearchBar from '../Search/SearchBar';
 
-const getUserInfo = (store) => {
-    let userName = computed(() => store.state.login.userName || '로그인을 하셔야 서비스를 이용하실 수 있습니다.');
+const getUserInfo = (store, router) => {
+    const userName = computed(() => store.state.login.userName);
     const userState = computed(() => store.state.login.userState);
 
     const userLogin = async() => {
@@ -40,6 +40,7 @@ const getUserInfo = (store) => {
 
     const userLogout = () => {
         store.commit('login/logoutUser');
+        router.replace('/');
     }
     
     return { 
@@ -66,7 +67,7 @@ export default {
         SearchBar,
     },
     setup(props, { root }) {
-        const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store);
+        const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store, root.$router);
         const { clickLogo } = clickEvent(root.$router);
 
         return {

@@ -40,8 +40,11 @@
                 </div>
             </div>
             <div class="option_area">
-                <img class="option_icon" :src="soundIcon" alt="소리" />
                 <img class="option_icon" :src="menuIcon" alt="메뉴" />
+                <img class="option_icon" :src="soundIcon" alt="소리" />
+                <div class="slider_area">
+                    <input id="slider" type="range" min="4" max="32" value="16" />
+                </div>
             </div>
         </div>
     </footer>
@@ -228,13 +231,33 @@ footer {
         justify-content: space-between;
 
         .option_icon {
-            width: 20px;
-            height: 20px;
+            width: 25px;
+            height: 25px;
             cursor: pointer;
-            margin-left: 24px;
+            margin-left: 20px;
         }
     }
 }
+.slider_area{
+    display: flex;
+    align-items: center;
+    height: 25px;
+    width: 78px;
+    margin-left: 12px;
+
+    #slider{
+        border-radius: 6px;
+        border: none;
+        background: #fff;
+        height: 3px;
+        width: 78px;
+    }
+    #slider::-webkit-slider-thumb{
+        cursor: pointer;
+        -webkit-appearance: none;
+    }
+}
+
 
 @media screen and (max-width: 1024px) {
     footer{

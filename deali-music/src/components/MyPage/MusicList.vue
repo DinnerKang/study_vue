@@ -21,10 +21,6 @@ const setMusicList = (props, dealiName, router ,emit) => {
     const musicList = ref([]);
 
     const getMusicList = () => {
-        if (!dealiName.value && props.groupName !== 'lounge') {
-            alert('로그인 해주세요.');
-            return router.replace('/');
-        }
         const data = {
           dealiName : props.groupName === 'lounge' ? 'lounge' : dealiName.value,
           groupName: props.groupName,

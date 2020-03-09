@@ -62,14 +62,15 @@ const myGroup = (userInfo) => {
     const groupData = ref([]);
 
     const getMyGroup = () => {
-        getGroupList(userInfo.value.dealiName).on("value", snapshot => {
+        getGroupList(userInfo.value.dealiName).once("value", snapshot => {
             if (!snapshot.val()) return;
+            console.log(snapshot.val());
             const keys = Object.keys(snapshot.val());
             const values = Object.values(snapshot.val());
             for (let i = 0; i< keys.length; i+=1) {
                 groupData.value.push({
                     targetName: userInfo.value.dealiName,
-                    groupKey: values[0].myKey,
+                    groupKey: values[i].myKey,
                 });
             }
         });
