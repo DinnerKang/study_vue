@@ -43,7 +43,8 @@
                 <img class="option_icon" :src="menuIcon" alt="메뉴" />
                 <img class="option_icon" :src="soundIcon" alt="소리" />
                 <div class="slider_area">
-                    <input id="slider" type="range" min="4" max="32" value="16" />
+                    <input id="slider" :style="{ background : sliderBackground }" 
+                    type="range" value="50" min="0" max="100" v-model="controlSound"/>
                 </div>
             </div>
         </div>
@@ -51,14 +52,16 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from "@vue/composition-api";
-import { videoController } from "@/service/Control";
+import { ref, onMounted, onBeforeUnmount, watch } from "@vue/composition-api";
+import { videoController, soundControl, getControlLoungeStatus } from "@/service/Control";
 import { getLoungeStatus } from "@/service/Status";
 
 let timer = null;
 const controlVideo = () => {
     const videoStatus = ref({});
     const playerStart = ref(false);
+    const sliderBackground = ref(0);
+    const controlSound = ref(null);
 
     const getStatus = () => {
         getLoungeStatus().on("value", snapshot => {
@@ -79,14 +82,30 @@ const controlVideo = () => {
     };
 
     const videoControl = state => {
-        videoController(state);
+        videoController(state, controlSound.value);
     };
+
+    const initSound = () => {
+        getControlLoungeStatus().once('value', snapshot =>{
+            controlSound.value = snapshot.val().volume;
+        });
+    };
+
+    watch(controlSound, (newValue, oldValue) => {
+        sliderBackground.value = `linear-gradient(to right, #00dbdb 0%, #00dbdb ${newValue}%, #fff ${newValue}%, #fff 100%)`;
+
+        if (oldValue === null) return;
+        soundControl(newValue);
+    });
 
     return {
         videoControl,
         videoStatus,
         playerStart,
         getStatus,
+        controlSound,
+        sliderBackground,
+        initSound,
     };
 };
 
@@ -114,9 +133,16 @@ export default {
             videoStatus,
             playerStart,
             getStatus,
+            controlSound,
+            sliderBackground,
+            initSound,
         } = controlVideo();
+        
 
-        onMounted(()=> getStatus());
+        onMounted(()=> {
+            getStatus();
+            initSound();
+        });
         onBeforeUnmount(()=> {
             getLoungeStatus().off();
         });
@@ -125,6 +151,8 @@ export default {
             videoControl,
             videoStatus,
             playerStart,
+            controlSound,
+            sliderBackground,
             ...iconData()
         };
     }
@@ -238,6 +266,14 @@ footer {
         }
     }
 }
+input[type=range] { 
+    -webkit-appearance: none; 
+    background: transparent; 
+}
+input:focus{
+    outline: none;
+}
+
 .slider_area{
     display: flex;
     align-items: center;
@@ -251,10 +287,33 @@ footer {
         background: #fff;
         height: 3px;
         width: 78px;
+        cursor: pointer; 
+    }
+    #slider::-moz-range-thumb {
+        background: #ffffff; 
+        border: none;
+        width: 4px;
+        height: 8px; 
+        border-radius: 0.8px;
+        background-color: $Main;
     }
     #slider::-webkit-slider-thumb{
-        cursor: pointer;
-        -webkit-appearance: none;
+        -webkit-appearance: none; 
+        background: #ffffff;
+        border: none;
+        width: 4px;
+        height: 8px; 
+        border-radius: 0.8px;
+        background-color: $Main;
+    }
+    #slider::-ms-track {
+        -webkit-appearance: none; 
+        background: #ffffff;
+        border: none;
+        width: 4px;
+        height: 8px; 
+        border-radius: 0.8px;
+        background-color: $Main;
     }
 }
 

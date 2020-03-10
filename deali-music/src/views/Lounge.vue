@@ -15,10 +15,9 @@ import { ref, watch, onMounted } from "@vue/composition-api";
 const youtubeData = () => {
     const myMusicList = ref([]);
 
-    let player = ref({});
-    let isReady = ref(false);
-    let playList = ref([]);
-    
+    const player = ref({});
+    const isReady = ref(false);
+    const playList = ref([]);
     
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
@@ -98,13 +97,16 @@ export default {
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
         const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
 
-        watch(musicStatus, (newValue) => {
+        watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
+            console.log(newValue, oldValue);
 
+            if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
             if (newValue.status === "start") return player.value.playVideo();
             if (newValue.status === "stop") return player.value.pauseVideo();
             if (newValue.status === "prev") return player.value.previousVideo();
             if (newValue.status === "next") return player.value.nextVideo();
+            
         });
 
         watch(myMusicList, () => {

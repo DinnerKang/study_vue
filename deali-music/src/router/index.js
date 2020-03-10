@@ -25,6 +25,7 @@ const routes = [
     path: '/lounge',
     name: 'Lounge',
     component: Lounge,
+    meta: { unauthorized: true },
   },
   {
     path: '/search',
@@ -50,7 +51,6 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log(Store.state.login.dealiName);
   if (to.matched.some(record => record.meta.unauthorized) === false 
       && !Store.state.login.dealiName) {
         alert('로그인 해주세요.');

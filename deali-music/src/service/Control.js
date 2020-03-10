@@ -11,9 +11,10 @@ export function getControlLoungeStatus() {
 
 // Write
 
-export function videoController(status) {
+export function videoController(status, volume) {
     firebase.database().ref(`control/lounge`).set({
         status,
+        volume: volume,
         date: String(new Date()),
     });
 
@@ -23,3 +24,10 @@ export function videoController(status) {
     });
 }
 
+export function soundControl(volume) {
+    if (volume === null) return;
+    return firebase.database().ref('control/lounge').update({
+        volume: Number(volume),
+        date: String(new Date()),
+    });
+}

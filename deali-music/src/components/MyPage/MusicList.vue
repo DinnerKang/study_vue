@@ -26,6 +26,7 @@ const setMusicList = (props, dealiName, router ,emit) => {
           groupName: props.groupName,
           groupKey: props.groupKey || '',
         };
+        
         getMusicListByGroup(data).on('value', (snapshot) => {
             if (!snapshot.val()) return;
               musicList.value = Object.values(snapshot.val()).reverse();
