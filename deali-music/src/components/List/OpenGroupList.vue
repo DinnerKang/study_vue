@@ -1,14 +1,14 @@
 <template>
     <div>
         <div class="group_container open_group_container"
-            @click="clickGroup(openGroupData)"
+            @click="clickGroup(groupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
             <img v-if="groupData.thumbnail" :src="groupData.thumbnail" alt="썸네일"/>
         </div>
         <div class="outside_area">
             <div class="main_text">
                 <span>{{groupData.groupName}}</span>
-                <img class="img_area" :src="isLike ? likeIcon : notIcon" @click="clickLikeGroup(openGroupData, isLike)" alt="하트" />
+                <img class="img_area" v-if="isLikes" :src="isLike ? likeIcon : notIcon" @click="clickLikeGroup(openGroupData)" alt="하트" />
             </div>
             <div class="sub_text">{{groupData.description}}</div>
         </div>
@@ -25,38 +25,42 @@ const getGroupData = (userInfo, openGroupData) => {
     const data = {
         dealiName: openGroupData.dealiName,
         key: openGroupData.targetKey,
-    }
+    };
     getGroupListByKey(data).on('value', snapshot =>{
         groupData.value = snapshot.val();
     });
+
 
     return {
         groupData,
     }
 };
 
-const clickEvent = (userInfo, router) => {
-    const clickGroup = (openGroupData) => {
+const clickEvent = (userInfo, router, isLike) => {
+
+    const clickGroup = (groupData) => {
         router.push({
             path: `/playPage`,
             query: {
-                groupName: openGroupData.groupName,
-                groupKey: openGroupData.targetKey,
+                groupName: groupData.groupName,
+                groupKey: groupData.targetKey || groupData.myKey,
             },
         });
     }
 
-    const clickLikeGroup = (openGroupData, isLike) => {
+    const clickLikeGroup = (openGroupData) => {
         if (!userInfo.value.dealiName) return;
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
             targetKey: openGroupData.targetKey,
         };
-        if (isLike === false) {
+        if (isLike.value === false) {
             addLikeGroup(data);
+            isLike.value = true;
         } else {
             deleteLikeGroup(data);
+            isLike.value = false;
         }
     }
     return {
@@ -91,24 +95,30 @@ export default {
             type: String,
             default: '180',
         },
+        isLikes: {
+            type: Boolean,
+            default: true,
+        }
     },
     setup(props, { root }) {
         const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
         
         const { groupData } = getGroupData(userInfo, props.openGroupData);
-        const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router);
         const { isLike, notIcon, likeIcon } = iconList();
-        const likeUser = computed(() =>  props.openGroupData.likes);
+        const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router, isLike);
+        const likeUser = computed(() => props.openGroupData.likes);
 
-        watch(() => {
+        watch(() => userInfo.value.dealiName, () => {
             if (!likeUser.value || !userInfo.value.dealiName) return isLike.value = false;
-            if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
-                isLike.value = true;
-            } else {
-                isLike.value = false;
+            if (userInfo.value.dealiName !== '') {
+                if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
+                    isLike.value = true;
+                } else {
+                    isLike.value = false;
+                }
             }
         });
-
+        
         return {
             groupData,
             isLike,

@@ -26,6 +26,11 @@ export function videoController(status, volume) {
 
 export function soundControl(volume) {
     if (volume === null) return;
+
+    firebase.database().ref('control/log/volume').set({
+        name: Store.state.login.userName,
+    });
+
     return firebase.database().ref('control/lounge').update({
         volume: Number(volume),
         date: String(new Date()),

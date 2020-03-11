@@ -59,10 +59,8 @@ export function addLikeGroup(data) {
 
 export function addShowGroup(data) {
     const ref = firebase.database().ref('group/showGroup');
-    const myKey = ref.push().key;
 
     return ref.child(data.targetKey).set({
-        myKey: myKey,
         targetKey: data.targetKey,
         dealiName: data.dealiName,
         groupName: data.groupName,

@@ -36,6 +36,7 @@ const getUserInfo = (store, router) => {
         });
         const profile = await firebase.auth().signInWithPopup(provider);
         store.commit('login/loginUser', profile);
+        router.replace('/');
     }
 
     const userLogout = () => {

@@ -2,18 +2,24 @@
     <section class="myPage_container">
         <article>
             <h2>내 그룹 설정</h2>
-            <button @click="isModal=true">그룹 추가</button>
             <ul class="my_group_list">
                 <li  v-for="(list, idx) in groupData" :key="idx">
-                    <my-group-list :group-key="list.groupKey" :target-name="list.targetName"
-                        :bottomPadding="'8px 24px'" :width="'238'" :height="'180'" :group-thumbnail="true">
-                    </my-group-list>
+                    <open-group-list :openGroupData="list" :is-likes="false">
+                    </open-group-list>
+                </li>
+                <li class="btn_area">
+                    <img class="add_btn" :src="addGroupIcon" @click="isModal=true" alt="그룹추가" />
                 </li>
             </ul>
         </article>
         <modal :isOpen="isModal" @close-modal="closeModal">
             <div class="group_container">
                 <div class="group_img_area">
+                    <h5>썸네일 이미지</h5>
+                    <div class="img_area">
+                        
+                    </div>
+                    <!--
                     <div class="thumbnail_container" v-if="isTumbnails" @scroll.passive="onScroll">
                         <div class="open_group_container" 
                         v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
@@ -24,8 +30,29 @@
                         <img v-if="selectThumbnail" :src="selectThumbnail" style="width:100%; height:100%" alt="선택한 사진"/>
                         <span v-else>썸네일 선택</span>
                     </div>
+                    -->
+
                 </div>
                 <div class="group_text_area">
+                    <div class="text_box">
+                        <h5>그룹 이름 <span class="inner_text">(/10)</span></h5>
+                        <input type="text" class="group_input" v-model="groupName"/>
+                    </div>
+                    <div class="text_box">
+                        <h5>그룹 설명 <span class="inner_text">(/10)</span></h5>
+                        <input type="text" class="group_input" v-model="groupDescription"/>
+                    </div>
+                    <div class="radio_box">
+                        <div class="radio_area">
+                            <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />전체공개
+                            <span class="radio_text">누구나 이 그룹을 볼 수 있습니다.</span>
+                        </div>
+                        <div class="radio_area">
+                            <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
+                            <span class="radio_text">개인만 이 그룹을 볼 수 있습니다.</span>
+                        </div>
+                    </div>
+                    <!--
                     <label>그룹이름<input type="text" class="group_input" v-model="groupName" placeholder="그룹이름" /></label>
                     <label>그룹설명<input type="text" class="group_input" v-model="groupDescription" placeholder="그룹설명" /></label>
                     <div>
@@ -33,6 +60,8 @@
                         <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
                     </div>
                     <button type="button" class="save_btn" @click="saveGroup(selectThumbnail)">저장</button>
+                    -->
+
                 </div>
             </div>
         </modal>
@@ -40,10 +69,9 @@
         <article class="my_likes">
             <h2>내가 좋아하는 그룹</h2>
             <ul class="my_group_list">
-                <li  v-for="list in likeGroupList" :key="list.groupKey">
-                    <my-group-list :group-key="list.groupKey" :target-name="list.targetName"
-                        :bottomPadding="'8px 24px'" :width="'238'" :height="'180'" :group-thumbnail="true">
-                    </my-group-list>
+                <li  v-for="list in likeGroupList" :key="list.targetKey">
+                    <open-group-list :openGroupData="list">
+                    </open-group-list>
                 </li>
             </ul>
         </article>
@@ -55,22 +83,20 @@ import { ref, computed, watch, onBeforeUnmount } from "@vue/composition-api";
 import { getGroupList, getLikeGroupList, addMyGroup } from '@/service/Group';
 import { readFolderLists, getThumbnail } from '@/service/Storage';
 import Modal  from '@/components/Common/Modal';
-import MyGroupList from '@/components/List/MyGroupList';
+import OpenGroupList from '@/components/List/OpenGroupList';
 
 
 const myGroup = (userInfo) => {
     const groupData = ref([]);
-
     const getMyGroup = () => {
-        getGroupList(userInfo.value.dealiName).once("value", snapshot => {
+        getGroupList(userInfo.value.dealiName).on("value", snapshot => {
             if (!snapshot.val()) return;
-            console.log(snapshot.val());
             const keys = Object.keys(snapshot.val());
             const values = Object.values(snapshot.val());
             for (let i = 0; i< keys.length; i+=1) {
                 groupData.value.push({
-                    targetName: userInfo.value.dealiName,
-                    groupKey: values[i].myKey,
+                    dealiName: userInfo.value.dealiName,
+                    targetKey: values[i].myKey,
                 });
             }
         });
@@ -90,15 +116,19 @@ const likeGroup = (userInfo) => {
             dealiName: userInfo.value.dealiName,
         };
         
-        getLikeGroupList(data).once('value', snapshot => {
+        getLikeGroupList(data).on('value', snapshot => {
+            likeGroupList.value = [];
+            if (!snapshot.val()) return;
             const keys = Object.keys(snapshot.val());
             const targetNames = Object.values(snapshot.val());
-            
             for (let i = 0; i< keys.length; i+=1) {
                 likeGroupList.value.push({
-                    targetName: targetNames[i],
-                    groupKey: keys[i],
-                })
+                    dealiName: targetNames[i],
+                    targetKey: keys[i],
+                    likes: {
+                        [userInfo.value.dealiName] : true,
+                    }
+                });
             }
         });
     };
@@ -108,6 +138,7 @@ const likeGroup = (userInfo) => {
         getLikeList,
     }
 };
+
 
 const modalEvent = (userInfo, isTumbnails) => {
     const isModal = ref(false);
@@ -201,9 +232,11 @@ const thumbnailsData = () => {
 
 const iconData = () => {
     const editIcon = require('@/assets/icons/edit-button.png');
+    const addGroupIcon = require('@/assets/icons/plus-icon.png');
 
     return {
         editIcon,
+        addGroupIcon,
     }
 };
 
@@ -211,13 +244,13 @@ export default {
     name: "MyPage",
     components: {
         Modal,
-        MyGroupList,
+        OpenGroupList,
     },
     setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
+        const { likeGroupList, getLikeList } = likeGroup(userInfo);
         const { getMyGroup, groupData } = myGroup(userInfo);
         const { thumbnailLists, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData();
-        const { likeGroupList, getLikeList } = likeGroup(userInfo);
 
         watch(userInfo.value.dealiName, () =>{
             getMyGroup();
@@ -227,7 +260,6 @@ export default {
         onBeforeUnmount(()=> {
             getGroupList().off();
         });
-
         return {
             groupData,
             thumbnailLists,
@@ -255,6 +287,19 @@ export default {
             gap: 10px 24px;
             grid-template-rows: 250px;
             grid-template-columns: repeat(4, 1fr);
+
+            .btn_area{
+                width: 238px;
+                height: 180px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .add_btn{
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+            }
         }
 
         .my_likes{
@@ -272,70 +317,64 @@ export default {
   }
   
     .group_container{
-        padding: 20px;
         display: flex;
+        padding: 0 40px;
 
         .group_img_area{
-            width: 238px;
-            height: 180px;
-            border: 1px solid $Black;
+            width: 300px;
+            height: 100%;
             position: relative;
-            
-            .select_thumbnail{
+            overflow: auto;
+
+            h5{
+                font-size: 15px;
+                font-weight: bold;
+                margin: 0;
+            }
+            .img_area {
+                margin-top: 16px;
                 width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                cursor: pointer;
+                height: 234px;
+                display: grid;
+                gap: 15px;
+                grid-template-rows: 68px;
+                grid-template-columns: repeat(3, 1fr);
             }
         }
         .group_text_area{
-            margin-left: 20px;
             position: relative;
 
-            label{
-                display: block;
-                margin-bottom: 20px;
-                font-size:12px;
+            .text_box{
+                margin-bottom: 16px;
 
+                h5{
+                    font-size: 15px;
+                    margin: 0 0 15px;
+                    
+                    .inner_text{
+                        color: $Gray600;
+                        font-weight: bold;
+                    }
+                }
                 .group_input{
-                    margin-left: 20px;
-                    border: none;
-                    border-bottom: 1px solid $Main;
+                    width: 260px;
+                    height: 30px;
+                    border: 1px solid $Gray400;
+                    border-radius: 4px;
                 }
             }
-            .save_btn{
-                width: 100%;
-                color: $Black;
-                height: 30px;
-                border: 1px solid $Main;
-                border-radius: 16px;
-                background-color: $White;
-                position: absolute;
-                bottom: 0;
-                cursor: pointer;
-            }
-        }
-    }
-    .thumbnail_container{
-        position: absolute;
-        top: -1px;
-        width: 240px;
-        height: 182px;
-        overflow: auto;
-        display: grid;
-        z-index: 3;
-        grid-template-rows: 90px;
-        grid-template-columns: repeat(2, 1fr);
-        
-        .open_group_container{
-            width: 120px;
-            height: 90px;
+            .radio_box{
+                margin-top:8px;
 
-            img{
-                border-radius: 0;
-                cursor: pointer;
+                .radio_area{
+                    font-size: 15px;
+
+                    .radio_text{
+                        font-size: 12px;
+                        color: $Gray400;
+                        float:right;
+                    }
+                }
             }
         }
     }

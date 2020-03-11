@@ -40,7 +40,7 @@ const myGroup = (userInfo) => {
       groupName: '',
     };
 
-    getMusicListByGroup(data).on('value', snapshot =>{
+    getMusicListByGroup(data).once('value', snapshot =>{
         if (!snapshot.val()) return;
         const keys = Object.keys(snapshot.val()).sort(()=> Math.random() - Math.random()).splice(0,2);
         for (let i=0; i<keys.length; i+=1) {
@@ -63,9 +63,9 @@ const openGroup = () => {
   const openGroupList = ref([]);
   const likeGroupList = ref([]);
   
-  getOpenGroup().on('value', snapshot => {
+  getOpenGroup().once('value', snapshot => {
     if (!snapshot.val()) return;
-    openGroupList.value = Object.values(snapshot.val());
+    openGroupList.value = Object.values(snapshot.val()).sort(() => Math.random() - Math.random());
   });
   
   return {

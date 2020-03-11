@@ -41,11 +41,14 @@
             </div>
             <div class="option_area">
                 <img class="option_icon" :src="menuIcon" alt="메뉴" />
-                <img class="option_icon" :src="soundIcon" alt="소리" />
-                <div class="slider_area">
-                    <input id="slider" :style="{ background : sliderBackground }" 
-                    type="range" value="50" min="0" max="100" v-model="controlSound"/>
+                <div class="sound_area" @click="isHoverSound=!isHoverSound">
+                    <img class="option_icon" :src="soundIcon" alt="소리" />
+                    <div class="slider_area" v-if="isHoverSound">
+                        <input id="slider" :style="{ background : sliderBackground }" 
+                        type="range" value="50" min="0" max="100" v-model="controlSound"/>
+                    </div>
                 </div>
+                
             </div>
         </div>
     </footer>
@@ -128,6 +131,7 @@ const iconData = () => {
 
 export default {
     setup() {
+        const isHoverSound = ref(false);
         const {
             videoControl,
             videoStatus,
@@ -153,6 +157,7 @@ export default {
             playerStart,
             controlSound,
             sliderBackground,
+            isHoverSound,
             ...iconData()
         };
     }
@@ -264,6 +269,12 @@ footer {
             cursor: pointer;
             margin-left: 20px;
         }
+        .sound_area{
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     }
 }
 input[type=range] { 
@@ -292,8 +303,8 @@ input:focus{
     #slider::-moz-range-thumb {
         background: #ffffff; 
         border: none;
-        width: 4px;
-        height: 8px; 
+        width: 5px;
+        height: 10px; 
         border-radius: 0.8px;
         background-color: $Main;
     }
@@ -301,8 +312,8 @@ input:focus{
         -webkit-appearance: none; 
         background: #ffffff;
         border: none;
-        width: 4px;
-        height: 8px; 
+        width: 5px;
+        height: 10px; 
         border-radius: 0.8px;
         background-color: $Main;
     }
@@ -310,8 +321,8 @@ input:focus{
         -webkit-appearance: none; 
         background: #ffffff;
         border: none;
-        width: 4px;
-        height: 8px; 
+        width: 5px;
+        height: 10px; 
         border-radius: 0.8px;
         background-color: $Main;
     }

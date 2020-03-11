@@ -1,6 +1,9 @@
 <template>
     <div v-if="isOpen" class="modal_container">
-        <div class="modal_area">
+        <div class="modal_area" :style="{ width: width + 'px', height: height + 'px'}">
+            <div class="close_area">
+                <div class="close_icon" @click="closeModal"></div>
+            </div>
             <slot></slot>
         </div>
         <div class="background_area" @click="closeModal" />
@@ -16,6 +19,14 @@ export default {
             type: Boolean,
             default: false,
         },
+        width: {
+            type: Number,
+            default: 720,
+        },
+        height: {
+            type: Number,
+            default: 360,
+        }
     },
     setup(props, { emit }) {
 
@@ -47,6 +58,25 @@ export default {
             transform: translate(-50%, -50%);
             background-color: $White;
             z-index: 3;
+
+            .close_area{
+                width: 100%;
+                height: 20px;
+                padding-left: 10px;
+                margin-bottom: 30px;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid $Gray400;
+                box-sizing: border-box;
+
+                .close_icon{
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background-color: #fa8282;
+                    cursor: pointer;
+                }
+            }
         }
 
         .background_area{

@@ -5,7 +5,7 @@
             :style="{ width : `${width}px`, height: `${height}px`}">
             <img v-if="groupThumbnail" class="youtube_img" :src="groupData.thumbnail" alt="그룹 썸네일" />
             <img v-else class="youtube_img" :src="musicData.thumbnails" alt="유튜브 사진" />
-            <div class="bottom_area" :style="{padding: bottomPadding, height: bottomPadding ? '30%' : '20%'}">
+            <div class="bottom_area">
                 <div class="main_text">{{groupData.groupName}}</div>
                 <div class="sub_text">{{groupData.description }}</div>
                 <slot></slot>
@@ -93,9 +93,6 @@ export default {
         groupThumbnail: {
             type: Boolean,
             default: false,
-        },
-        bottomPadding: {
-            type: String,
         }
     },
     setup(props, { root }) {
@@ -127,7 +124,6 @@ export default {
 
         .bottom_area{
             position: absolute;
-            height: 20%;
             width: 100%;
             bottom: 0px;
             color: $White;
