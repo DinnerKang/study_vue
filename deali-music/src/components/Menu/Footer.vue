@@ -73,6 +73,7 @@ const controlVideo = () => {
             if (videoStatus.value.status === 1) {
                 if (timer===null) {
                     timer = setInterval(() =>{
+                        if (videoStatus.value.currentTime > videoStatus.value.playTime) return;
                         videoStatus.value.currentTime += 1;
                     }, 1000);
                 }
@@ -254,6 +255,7 @@ footer {
                     height: 2px;
                     background-color: $Main;
                     z-index: 1;
+                    max-width: 100%;
                 }
             }
         }

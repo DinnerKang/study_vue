@@ -7,7 +7,7 @@
                     <open-group-list :openGroupData="list" :is-likes="false">
                     </open-group-list>
                 </li>
-                <li class="btn_area">
+                <li class="btn_area" v-if="groupData.length < 8">
                     <img class="add_btn" :src="addGroupIcon" @click="isModal=true" alt="그룹추가" />
                 </li>
             </ul>
@@ -35,12 +35,12 @@
                 </div>
                 <div class="group_text_area">
                     <div class="text_box">
-                        <h5>그룹 이름 <span class="inner_text">(/10)</span></h5>
-                        <input type="text" class="group_input" v-model="groupName"/>
+                        <h5>그룹 이름 <span class="inner_text">({{groupName.length}}/10)</span></h5>
+                        <input type="text" class="group_input" v-model="groupName" maxlength="10"/>
                     </div>
                     <div class="text_box">
-                        <h5>그룹 설명 <span class="inner_text">(/10)</span></h5>
-                        <input type="text" class="group_input" v-model="groupDescription"/>
+                        <h5>그룹 설명 <span class="inner_text">({{groupDescription.length}}/10)</span></h5>
+                        <input type="text" class="group_input" v-model="groupDescription" maxlength="10"/>
                     </div>
                     <div class="radio_box">
                         <div class="radio_area">
@@ -88,6 +88,7 @@ import OpenGroupList from '@/components/List/OpenGroupList';
 
 const myGroup = (userInfo) => {
     const groupData = ref([]);
+
     const getMyGroup = () => {
         getGroupList(userInfo.value.dealiName).on("value", snapshot => {
             if (!snapshot.val()) return;
@@ -361,6 +362,8 @@ export default {
                     height: 30px;
                     border: 1px solid $Gray400;
                     border-radius: 4px;
+                    font-size: 12px;
+                    padding-left: 8px;
                 }
             }
             .radio_box{

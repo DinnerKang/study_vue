@@ -47,19 +47,16 @@ const youtubeData = () => {
     };
 
     const stateChange = (event) => {
-        if (event.data === 1 || event.data === 2) {
-            
-            const data = {
-                status: event.data,
-                currentTime: player.value.getCurrentTime(),
-                playTime: player.value.getDuration(),
-                videoName: myMusicList.value.filter(
-                    item =>
-                        item.videoId === player.value.getVideoData()["video_id"]
-                )[0].musicName,
-            };
-            addVideoStatus(data);
-        }
+        const data = {
+            status: event.data,
+            currentTime: player.value.getCurrentTime(),
+            playTime: player.value.getDuration(),
+            videoName: myMusicList.value.filter(
+                item =>
+                    item.videoId === player.value.getVideoData()["video_id"]
+            )[0].musicName,
+        };
+        addVideoStatus(data);
     };
 
 
@@ -99,7 +96,6 @@ export default {
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
-            console.log(newValue, oldValue);
 
             if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
             if (newValue.status === "start") return player.value.playVideo();
