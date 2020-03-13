@@ -4,7 +4,7 @@
             @click="clickGroup(groupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
             <img v-if="groupThumbnail" class="youtube_img" :src="groupData.thumbnail" alt="그룹 썸네일" />
-            <img v-else class="youtube_img" :src="musicData.thumbnails" alt="유튜브 사진" />
+            <img v-else class="youtube_img" :src="musicData.thumbnails" alt="유튜브 사진" />/>
             <div class="bottom_area">
                 <div class="main_text">{{groupData.groupName}}</div>
                 <div class="sub_text">{{groupData.description }}</div>
@@ -116,6 +116,7 @@ export default {
         color: $White;
         position: relative;
         cursor: pointer;
+        background-color: $Black;
 
         .youtube_img{
             width: 100%;

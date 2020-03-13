@@ -44,24 +44,18 @@
                     </div>
                     <div class="radio_box">
                         <div class="radio_area">
-                            <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />전체공개
+                            <radio-btn v-model="openGroup" :key-value="0">전체공개</radio-btn>
                             <span class="radio_text">누구나 이 그룹을 볼 수 있습니다.</span>
                         </div>
                         <div class="radio_area">
-                            <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
+                            <radio-btn v-model="openGroup" :key-value="1">비공개</radio-btn>
                             <span class="radio_text">개인만 이 그룹을 볼 수 있습니다.</span>
                         </div>
                     </div>
-                    <!--
-                    <label>그룹이름<input type="text" class="group_input" v-model="groupName" placeholder="그룹이름" /></label>
-                    <label>그룹설명<input type="text" class="group_input" v-model="groupDescription" placeholder="그룹설명" /></label>
-                    <div>
-                        <input type="radio" name="openGroup" v-model="openGroup" value="1" checked="checked" />공개
-                        <input type="radio" name="openGroup" v-model="openGroup" value="0" />비공개
+                    <div class="btn_area">
+                        <button type="button" class="btn" >초기화</button>
+                        <button type="button" class="btn" >저장</button>
                     </div>
-                    <button type="button" class="save_btn" @click="saveGroup(selectThumbnail)">저장</button>
-                    -->
-
                 </div>
             </div>
         </modal>
@@ -84,6 +78,7 @@ import { getGroupList, getLikeGroupList, addMyGroup } from '@/service/Group';
 import { readFolderLists, getThumbnail } from '@/service/Storage';
 import Modal  from '@/components/Common/Modal';
 import OpenGroupList from '@/components/List/OpenGroupList';
+import RadioBtn from '@/components/Common/RadioBtn';
 
 
 const myGroup = (userInfo) => {
@@ -232,11 +227,9 @@ const thumbnailsData = () => {
 };
 
 const iconData = () => {
-    const editIcon = require('@/assets/icons/edit-button.png');
     const addGroupIcon = require('@/assets/icons/plus-icon.png');
 
     return {
-        editIcon,
         addGroupIcon,
     }
 };
@@ -246,6 +239,7 @@ export default {
     components: {
         Modal,
         OpenGroupList,
+        RadioBtn,
     },
     setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
@@ -370,13 +364,33 @@ export default {
                 margin-top:8px;
 
                 .radio_area{
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
                     font-size: 15px;
+                    margin-bottom: 14px;
 
                     .radio_text{
                         font-size: 12px;
                         color: $Gray400;
-                        float:right;
                     }
+                }
+            }
+            .btn_area{
+                display: flex;
+                justify-content: space-between;
+
+                .btn{
+                    outline: none;
+                    width: 120px;
+                    height: 30px;
+                    border: 1px solid $Gray400;
+                    border-radius: 15px;
+                    color: $Gray600;
+                    font-weight: bold;
+                    font-size: 15px;
+                    padding: 0;
+                    cursor: pointer;
                 }
             }
         }

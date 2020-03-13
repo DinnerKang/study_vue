@@ -2,6 +2,9 @@
     <div>
         <div id="player"></div>
         <music-list v-model="myMusicList" :group-name="groupName" :groupKey="groupKey" :is-list="true" />
+        <div class="empty_area" v-if="!isList" >
+            노래를 추가해주세요.
+        </div>
     </div>
 </template>
 
@@ -45,9 +48,13 @@ export default {
         const { groupKey } = root.$route.query;
         const { groupName } = root.$route.query;
         const { player, myMusicList, onYouTubeIframeAPIReady } = youtubeData();
-
+        const isList = ref(true);
         watch(myMusicList, () => {
-            if (myMusicList.value.length === 0) return;
+            if (myMusicList.value.length === 0) {
+                return isList.value = false;
+            } else {
+                isList.value = true;
+            }
             onYouTubeIframeAPIReady();
         });
 
@@ -57,6 +64,7 @@ export default {
             myMusicList,
             player,
             onYouTubeIframeAPIReady,
+            isList,
         }
     },
 }
@@ -64,4 +72,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .empty_area{
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 </style>
