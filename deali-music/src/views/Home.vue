@@ -86,6 +86,9 @@ export default {
     const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
     const { openGroupList } = openGroup(dealiName);
 
+
+    
+
     watch(dealiName, newValue => {
        if (newValue) getMyGroupList();
     });

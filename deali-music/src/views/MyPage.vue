@@ -3,9 +3,13 @@
         <article>
             <h2>내 그룹 설정</h2>
             <ul class="my_group_list">
-                <li  v-for="(list, idx) in groupData" :key="idx">
+                <li  v-for="(list, idx) in groupData" :key="idx" class="my_group_area">
                     <open-group-list :openGroupData="list" :is-likes="false">
                     </open-group-list>
+                    <div class="setting_area">
+                        <img class="icon" :src="editGroupIcon" alt="수정" @click="editGroup(list)" />
+                        <img class="icon" :src="deleteGroupIcon" alt="삭제" @click="deleteGroup(list)" />
+                    </div>
                 </li>
                 <li class="btn_area" v-if="groupData.length < 8">
                     <img class="add_btn" :src="addGroupIcon" @click="isModal=true" alt="그룹추가" />
@@ -35,26 +39,26 @@
                 </div>
                 <div class="group_text_area">
                     <div class="text_box">
-                        <h5>그룹 이름 <span class="inner_text">({{groupName.length}}/10)</span></h5>
-                        <input type="text" class="group_input" v-model="groupName" maxlength="10"/>
+                        <h5>그룹 이름 <span class="inner_text">({{groupName.length}}/20)</span></h5>
+                        <input type="text" class="group_input" v-model="groupName" maxlength="20"/>
                     </div>
                     <div class="text_box">
-                        <h5>그룹 설명 <span class="inner_text">({{groupDescription.length}}/10)</span></h5>
-                        <input type="text" class="group_input" v-model="groupDescription" maxlength="10"/>
+                        <h5>그룹 설명 <span class="inner_text">({{description.length}}/20)</span></h5>
+                        <input type="text" class="group_input" v-model="description" maxlength="20"/>
                     </div>
                     <div class="radio_box">
                         <div class="radio_area">
-                            <radio-btn v-model="openGroup" :key-value="0">전체공개</radio-btn>
+                            <radio-btn v-model="isShowGroup" :key-value="true">전체공개</radio-btn>
                             <span class="radio_text">누구나 이 그룹을 볼 수 있습니다.</span>
                         </div>
                         <div class="radio_area">
-                            <radio-btn v-model="openGroup" :key-value="1">비공개</radio-btn>
+                            <radio-btn v-model="isShowGroup" :key-value="false">비공개</radio-btn>
                             <span class="radio_text">개인만 이 그룹을 볼 수 있습니다.</span>
                         </div>
                     </div>
                     <div class="btn_area">
                         <button type="button" class="btn" >초기화</button>
-                        <button type="button" class="btn" >저장</button>
+                        <button type="button" class="btn" @click="saveGroup" >저장</button>
                     </div>
                 </div>
             </div>
@@ -73,9 +77,8 @@
 </template>
 
 <script>
-import { ref, computed, watch, onBeforeUnmount } from "@vue/composition-api";
-import { getGroupList, getLikeGroupList, addMyGroup } from '@/service/Group';
-import { readFolderLists, getThumbnail } from '@/service/Storage';
+import { ref, computed, watch, onBeforeUnmount, reactive, toRefs } from "@vue/composition-api";
+import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroupName } from '@/service/Group';
 import Modal  from '@/components/Common/Modal';
 import OpenGroupList from '@/components/List/OpenGroupList';
 import RadioBtn from '@/components/Common/RadioBtn';
@@ -87,6 +90,7 @@ const myGroup = (userInfo) => {
     const getMyGroup = () => {
         getGroupList(userInfo.value.dealiName).on("value", snapshot => {
             if (!snapshot.val()) return;
+            groupData.value = [];
             const keys = Object.keys(snapshot.val());
             const values = Object.values(snapshot.val());
             for (let i = 0; i< keys.length; i+=1) {
@@ -98,9 +102,18 @@ const myGroup = (userInfo) => {
         });
     };
 
+    const deleteGroup = (list) => {
+        const data = {
+            targetKey: list.targetKey,
+            dealiName: list.dealiName,
+        };
+        deleteMyGroup(data);
+    };
+
     return {
         getMyGroup,
         groupData,
+        deleteGroup,
     };
 };
 
@@ -136,101 +149,91 @@ const likeGroup = (userInfo) => {
 };
 
 
-const modalEvent = (userInfo, isTumbnails) => {
+const modalEvent = (userInfo) => {
     const isModal = ref(false);
-    const groupName = ref('');
-    const groupDescription = ref('');
-    const openGroup = ref(0);
+    const isEdit = ref(false);
 
-    const saveGroup = (selectThumbnail) => {
-        if (!groupName.value || !selectThumbnail) return alert('정보를 정확하게 입력해주세요.');
-        
-        const data = {
-            dealiName: userInfo.value.dealiName,
-            groupName: groupName.value,
-            description: groupDescription.value,
-            thumbnail: selectThumbnail,
-            isShow: openGroup.value,
-        };
-        addMyGroup(data);
+    const groupData = reactive({
+        dealiName: userInfo.value.dealiName,
+        groupName: '',
+        description: '',
+        thumbnail: '',
+        isShowGroup: true,
+        targetKey: '',
+    });
+
+    const saveGroup = () => {
+        isEdit.value === false ? addMyGroup(groupData) : editMyGroupName(groupData);
         closeModal();
+    };
+
+    const editGroup = (list) => {
+        isEdit.value = true;
+
+        const data = {
+            dealiName: list.dealiName,
+            key: list.targetKey,
+        };
+
+        getGroupListByKey(data).once('value', snapshot => {
+            const result = snapshot.val();
+            isModal.value = true;
+            groupData.groupName = result.groupName;
+            groupData.description = result.description;
+            groupData.isShowGroup = result.isShowGroup;
+            groupData.targetKey = list.targetKey;
+        });
     };
 
     const closeModal = () => {
         isModal.value = false;
-        groupName.value = '';
-        groupDescription.value = '';
-        openGroup.value = 0;
-        isTumbnails.value = false;
+        isEdit.value = false;
+
+        groupData.groupName = '';
+        groupData.description = '';
+        groupData.isShowGroup = '';
+        groupData.thumbnail = '';
+        groupData.key = '';
     };
 
     return {
         isModal,
-        groupName,
-        groupDescription,
-        openGroup,
         saveGroup,
         closeModal,
+        editGroup,
+        ...toRefs(groupData),
     }
 }
 
 const thumbnailsData = () => {
     const thumbnailLists = ref([]);
     const selectThumbnail = ref('');
-    const isTumbnails = ref(false);
-    const fullPath = ref([]);
-    let nowImg = 0;
-    const perImg = 6;
-    let isMoreImg = true;
     
     const getThumbnails = async () => {
-        isTumbnails.value = true;
-        const { items } = await readFolderLists();
-        fullPath.value = items.map(i => i.fullPath);
-        
-        getImg();
+        console.log('get');
     };
-
-    const getImg = async () => {
-        if (isMoreImg === false) return;
-        for (let i = nowImg * 6; i < perImg + nowImg * perImg; i++) {
-            if (i >= fullPath.value.length ) {
-                isMoreImg = false;
-                break;
-            }
-            thumbnailLists.value.push(await getThumbnail(fullPath.value[i]));
-        }
-
-        if (fullPath.value.length > nowImg * 6) isMoreImg = true;
-    }
 
     const clickThumbnail = idx => {
-        isTumbnails.value = false;
-        selectThumbnail.value = thumbnailLists.value[idx];
-    };
-
-    const onScroll = (e) => {
-        if (e.target.scrollHeight - (e.target.scrollTop + 182) === 0) {
-            nowImg += 1;
-            getImg();
-        }
+        console.log(idx);
     };
 
     return {
         thumbnailLists,
+        selectThumbnail,
         getThumbnails,
         clickThumbnail,
-        selectThumbnail,
-        isTumbnails,
-        onScroll,
     }
 };
 
 const iconData = () => {
     const addGroupIcon = require('@/assets/icons/plus-icon.png');
+    const editGroupIcon = require('@/assets/icons/edit-icon.png');
+    const deleteGroupIcon = require('@/assets/icons/delete-icon.png');
 
     return {
         addGroupIcon,
+        editGroupIcon,
+        deleteGroupIcon,
     }
 };
 
@@ -244,8 +247,8 @@ export default {
     setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const { likeGroupList, getLikeList } = likeGroup(userInfo);
-        const { getMyGroup, groupData } = myGroup(userInfo);
-        const { thumbnailLists, getThumbnails, selectThumbnail, clickThumbnail, isTumbnails, onScroll } = thumbnailsData();
+        const { getMyGroup, groupData, deleteGroup } = myGroup(userInfo);
+        const { thumbnailLists, getThumbnails, selectThumbnail, clickThumbnail  } = thumbnailsData();
 
         watch(userInfo.value.dealiName, () =>{
             getMyGroup();
@@ -257,14 +260,13 @@ export default {
         });
         return {
             groupData,
+            deleteGroup,
             thumbnailLists,
             getThumbnails,
             selectThumbnail,
             clickThumbnail,
-            isTumbnails,
-            onScroll,
             likeGroupList,
-            ...modalEvent(userInfo, isTumbnails),
+            ...modalEvent(userInfo),
             ...iconData(),
         };
     }
@@ -282,6 +284,32 @@ export default {
             gap: 10px 24px;
             grid-template-rows: 250px;
             grid-template-columns: repeat(4, 1fr);
+
+            .my_group_area{
+                position: relative;
+
+                .setting_area{
+                    position: absolute;
+                    right: 7px;
+                    top: 148px;
+                    width: 64px;
+                    height: 25px;
+                    display: flex;
+                    justify-content: space-between;
+                    visibility: hidden;
+
+                    .icon{
+                        width: 25px;
+                        height: 25px;
+                        cursor: pointer;
+                    }
+                }
+                &:hover{
+                    .setting_area{
+                        visibility: visible;
+                    }
+                }
+            }
 
             .btn_area{
                 width: 238px;

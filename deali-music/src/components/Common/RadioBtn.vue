@@ -28,7 +28,6 @@ export default {
     setup(props, { emit }) {
 
         const clickBtn = () => {
-            console.log(props);
             emit('input', props.keyValue);
         }
 

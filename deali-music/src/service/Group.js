@@ -28,7 +28,7 @@ export function addMyGroup(data) {
     const ref = firebase.database().ref(`group/all/${data.dealiName}`);
     const myKey = ref.push().key;
 
-    if (data.isShow === "1") {
+    if (data.isShowGroup === true) {
         const data1 = {
             targetKey: myKey,
             dealiName: data.dealiName,
@@ -41,6 +41,7 @@ export function addMyGroup(data) {
         description: data.description,
         thumbnail: data.thumbnail,
         myKey: myKey,
+        isShowGroup: data.isShowGroup,
     });
 }
 
@@ -68,10 +69,16 @@ export function addShowGroup(data) {
 }
 
 export function editMyGroupName(data) {
-    const key = data.key + '/groupName';
-    firebase.database().ref(`group/all/${data.userId}`).update({
-        [key] : data.groupName
+    firebase.database().ref(`group/all/${data.dealiName}/${data.targetKey}`).update({
+        groupName: data.groupName,
+        description: data.description,
+        isShowGroup: data.isShowGroup,
     });
+    if (data.isShowGroup === true) {
+        addShowGroup(data);
+    } else {
+        deleteOpenGroup(data);
+    }
 }
 
 // Delete
@@ -82,11 +89,11 @@ export function deleteLikeGroup(data) {
 }
 
 export function deleteOpenGroup(data) {
-    return firebase.database().ref(`group/showGroup/${data.myKey}`).remove();
+    return firebase.database().ref(`group/showGroup/${data.targetKey}`).remove();
 }
 
 export function deleteMyGroup(data) {
-    firebase.database().ref(`group/all/${data.dealiName}/${data.myKey}`).remove();
-    firebase.database().ref(`music/${data.dealiName}/${data.myKey}`).remove();
-    return deleteOpenGroup(data);
+    firebase.database().ref(`group/all/${data.dealiName}/${data.targetKey}`).remove();
+    firebase.database().ref(`music/${data.dealiName}/${data.targetKey}`).remove();
+    return deleteLikeGroup(data);
 }

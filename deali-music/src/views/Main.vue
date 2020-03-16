@@ -20,7 +20,8 @@ export default {
   setup(props, { root }) {
     const userState = computed(()=> root.$store.getters['login/getUserStatus'].userState);
     const isFooter = computed(()=> root.$store.getters['menu/getFooter']);
-
+    root.$store.dispatch('image/getGroupThumbnails');
+    
     watch(userState, ()=>{
         if(userState.value !== '딜리언즈') {
           root.$store.commit('menu/disableFooter');
