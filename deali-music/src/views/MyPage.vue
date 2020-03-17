@@ -21,7 +21,7 @@
                 <div class="group_img_area">
                     <h5>썸네일 이미지</h5>
                     <div class="img_area">
-                        
+                        <img v-for="(data, idx) in thumbnailLists" :src="data" :key="idx" alt="이미지" />
                     </div>
                     <!--
                     <div class="thumbnail_container" v-if="isTumbnails" @scroll.passive="onScroll">
@@ -79,6 +79,7 @@
 <script>
 import { ref, computed, watch, onBeforeUnmount, reactive, toRefs } from "@vue/composition-api";
 import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroupName } from '@/service/Group';
+
 import Modal  from '@/components/Common/Modal';
 import OpenGroupList from '@/components/List/OpenGroupList';
 import RadioBtn from '@/components/Common/RadioBtn';
@@ -205,14 +206,10 @@ const modalEvent = (userInfo) => {
     }
 }
 
-const thumbnailsData = () => {
-    const thumbnailLists = ref([]);
+const thumbnailsData = (store) => {
+    const thumbnailLists = computed(() => store.getters['image/getGroupThumbnails']);
     const selectThumbnail = ref('');
-    
-    const getThumbnails = async () => {
-        console.log('get');
-    };
-
+   
     const clickThumbnail = idx => {
         console.log(idx);
     };
@@ -220,7 +217,6 @@ const thumbnailsData = () => {
     return {
         thumbnailLists,
         selectThumbnail,
-        getThumbnails,
         clickThumbnail,
     }
 };
@@ -248,7 +244,7 @@ export default {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const { likeGroupList, getLikeList } = likeGroup(userInfo);
         const { getMyGroup, groupData, deleteGroup } = myGroup(userInfo);
-        const { thumbnailLists, getThumbnails, selectThumbnail, clickThumbnail  } = thumbnailsData();
+        const { thumbnailLists, selectThumbnail, clickThumbnail  } = thumbnailsData(root.$store);
 
         watch(userInfo.value.dealiName, () =>{
             getMyGroup();
@@ -262,7 +258,6 @@ export default {
             groupData,
             deleteGroup,
             thumbnailLists,
-            getThumbnails,
             selectThumbnail,
             clickThumbnail,
             likeGroupList,

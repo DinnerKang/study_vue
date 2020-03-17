@@ -6,9 +6,6 @@ const state = {
 
 const mutations = {
     setGroupThumbnails(state, payload) {
-
-
-
         return state.groupThumbnails[payload.index] = payload.img;
     },
 };
