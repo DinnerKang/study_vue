@@ -26,12 +26,12 @@ const getMusicData = (targetName, groupKey) => {
     const data = {
         dealiName: targetName,
         groupKey: groupKey,
-        groupName: '',
-    }
+    };
 
     getMusicListByGroup(data).once('value', snapshot => {
         if(!snapshot.val()) return;
-        musicData.value = Object.values(Object.values(snapshot.val())[0])[0];
+        console.log(snapshot.val());
+        musicData.value = Object.values(snapshot.val())[0];
     });
 
     return {

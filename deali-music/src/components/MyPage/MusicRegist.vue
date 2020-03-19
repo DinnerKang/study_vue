@@ -39,7 +39,6 @@ const clickEvent = (userInfo) => {
             
             dealiName: dealiName,
             groupKey: groupData.myKey || '',
-            groupName: groupData.groupName || 'lounge',
         };
         
         registMusic(data);

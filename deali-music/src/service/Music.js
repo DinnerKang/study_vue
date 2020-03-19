@@ -6,7 +6,7 @@ import 'firebase/database';
 // Read
 
 export function getMusicListByGroup(data) {
-    return firebase.database().ref(`music/${data.dealiName}/${data.groupKey}/${data.groupName}`);
+    return firebase.database().ref(`music/${data.dealiName}/${data.groupKey}`);
 }
 
 
@@ -14,7 +14,7 @@ export function getMusicListByGroup(data) {
 
 export function registMusic(data) {
     // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
-    firebase.database().ref(`music/${data.dealiName}/${data.groupKey}/${data.groupName}`).push({
+    firebase.database().ref(`music/${data.dealiName}/${data.groupKey}`).push({
         thumbnails: data.thumbnails,
         musicName: data.musicName,
         videoId: data.videoId,
@@ -27,5 +27,5 @@ export function registMusic(data) {
 // Delete
 
 export function deleteMusic(data, key) {
-    firebase.database().ref(`music/${data.id}/${data.groupName}`).child(key).remove();
+    firebase.database().ref(`music/${data.id}`).child(key).remove();
 }

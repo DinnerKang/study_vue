@@ -1,15 +1,18 @@
 <template>
   <div id="app">
-    <main-component></main-component>
+      <the-layout>
+        <router-view />
+      </the-layout>
   </div>
 </template>
 <script>
 import * as firebase from 'firebase/app';
 import firebaseConfig from '../firebaseConfig';
-import MainComponent from './views/Main';
+import TheLayout from '@/layouts/TheLayout';
 
 export default {
-    components: { MainComponent },
+    name: 'App',
+    components: { TheLayout },
     created(){
         firebase.initializeApp(firebaseConfig);
     },

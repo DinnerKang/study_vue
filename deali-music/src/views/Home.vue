@@ -37,7 +37,6 @@ const myGroup = (userInfo) => {
     const data = {
       dealiName: userInfo.value.dealiName,
       groupKey: '',
-      groupName: '',
     };
 
     getMusicListByGroup(data).once('value', snapshot =>{

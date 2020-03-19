@@ -6,7 +6,7 @@ const mutations = {
     disableFooter(state) {
         state.isFooter = false;
     },
-    ableFooter(state) {
+    showFooter(state) {
         state.isFooter = true;
     }
 };

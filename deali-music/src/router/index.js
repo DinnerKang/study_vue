@@ -25,7 +25,7 @@ const routes = [
     path: '/lounge',
     name: 'Lounge',
     component: Lounge,
-    meta: { unauthorized: true },
+    meta: { unauthorized: true, layout: 'MobileLayout' },
   },
   {
     path: '/search',

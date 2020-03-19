@@ -35,6 +35,7 @@ const youtubeData = () => {
     };
 
     const addPlayList = () => {
+        console.log(myMusicList.value);
         playList.value = myMusicList.value.map(item => item.videoId);
         player.value.cuePlaylist({
             playlist: playList.value,

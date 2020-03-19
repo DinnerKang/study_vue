@@ -23,12 +23,12 @@ const setMusicList = (props, dealiName, router ,emit) => {
     const getMusicList = () => {
         const data = {
           dealiName : props.groupName === 'lounge' ? 'lounge' : dealiName.value,
-          groupName: props.groupName,
-          groupKey: props.groupKey || '',
+          groupKey: props.groupKey || 'lounge',
         };
         
         getMusicListByGroup(data).on('value', (snapshot) => {
             if (!snapshot.val()) return;
+              console.log(snapshot.val());
               musicList.value = Object.values(snapshot.val()).reverse();
               emit('input', musicList.value);
         });
@@ -37,7 +37,6 @@ const setMusicList = (props, dealiName, router ,emit) => {
     const removeMusic = (idx) => {
         const data = {
             dealiName: dealiName.value,
-            groupName: props.groupName,
         };
         
         getMusicListByGroup(data).orderByKey().once('value', snapshot => {
