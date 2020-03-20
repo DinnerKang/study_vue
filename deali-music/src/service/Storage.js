@@ -8,5 +8,5 @@ export function readFolderLists() {
 }
 
 export function getThumbnail(fullPath) {
-    return firebase.storage().ref(fullPath);
+    return firebase.storage().ref(fullPath).getDownloadURL();
 }

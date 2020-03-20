@@ -23,19 +23,6 @@
                     <div class="img_area">
                         <img v-for="(data, idx) in thumbnailLists" :src="data" :key="idx" alt="이미지" />
                     </div>
-                    <!--
-                    <div class="thumbnail_container" v-if="isTumbnails" @scroll.passive="onScroll">
-                        <div class="open_group_container" 
-                        v-for="(url, idx) in thumbnailLists" :key="idx" @click="clickThumbnail(idx)">
-                                <img :src="url" alt="사진" />
-                        </div>
-                    </div>
-                    <div class="select_thumbnail" @click="getThumbnails" v-else>
-                        <img v-if="selectThumbnail" :src="selectThumbnail" style="width:100%; height:100%" alt="선택한 사진"/>
-                        <span v-else>썸네일 선택</span>
-                    </div>
-                    -->
-
                 </div>
                 <div class="group_text_area">
                     <div class="text_box">
@@ -336,6 +323,7 @@ export default {
   
     .group_container{
         display: flex;
+        justify-content: space-between;
         padding: 0 40px;
 
         .group_img_area{
@@ -357,6 +345,11 @@ export default {
                 gap: 15px;
                 grid-template-rows: 68px;
                 grid-template-columns: repeat(3, 1fr);
+
+                img{
+                    width: 90px;
+                    height: 68px;
+                }
             }
         }
         .group_text_area{

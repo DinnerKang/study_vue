@@ -1,6 +1,6 @@
 <template>
-    <component :is="layout" class="main">
-        <router-view />
+    <component :is="layout" >
+        <router-view class="main" />
     </component>
 </template>
 
@@ -17,6 +17,7 @@ export default {
     },
     setup(props, { root }){
         const layout = computed(() => root.$route.meta.layout || 'DefaultLayout' );
+        root.$store.dispatch('image/getGroupThumbnails');
 
         return {
             layout,

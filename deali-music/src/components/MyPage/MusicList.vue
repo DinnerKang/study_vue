@@ -2,7 +2,7 @@
     <section class="myMusic_container" v-if="isList">
       <article class="myMusic_list_area">
         <ul>
-          <li class="myMusic_list" v-for="(list, idx) in musicList" :key="idx">
+          <li class="myMusic_list" v-for="(list, idx) in musicList" :key="list">
             <div class="music_name">음악 : {{list.musicName}}</div>
             <button v-if="dealiName || '' === value[0].dealiName"  @click="removeMusic(idx)">삭제</button>
           </li>
@@ -28,7 +28,6 @@ const setMusicList = (props, dealiName, router ,emit) => {
         
         getMusicListByGroup(data).on('value', (snapshot) => {
             if (!snapshot.val()) return;
-              console.log(snapshot.val());
               musicList.value = Object.values(snapshot.val()).reverse();
               emit('input', musicList.value);
         });

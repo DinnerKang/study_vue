@@ -15,7 +15,7 @@ const actions = {
         if (state.getters['getGroupThumbnails'].length > 0) return;
         const { items } = await readFolderLists();
         const fullPath = items.map(i => i.fullPath);
-
+        console.log(fullPath);
         for (let i = 0; i < fullPath.length; i += 1) {
             const img = await getThumbnail(fullPath[i]);
             const data = {

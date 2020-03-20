@@ -13,7 +13,7 @@ import TheLayout from '@/layouts/TheLayout';
 export default {
     name: 'App',
     components: { TheLayout },
-    created(){
+    setup(){
         firebase.initializeApp(firebaseConfig);
     },
 }
