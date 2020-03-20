@@ -38,9 +38,8 @@ const clickEvent = (userInfo) => {
             registDate: String(new Date()),
             
             dealiName: dealiName,
-            groupKey: groupData.myKey || '',
+            groupKey: groupData.myKey || 'lounge',
         };
-        
         registMusic(data);
     }
 
