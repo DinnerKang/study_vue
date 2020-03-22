@@ -20,9 +20,7 @@
             <div class="group_container">
                 <div class="group_img_area">
                     <h5>썸네일 이미지</h5>
-                    <div class="img_area">
-                        <img v-for="(data, idx) in thumbnailLists" :src="data" :key="idx" alt="이미지" />
-                    </div>
+                    <thumbnail-area v-model="thumbnailIdx" />
                 </div>
                 <div class="group_text_area">
                     <div class="text_box">
@@ -44,7 +42,7 @@
                         </div>
                     </div>
                     <div class="btn_area">
-                        <button type="button" class="btn" >초기화</button>
+                        <button type="button" class="btn" @click="initGroup">초기화</button>
                         <button type="button" class="btn" @click="saveGroup" >저장</button>
                     </div>
                 </div>
@@ -70,6 +68,7 @@ import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupList
 import Modal  from '@/components/Common/Modal';
 import OpenGroupList from '@/components/List/OpenGroupList';
 import RadioBtn from '@/components/Common/RadioBtn';
+import ThumbnailArea from '@/components/MyPage/ThumbnailArea';
 
 
 const myGroup = (userInfo) => {
@@ -141,18 +140,25 @@ const modalEvent = (userInfo) => {
     const isModal = ref(false);
     const isEdit = ref(false);
 
-    const groupData = reactive({
+    const modalData = reactive({
         dealiName: userInfo.value.dealiName,
         groupName: '',
         description: '',
-        thumbnail: '',
+        thumbnailIdx: null,
         isShowGroup: true,
         targetKey: '',
     });
 
     const saveGroup = () => {
-        isEdit.value === false ? addMyGroup(groupData) : editMyGroupName(groupData);
+        isEdit.value === false ? addMyGroup(modalData) : editMyGroupName(modalData);
         closeModal();
+    };
+
+    const initGroup = () => {
+        modalData.groupName = '';
+        modalData.description = '';
+        modalData.isShowGroup = true;
+        modalData.thumbnailIdx = null;
     };
 
     const editGroup = (list) => {
@@ -166,10 +172,11 @@ const modalEvent = (userInfo) => {
         getGroupListByKey(data).once('value', snapshot => {
             const result = snapshot.val();
             isModal.value = true;
-            groupData.groupName = result.groupName;
-            groupData.description = result.description;
-            groupData.isShowGroup = result.isShowGroup;
-            groupData.targetKey = list.targetKey;
+            modalData.groupName = result.groupName;
+            modalData.description = result.description;
+            modalData.isShowGroup = result.isShowGroup;
+            modalData.thumbnailIdx = result.thumbnailIdx;
+            modalData.targetKey = list.targetKey;
         });
     };
 
@@ -177,11 +184,8 @@ const modalEvent = (userInfo) => {
         isModal.value = false;
         isEdit.value = false;
 
-        groupData.groupName = '';
-        groupData.description = '';
-        groupData.isShowGroup = '';
-        groupData.thumbnail = '';
-        groupData.key = '';
+        initGroup();
+        modalData.key = '';
     };
 
     return {
@@ -189,24 +193,12 @@ const modalEvent = (userInfo) => {
         saveGroup,
         closeModal,
         editGroup,
-        ...toRefs(groupData),
+        initGroup,
+        ...toRefs(modalData),
     }
 }
 
-const thumbnailsData = (store) => {
-    const thumbnailLists = computed(() => store.getters['image/getGroupThumbnails']);
-    const selectThumbnail = ref('');
-   
-    const clickThumbnail = idx => {
-        console.log(idx);
-    };
 
-    return {
-        thumbnailLists,
-        selectThumbnail,
-        clickThumbnail,
-    }
-};
 
 const iconData = () => {
     const addGroupIcon = require('@/assets/icons/plus-icon.png');
@@ -226,12 +218,12 @@ export default {
         Modal,
         OpenGroupList,
         RadioBtn,
+        ThumbnailArea,
     },
     setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
         const { likeGroupList, getLikeList } = likeGroup(userInfo);
         const { getMyGroup, groupData, deleteGroup } = myGroup(userInfo);
-        const { thumbnailLists, selectThumbnail, clickThumbnail  } = thumbnailsData(root.$store);
 
         watch(userInfo.value.dealiName, () =>{
             getMyGroup();
@@ -244,9 +236,6 @@ export default {
         return {
             groupData,
             deleteGroup,
-            thumbnailLists,
-            selectThumbnail,
-            clickThumbnail,
             likeGroupList,
             ...modalEvent(userInfo),
             ...iconData(),
@@ -337,20 +326,6 @@ export default {
                 font-weight: bold;
                 margin: 0;
             }
-            .img_area {
-                margin-top: 16px;
-                width: 100%;
-                height: 234px;
-                display: grid;
-                gap: 15px;
-                grid-template-rows: 68px;
-                grid-template-columns: repeat(3, 1fr);
-
-                img{
-                    width: 90px;
-                    height: 68px;
-                }
-            }
         }
         .group_text_area{
             position: relative;
@@ -406,6 +381,7 @@ export default {
                     font-weight: bold;
                     font-size: 15px;
                     padding: 0;
+                    background-color: $White;
                     cursor: pointer;
                 }
             }

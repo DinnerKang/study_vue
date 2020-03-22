@@ -3,7 +3,7 @@
         <div class="group_container open_group_container"
             @click="clickGroup(groupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
-            <img v-if="groupData.thumbnail" :src="groupData.thumbnail" alt="썸네일"/>
+            <img v-if="getImage" :src="getImage[groupData.thumbnailIdx]" alt="썸네일"/>
         </div>
         <div class="outside_area">
             <div class="main_text">
@@ -74,6 +74,7 @@ const iconList = () => {
     const likeIcon = require('../../assets/icons/Heart-01.png');
     const notIcon = require('../../assets/icons/Heart-02.png');
 
+
     return {
         isLike,
         likeIcon,
@@ -106,7 +107,9 @@ export default {
         const { groupData } = getGroupData(userInfo, props.openGroupData);
         const { isLike, notIcon, likeIcon } = iconList();
         const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router, isLike);
+
         const likeUser = computed(() => props.openGroupData.likes);
+        const getImage = computed(()=> root.$store.getters['image/getGroupThumbnails']);
 
         watch(() => userInfo.value.dealiName, () => {
             if (!likeUser.value || !userInfo.value.dealiName) return isLike.value = false;
@@ -121,6 +124,7 @@ export default {
         
         return {
             groupData,
+            getImage,
             isLike,
             notIcon,
             likeIcon,

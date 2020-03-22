@@ -31,7 +31,7 @@ const actions = {
 const getters = {
     getGroupThumbnails(state){
         return state.groupThumbnails;
-    }
+    },
 }
 
 export default {

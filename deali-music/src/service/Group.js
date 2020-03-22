@@ -27,6 +27,7 @@ export function addMyGroup(data) {
     // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
     const ref = firebase.database().ref(`group/all/${data.dealiName}`);
     const myKey = ref.push().key;
+    console.log(data);
 
     if (data.isShowGroup === true) {
         const data1 = {
@@ -39,7 +40,7 @@ export function addMyGroup(data) {
     return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,
-        thumbnail: data.thumbnail,
+        thumbnailIdx: data.thumbnailIdx,
         myKey: myKey,
         isShowGroup: data.isShowGroup,
     });
