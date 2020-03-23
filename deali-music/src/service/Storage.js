@@ -4,7 +4,7 @@ import 'firebase/storage';
 
 const list = [
     '2.jpg',
-    'ggobuk.jpg',
+    '3.jpg',
     'images.jpeg',
 ];
 

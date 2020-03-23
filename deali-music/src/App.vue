@@ -1,7 +1,7 @@
 <template>
   <div id="app">
       <the-layout>
-        <router-view />
+        <router-view class="main" />
       </the-layout>
   </div>
 </template>
@@ -44,4 +44,8 @@ export default {
       border-radius: 8px;
     }
  }
+ .main{
+        width: 1024px;
+        margin: 0 auto 100px;
+    }
 </style>

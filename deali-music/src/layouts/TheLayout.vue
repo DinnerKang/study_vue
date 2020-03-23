@@ -1,6 +1,6 @@
 <template>
-    <component :is="layout" >
-        <router-view class="main" />
+    <component :is="layout">
+        <slot />
     </component>
 </template>
 
@@ -26,8 +26,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    .main{
-        width: 1024px;
-        margin: 0 auto 100px;
-    }
+    
 </style>
