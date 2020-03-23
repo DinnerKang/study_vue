@@ -10,7 +10,7 @@
 import { computed } from '@vue/composition-api';
 
 const thumbnailsData = (props, store, emit) => {
-    const thumbnailLists = computed(() => store.getters['image/getGroupThumbnails']);
+    // const thumbnailLists = computed(() => store.getters['image/getGroupThumbnails']);
     const selectThumbnail = computed(() => props.value);
    
     const clickThumbnail = idx => {

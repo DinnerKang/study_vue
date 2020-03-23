@@ -2,11 +2,12 @@
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
+const list = [
+    '2.jpg',
+    'ggobuk.jpg',
+    'images.jpeg',
+];
 
-export function readFolderLists() {
-    return firebase.storage().ref('thumbnail').listAll();
-}
-
-export function getThumbnail(fullPath) {
-    return firebase.storage().ref(fullPath).getDownloadURL();
+export function getThumbnail(idx) {
+    return firebase.storage().ref(`thumbnail/${list[idx]}`).getDownloadURL();
 }

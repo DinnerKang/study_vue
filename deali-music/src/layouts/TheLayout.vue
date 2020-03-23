@@ -17,7 +17,6 @@ export default {
     },
     setup(props, { root }){
         const layout = computed(() => root.$route.meta.layout || 'DefaultLayout' );
-        root.$store.dispatch('image/getGroupThumbnails');
 
         return {
             layout,

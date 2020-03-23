@@ -3,7 +3,7 @@
         <div class="group_container open_group_container"
             @click="clickGroup(groupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
-            <img v-if="getImage" :src="getImage[groupData.thumbnailIdx]" alt="썸네일"/>
+            <img :src="getImage" alt="썸네일"/>
         </div>
         <div class="outside_area">
             <div class="main_text">
@@ -18,21 +18,32 @@
 <script>
 import { computed, ref, watch } from '@vue/composition-api';
 import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/service/Group';
+import { getThumbnail } from '@/service/Storage';
 
 const getGroupData = (userInfo, openGroupData) => {
     const groupData = ref({});
+    const getImage = ref('');
 
     const data = {
         dealiName: openGroupData.dealiName,
         key: openGroupData.targetKey,
     };
-    getGroupListByKey(data).on('value', snapshot =>{
+    getGroupListByKey(data).on('value', async snapshot =>{
         groupData.value = snapshot.val();
+        getImage.value = await thumbnailData(groupData.value.thumbnailIdx);
     });
 
+    const thumbnailData = async (idx) => {
+        const result = await getThumbnail(idx);
+        
+        return new Promise(resolve => {
+            resolve(result);
+        });
+    };
 
     return {
         groupData,
+        getImage,
     }
 };
 
@@ -104,12 +115,12 @@ export default {
     setup(props, { root }) {
         const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
         
-        const { groupData } = getGroupData(userInfo, props.openGroupData);
+        const { groupData, getImage } = getGroupData(userInfo, props.openGroupData, root.$store);
         const { isLike, notIcon, likeIcon } = iconList();
         const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router, isLike);
 
         const likeUser = computed(() => props.openGroupData.likes);
-        const getImage = computed(()=> root.$store.getters['image/getGroupThumbnails']);
+
 
         watch(() => userInfo.value.dealiName, () => {
             if (!likeUser.value || !userInfo.value.dealiName) return isLike.value = false;

@@ -1,4 +1,3 @@
-import { readFolderLists, getThumbnail } from '@/service/Storage';
 
 const state = {
     groupThumbnails: [],
@@ -10,27 +9,15 @@ const mutations = {
     },
 };
 
-const actions = {
-    async getGroupThumbnails(state) {
-        if (state.getters['getGroupThumbnails'].length > 0) return;
-        const { items } = await readFolderLists();
-        const fullPath = items.map(i => i.fullPath);
-        console.log(fullPath);
-        for (let i = 0; i < fullPath.length; i += 1) {
-            const img = await getThumbnail(fullPath[i]);
-            const data = {
-                img,
-                index: i,
-            };
-            state.commit('setGroupThumbnails', data);
-        }
-    },
-};
-
 
 const getters = {
     getGroupThumbnails(state){
         return state.groupThumbnails;
+    },
+    getThumbnailByIdx(state){
+        return (payload) => {
+            return state.groupThumbnails[payload];
+        };
     },
 }
 
@@ -38,6 +25,5 @@ export default {
     namespaced: true,
     state,
     mutations,
-    actions,
     getters,
 };
