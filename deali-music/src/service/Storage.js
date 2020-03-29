@@ -8,6 +8,11 @@ const list = [
     'images.jpeg',
 ];
 
+
 export function getThumbnail(idx) {
     return firebase.storage().ref(`thumbnail/${list[idx]}`).getDownloadURL();
 }
+
+export function getAllThumbnails(){
+    return list.map((item, idx) => firebase.storage().ref(`thumbnail/${list[idx]}`).getDownloadURL());
+} 

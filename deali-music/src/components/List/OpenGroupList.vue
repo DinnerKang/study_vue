@@ -30,16 +30,8 @@ const getGroupData = (userInfo, openGroupData) => {
     };
     getGroupListByKey(data).on('value', async snapshot =>{
         groupData.value = snapshot.val();
-        getImage.value = await thumbnailData(groupData.value.thumbnailIdx);
+        getImage.value = await getThumbnail(snapshot.val().thumbnailIdx);
     });
-
-    const thumbnailData = async (idx) => {
-        const result = await getThumbnail(idx);
-        
-        return new Promise(resolve => {
-            resolve(result);
-        });
-    };
 
     return {
         groupData,
