@@ -2,13 +2,12 @@
     <div class="img_area">
         <img v-for="(data, idx) in thumbnailLists" :key="idx" 
             :class="{ active_btn : idx === selectThumbnail }"
-            :src="data.i" alt="이미지" @click="clickThumbnail(idx)" />
+            :src="data" alt="이미지" @click="clickThumbnail(idx)" />
     </div>
 </template>
 
 <script>
 import { computed, onMounted, ref } from '@vue/composition-api';
-import { getAllThumbnails } from '@/service/Storage';
 
 const thumbnailsData = (props, store, emit) => {
     const selectThumbnail = computed(() => props.value);
@@ -17,8 +16,10 @@ const thumbnailsData = (props, store, emit) => {
     const clickThumbnail = idx => {
         emit('input', idx);
     };
-    const getThumbnails = async () => {
-        thumbnailLists.value = await getAllThumbnails();
+    const getThumbnails = () => {
+        const img = computed(()=> store.getters['image/getAllImages']);
+        console.log(img);
+        thumbnailLists.value = img.value;
     }
 
     onMounted(() => getThumbnails());

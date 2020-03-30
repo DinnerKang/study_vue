@@ -18,11 +18,11 @@
 <script>
 import { computed, ref, watch } from '@vue/composition-api';
 import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/service/Group';
-import { getThumbnail } from '@/service/Storage';
 
-const getGroupData = (userInfo, openGroupData) => {
+const getGroupData = (userInfo, openGroupData, store) => {
     const groupData = ref({});
-    const getImage = ref('');
+    let getImage = ref('');
+    
 
     const data = {
         dealiName: openGroupData.dealiName,
@@ -30,8 +30,14 @@ const getGroupData = (userInfo, openGroupData) => {
     };
     getGroupListByKey(data).on('value', async snapshot =>{
         groupData.value = snapshot.val();
-        getImage.value = await getThumbnail(snapshot.val().thumbnailIdx);
+        const img = computed(()=> store.getters['image/getImages'](snapshot.val().thumbnailIdx));
+        /*
+        store.watch((state) => state.image[snapshot.val().thumbnailIdx], () => {
+            console.log('hi');
+        });*/
+        getImage.value = img.value;
     });
+
 
     return {
         groupData,
