@@ -30,13 +30,20 @@ const getGroupData = (userInfo, openGroupData, store) => {
     };
     getGroupListByKey(data).on('value', async snapshot =>{
         groupData.value = snapshot.val();
-        const img = computed(()=> store.getters['image/getImages'](snapshot.val().thumbnailIdx));
-        /*
-        store.watch((state) => state.image[snapshot.val().thumbnailIdx], () => {
-            console.log('hi');
-        });*/
+        let img = computed(()=> store.getters['image/getImages'](snapshot.val().thumbnailIdx) || null);
+
+        store.watch((state, getters) => getters['image/getImages'](snapshot.val().thumbnailIdx), () => {
+            getImage.value = computed(()=> store.getters['image/getImages'](snapshot.val().thumbnailIdx) || null);
+        });
+        
         getImage.value = img.value;
     });
+
+
+    watch(() => getImage.value, (newValue) => {
+        if (!newValue.value || !newValue) return;
+        getImage.value = newValue.value;
+    })
 
 
     return {

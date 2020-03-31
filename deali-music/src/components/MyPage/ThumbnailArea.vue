@@ -18,7 +18,6 @@ const thumbnailsData = (props, store, emit) => {
     };
     const getThumbnails = () => {
         const img = computed(()=> store.getters['image/getAllImages']);
-        console.log(img);
         thumbnailLists.value = img.value;
     }
 

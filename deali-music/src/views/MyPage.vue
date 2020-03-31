@@ -63,7 +63,7 @@
 
 <script>
 import { ref, computed, watch, onBeforeUnmount, reactive, toRefs } from "@vue/composition-api";
-import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroupName } from '@/service/Group';
+import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroup } from '@/service/Group';
 
 import Modal  from '@/components/Common/Modal';
 import OpenGroupList from '@/components/List/OpenGroupList';
@@ -150,7 +150,7 @@ const modalEvent = (userInfo) => {
     });
 
     const saveGroup = () => {
-        isEdit.value === false ? addMyGroup(modalData) : editMyGroupName(modalData);
+        isEdit.value === false ? addMyGroup(modalData) : editMyGroup(modalData);
         closeModal();
     };
 

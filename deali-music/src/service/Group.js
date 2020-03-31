@@ -69,11 +69,12 @@ export function addShowGroup(data) {
     });
 }
 
-export function editMyGroupName(data) {
+export function editMyGroup(data) {
     firebase.database().ref(`group/all/${data.dealiName}/${data.targetKey}`).update({
         groupName: data.groupName,
         description: data.description,
         isShowGroup: data.isShowGroup,
+        thumbnailIdx: data.thumbnailIdx,
     });
     if (data.isShowGroup === true) {
         addShowGroup(data);

@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <section class="my_play_list"  v-if="dealiName">
+    <section class="my_play_list" v-if="myGroupKeys.length > 0">
       <h2>
         나의 플레이리스트
       </h2>
