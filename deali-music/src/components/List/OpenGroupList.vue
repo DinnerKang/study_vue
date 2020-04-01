@@ -21,7 +21,7 @@ import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/service/Grou
 
 const getGroupData = (userInfo, openGroupData, store) => {
     const groupData = ref({});
-    let getImage = ref('');
+    let getImage = ref(null);
     
 
     const data = {
@@ -41,7 +41,8 @@ const getGroupData = (userInfo, openGroupData, store) => {
 
 
     watch(() => getImage.value, (newValue) => {
-        if (!newValue.value || !newValue) return;
+        if (!newValue) return;
+        if (!newValue.value) return;
         getImage.value = newValue.value;
     })
 
