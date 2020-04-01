@@ -41,8 +41,8 @@
             </div>
             <div class="option_area">
                 <img class="option_icon" :src="menuIcon" alt="메뉴" />
-                <div class="sound_area" @click="isHoverSound=!isHoverSound">
-                    <img class="option_icon" :src="soundIcon" alt="소리" />
+                <div class="sound_area">
+                    <img class="option_icon" :src="soundIcon" alt="소리"  @click="isHoverSound=!isHoverSound" />
                     <div class="slider_area" v-if="isHoverSound">
                         <input id="slider" :style="{ background : sliderBackground }" 
                         type="range" value="50" min="0" max="100" v-model="controlSound"/>
@@ -166,7 +166,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 footer {
-    position: fixed;
+    position: sticky;
     bottom: 0;
     width: 100%;
     min-width: 1024px;
@@ -327,13 +327,6 @@ input:focus{
         height: 10px; 
         border-radius: 0.8px;
         background-color: $Main;
-    }
-}
-
-
-@media screen and (max-width: 1024px) {
-    footer{
-        position: static;
     }
 }
 </style>

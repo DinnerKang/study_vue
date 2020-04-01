@@ -23,7 +23,7 @@
 import { computed } from '@vue/composition-api';
 import * as firebase from 'firebase/app';
 import "firebase/auth";
-import SearchBar from '../Search/SearchBar';
+import SearchBar from '../search/SearchBar';
 
 const getUserInfo = (store, router) => {
     const userName = computed(() => store.state.login.userName);

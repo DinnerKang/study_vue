@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import TheHeader from '../components/Menu/TheHeader';
-import TheFooter from '@/components/Menu/TheFooter';
+import TheHeader from '../components/menu/TheHeader';
+import TheFooter from '@/components/menu/TheFooter';
 import { computed, watch } from '@vue/composition-api';
 
 export default {

@@ -46,6 +46,7 @@ export default {
  }
  .main{
         width: 1024px;
-        margin: 0 auto 100px;
+        min-height: calc(100vh - 128px);
+        margin: 0 auto;
     }
 </style>

@@ -65,10 +65,10 @@
 import { ref, computed, watch, onBeforeUnmount, reactive, toRefs } from "@vue/composition-api";
 import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroup } from '@/service/Group';
 
-import Modal  from '@/components/Common/Modal';
-import OpenGroupList from '@/components/List/OpenGroupList';
-import RadioBtn from '@/components/Common/RadioBtn';
-import ThumbnailArea from '@/components/MyPage/ThumbnailArea';
+import Modal  from '@/components/common/Modal';
+import OpenGroupList from '@/components/list/OpenGroupList';
+import RadioBtn from '@/components/common/RadioBtn';
+import ThumbnailArea from '@/components/myPage/ThumbnailArea';
 
 
 const myGroup = (userInfo) => {
@@ -150,6 +150,8 @@ const modalEvent = (userInfo) => {
     });
 
     const saveGroup = () => {
+        if (!modalData.groupName) return alert('그룹 이름을 적어주세요.');
+        if (modalData.thumbnailIdx === null) return alert('썸네일을 선택해주세요.');
         isEdit.value === false ? addMyGroup(modalData) : editMyGroup(modalData);
         closeModal();
     };

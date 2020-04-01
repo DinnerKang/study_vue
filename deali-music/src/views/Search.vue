@@ -9,7 +9,7 @@ import { ref, watch } from "@vue/composition-api";
 import { getYoutubeData } from "../service/Youtube.js";
 import youtubeKey from "../../youtubeConfig";
 
-import MusicRegist from '../components/MyPage/MusicRegist';
+import MusicRegist from '@/components/myPage/MusicRegist';
 
 const showYoutubeData = () => {
   let searchResult = ref("");

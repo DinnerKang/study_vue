@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import MusicList from "../components/MyPage/MusicList";
+import MusicList from "../components/myPage/MusicList";
 import { addVideoStatus } from "@/service/Status";
 import { getControlLoungeStatus } from '@/service/Control';
 import { ref, watch, onMounted } from "@vue/composition-api";

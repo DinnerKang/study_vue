@@ -10,7 +10,7 @@
 
 <script>
 import { ref, watch } from "@vue/composition-api";
-import MusicList from '../components/MyPage/MusicList';
+import MusicList from '@/components/myPage/MusicList';
 
 const youtubeData = () => {
     let player = {};
