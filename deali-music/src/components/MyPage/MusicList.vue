@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { getMusicListByGroup, deleteMusic } from '@/service/Music';
+import { getMusicListByGroup, deleteMusic } from '@/services/Music';
 import { ref, computed, watch } from '@vue/composition-api';
 
 const setMusicList = (props, dealiName, router ,emit) => {

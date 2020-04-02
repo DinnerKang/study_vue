@@ -16,8 +16,8 @@
 
 <script>
 import { ref } from '@vue/composition-api';
-import { getGroupListByKey } from '@/service/Group';
-import { getMusicListByGroup } from '@/service/Music';
+import { getGroupListByKey } from '@/services/Group';
+import { getMusicListByGroup } from '@/services/Music';
 
 
 

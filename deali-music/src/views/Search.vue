@@ -6,7 +6,7 @@
 
 <script>
 import { ref, watch } from "@vue/composition-api";
-import { getYoutubeData } from "../service/Youtube.js";
+import { getYoutubeData } from "@/services/Youtube.js";
 import youtubeKey from "../../youtubeConfig";
 
 import MusicRegist from '@/components/myPage/MusicRegist';

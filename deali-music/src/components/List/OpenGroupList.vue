@@ -17,7 +17,7 @@
 
 <script>
 import { computed, ref, watch } from '@vue/composition-api';
-import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/service/Group';
+import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/services/Group';
 
 const getGroupData = (userInfo, openGroupData, store) => {
     const groupData = ref({});
@@ -107,7 +107,7 @@ export default {
         },
         width: {
             type: String,
-            default: '238',
+            default: '240',
         },
         height: {
             type: String,
@@ -155,7 +155,6 @@ export default {
 
 <style lang="scss" scoped>
     .group_container{
-        border: 1px solid $Black;
         box-sizing: border-box;
         border-radius: 8px;
         color: $White;

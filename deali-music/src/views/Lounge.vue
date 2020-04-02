@@ -7,8 +7,8 @@
 
 <script>
 import MusicList from "../components/myPage/MusicList";
-import { addVideoStatus } from "@/service/Status";
-import { getControlLoungeStatus } from '@/service/Control';
+import { addVideoStatus } from "@/services/Status";
+import { getControlLoungeStatus } from '@/services/Control';
 import { ref, watch, onMounted } from "@vue/composition-api";
 
 

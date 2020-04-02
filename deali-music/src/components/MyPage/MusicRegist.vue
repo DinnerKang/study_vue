@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import { registMusic } from '@/service/Music';
-import { getGroupList } from '@/service/Group';
+import { registMusic } from '@/services/Music';
+import { getGroupList } from '@/services/Group';
 import { computed, ref } from '@vue/composition-api';
 
 const clickEvent = (userInfo) => {

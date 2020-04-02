@@ -14,8 +14,8 @@
       <h2>
         공개 플레이리스트
       </h2>
-      <div class="recomend_group_list">
-        <article v-for="(list, idx) in openGroupList" :key="idx">
+      <div class="recomend_group">
+        <article v-for="(list, idx) in openGroupList" :key="idx" class="recomend_group_list">
           <open-group-list :openGroupData="list"></open-group-list>
         </article>
       </div>
@@ -27,8 +27,8 @@
 import { ref, computed, watch } from '@vue/composition-api';
 import MyGroupList from '@/components/list/MyGroupList';
 import openGroupList from '@/components/list/OpenGroupList';
-import { getOpenGroup } from '@/service/Group';
-import { getMusicListByGroup } from '@/service/Music';
+import { getOpenGroup } from '@/services/Group';
+import { getMusicListByGroup } from '@/services/Music';
 
 const myGroup = (userInfo) => {
   const myGroupKeys = ref([]);
@@ -118,12 +118,17 @@ export default {
       margin-bottom: 48px;
     }
 
-    .recomend_group_list{
+    .recomend_group{
       display: grid;
-      gap: 10px 24px;
+      gap: 10px 20px;
       grid-template-rows: 250px;
       grid-template-columns: repeat(4, 1fr);
       margin-bottom: 300px;
+
+      .recomend_group{
+        display: flex;
+        justify-content: center;
+      }
     }
   }
 </style>

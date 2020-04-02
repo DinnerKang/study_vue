@@ -56,8 +56,8 @@
 
 <script>
 import { ref, onMounted, onBeforeUnmount, watch } from "@vue/composition-api";
-import { videoController, soundControl, getControlLoungeStatus } from "@/service/Control";
-import { getLoungeStatus } from "@/service/Status";
+import { videoController, soundControl, getControlLoungeStatus } from "@/services/Control";
+import { getLoungeStatus } from "@/services/Status";
 
 let timer = null;
 const controlVideo = () => {
