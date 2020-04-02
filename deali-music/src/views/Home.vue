@@ -15,7 +15,7 @@
         공개 플레이리스트
       </h2>
       <div class="recomend_group">
-        <article v-for="(list, idx) in openGroupList" :key="idx" class="recomend_group_list">
+        <article v-for="(list, idx) in openGroups" :key="idx" class="recomend_group_list">
           <open-group-list :openGroupData="list"></open-group-list>
         </article>
       </div>
@@ -26,9 +26,9 @@
 <script>
 import { ref, computed, watch } from '@vue/composition-api';
 import MyGroupList from '@/components/list/MyGroupList';
-import openGroupList from '@/components/list/OpenGroupList';
-import { getOpenGroup } from '@/services/Group';
 import { getMusicListByGroup } from '@/services/Music';
+import { openGroup } from '@/composible/openGroup';
+import openGroupList from '@/components/list/OpenGroupList';
 
 const myGroup = (userInfo) => {
   const myGroupKeys = ref([]);
@@ -58,20 +58,6 @@ const myGroup = (userInfo) => {
   }
 };
 
-const openGroup = () => {
-  const openGroupList = ref([]);
-  const likeGroupList = ref([]);
-  
-  getOpenGroup().once('value', snapshot => {
-    if (!snapshot.val()) return;
-    openGroupList.value = Object.values(snapshot.val()).sort(() => Math.random() - Math.random());
-  });
-  
-  return {
-    openGroupList,
-    likeGroupList,
-  }
-};
 
 export default {
   name: 'Home',
@@ -83,7 +69,6 @@ export default {
     const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
     const dealiName = computed(()=> root.$store.getters['login/getUserStatus'].dealiName);
     const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
-    const { openGroupList } = openGroup(dealiName);
 
     watch(dealiName, newValue => {
        if (newValue) getMyGroupList();
@@ -91,7 +76,7 @@ export default {
 
     return {
       myGroupKeys,
-      openGroupList,
+      ...openGroup(),
       dealiName,
       userInfo,
     }
