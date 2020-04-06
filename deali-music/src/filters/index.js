@@ -46,5 +46,26 @@ export default {
         result = mm + ':' + ss;
         
         return result;
-    }
+    },
+
+    setYoutubeTime(value) {
+        if (!value) return;
+        let match = value.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+
+        match = match.slice(1).map(function(x) {
+          if (x != null) {
+              return x.replace(/\D/, '');
+          }
+        });
+      
+        let hours = parseInt(match[0]) || 0;
+        let minutes = parseInt(match[1]) || 0;
+        let seconds = parseInt(match[2]) || 0;
+        
+        if (hours < 10) hours = '0' + hours;
+        if (minutes < 10) minutes = '0' + minutes;
+        if (seconds < 10) seconds = '0' + seconds;
+
+        return hours + ':' + minutes + ':' + seconds;
+    },
 }

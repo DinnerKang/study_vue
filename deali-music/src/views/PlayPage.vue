@@ -1,7 +1,8 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="groupName" :groupKey="groupKey" :is-list="true" />
+        <music-list v-model="myMusicList" :group-name="groupName" :groupKey="groupKey" :is-list="true"
+        @click-music="changeMusic" />
         <div class="empty_area" v-if="!isList" >
             노래를 추가해주세요.
         </div>
@@ -10,7 +11,7 @@
 
 <script>
 import { ref, watch } from "@vue/composition-api";
-import MusicList from '@/components/myPage/MusicList';
+import MusicList from '@/components/list/MusicList';
 
 const youtubeData = () => {
     let player = {};
@@ -34,10 +35,15 @@ const youtubeData = () => {
         });
     };
 
+    const changeMusic = (idx) => {
+        player.playVideoAt(idx);
+    };
+
     return {
         player,
         myMusicList,
         onYouTubeIframeAPIReady,
+        changeMusic,
     }
 }
 
@@ -47,7 +53,7 @@ export default {
     setup(props, { root }){
         const { groupKey } = root.$route.query;
         const { groupName } = root.$route.query;
-        const { player, myMusicList, onYouTubeIframeAPIReady } = youtubeData();
+        const { player, myMusicList, onYouTubeIframeAPIReady, changeMusic } = youtubeData();
         const isList = ref(true);
         watch(myMusicList, () => {
             if (myMusicList.value.length === 0) {
@@ -65,6 +71,7 @@ export default {
             player,
             onYouTubeIframeAPIReady,
             isList,
+            changeMusic,
         }
     },
 }

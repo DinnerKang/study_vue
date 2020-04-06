@@ -1,12 +1,12 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="'lounge'" :is-list="true" />
+        <music-list v-model="myMusicList" :group-name="'lounge'" :group-key="'lounge'" :is-list="true"/>
     </div>
 </template>
 
 <script>
-import MusicList from "../components/myPage/MusicList";
+import MusicList from "@/components/list/MusicList";
 import { addVideoStatus } from "@/services/Status";
 import { getControlLoungeStatus } from '@/services/Control';
 import { ref, watch, onMounted } from "@vue/composition-api";
@@ -35,7 +35,6 @@ const youtubeData = () => {
     };
 
     const addPlayList = () => {
-        console.log(myMusicList.value);
         playList.value = myMusicList.value.map(item => item.videoId);
         player.value.cuePlaylist({
             playlist: playList.value,
@@ -60,6 +59,10 @@ const youtubeData = () => {
         addVideoStatus(data);
     };
 
+    const changeMusic = (idx) => {
+        console.log(idx);
+    };
+
 
     return {
         player,
@@ -67,6 +70,7 @@ const youtubeData = () => {
         isReady,
         onYouTubeIframeAPIReady,
         addPlayList,
+        changeMusic,
     }
 };
 
@@ -93,12 +97,13 @@ export default {
     },
     setup(props, { root }) {
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
-        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
+        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList, changeMusic } = youtubeData();
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
 
             if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
+            if (newValue.idx >= 0) return player.value.playVideoAt(newValue.idx);
             if (newValue.status === "start") return player.value.playVideo();
             if (newValue.status === "stop") return player.value.pauseVideo();
             if (newValue.status === "prev") return player.value.previousVideo();
@@ -122,9 +127,9 @@ export default {
         });
 
         return{
-            player,
             myMusicList,
             musicStatus,
+            changeMusic,
         }
     }
 }

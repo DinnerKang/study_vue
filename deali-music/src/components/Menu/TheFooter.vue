@@ -39,16 +39,18 @@
                     <div>{{ videoStatus.playTime | getTime}}</div>
                 </div>
             </div>
-            <div class="option_area">
-                <img class="option_icon" :src="menuIcon" alt="메뉴" />
+            <div class="option_area" v-click-outside="menuControl">
                 <div class="sound_area">
-                    <img class="option_icon" :src="soundIcon" alt="소리"  @click="isHoverSound=!isHoverSound" />
-                    <div class="slider_area" v-if="isHoverSound">
+                    <img class="option_icon" :src="soundIcon" alt="소리"  @click="isSound=!isSound" />
+                    <div class="slider_area" v-if="isSound">
                         <input id="slider" :style="{ background : sliderBackground }" 
                         type="range" value="50" min="0" max="100" v-model="controlSound"/>
                     </div>
                 </div>
-                
+                <img class="option_icon" :src="menuIcon" alt="메뉴" @click="isMenu=!isMenu" />
+                <div class="menu_area" v-show="isMenu" >
+                    <music-list :group-name="'lounge'" :group-key="'lounge'" :is-list="true" @close-menu="isMenu = false" />
+                </div>
             </div>
         </div>
     </footer>
@@ -58,6 +60,8 @@
 import { ref, onMounted, onBeforeUnmount, watch } from "@vue/composition-api";
 import { videoController, soundControl, getControlLoungeStatus } from "@/services/Control";
 import { getLoungeStatus } from "@/services/Status";
+import MusicList from '@/components/list/MusicList';
+import ClickOutside from 'vue-click-outside';
 
 let timer = null;
 const controlVideo = () => {
@@ -131,8 +135,16 @@ const iconData = () => {
 
 
 export default {
+    name: 'TheFooter',
+    components: {
+        MusicList,
+    },
+    directives: {
+        ClickOutside,
+    },
     setup() {
-        const isHoverSound = ref(false);
+        const isSound = ref(false);
+        const isMenu = ref(false);
         const {
             videoControl,
             videoStatus,
@@ -143,6 +155,9 @@ export default {
             initSound,
         } = controlVideo();
         
+        const menuControl = () => {
+            isMenu.value = false;
+        }
 
         onMounted(()=> {
             getStatus();
@@ -153,12 +168,14 @@ export default {
         });
 
         return {
+            menuControl,
             videoControl,
             videoStatus,
             playerStart,
             controlSound,
             sliderBackground,
-            isHoverSound,
+            isSound,
+            isMenu,
             ...iconData()
         };
     }
@@ -182,6 +199,14 @@ footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        .menu_area{
+            width: 400px;
+            height: 600px;
+            position: absolute;
+            right: 0;
+            bottom: 72px;
+        }
     }
 
     .name_area {

@@ -7,7 +7,6 @@
 <script>
 import { ref, watch } from "@vue/composition-api";
 import { getYoutubeData } from "@/services/Youtube.js";
-import youtubeKey from "../../youtubeConfig";
 
 import MusicRegist from '@/components/myPage/MusicRegist';
 
@@ -16,13 +15,7 @@ const showYoutubeData = () => {
 
   const getYotube = async (searchText) => {
     try {
-      const params = {
-        key: youtubeKey,
-        part: "snippet",
-        q: searchText,
-        maxResults: 9
-      };
-      const { data } = await getYoutubeData(params);
+      const { data } = await getYoutubeData(searchText);
       searchResult.value = data;
     } catch (e) {
       if (e.status === 403) alert('검색 사용량이 초과하였습니다. 추가하실려면 커피사주세요.');

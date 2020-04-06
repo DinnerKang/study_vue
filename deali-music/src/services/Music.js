@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
+import { getYoutubeDetail } from './Youtube';
 // import Store from '@/store';
 
 
@@ -12,14 +13,15 @@ export function getMusicListByGroup(data) {
 
 // Write
 
-export function registMusic(data) {
-    // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
-    firebase.database().ref(`music/${data.dealiName}/${data.groupKey}`).push({
-        thumbnails: data.thumbnails,
-        musicName: data.musicName,
-        videoId: data.videoId,
-        registDate: data.registDate,
-        dealiName: data.dealiName,
+export async function registMusic(searchResult) {
+    const { data } = await getYoutubeDetail(searchResult.videoId);
+    
+    await firebase.database().ref(`music/${searchResult.dealiName}/${searchResult.groupKey}`).push({
+        thumbnails: searchResult.thumbnails,
+        musicName: searchResult.musicName,
+        videoId: searchResult.videoId,
+        dealiName: searchResult.dealiName,
+        duration: data.items[0].contentDetails.duration,
     });
     return alert('저장했습니다.');
 }
@@ -27,5 +29,5 @@ export function registMusic(data) {
 // Delete
 
 export function deleteMusic(data, key) {
-    firebase.database().ref(`music/${data.id}`).child(key).remove();
+    firebase.database().ref(`music/${data.dealiName}/${data.groupKey}`).child(key).remove();
 }

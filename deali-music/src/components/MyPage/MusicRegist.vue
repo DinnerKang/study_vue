@@ -28,10 +28,10 @@ import { computed, ref } from '@vue/composition-api';
 const clickEvent = (userInfo) => {
     
     const clickRegist = (item, groupData='lounge') => {
-
+        console.log(item);
         const dealiName = groupData === 'lounge' ? 'lounge' : userInfo.value.dealiName;
         
-        const data = {
+        const searchResult = {
             thumbnails: item.snippet.thumbnails.high.url,
             musicName: item.snippet.title,
             videoId: item.id.videoId,
@@ -40,7 +40,7 @@ const clickEvent = (userInfo) => {
             dealiName: dealiName,
             groupKey: groupData.myKey || 'lounge',
         };
-        registMusic(data);
+        registMusic(searchResult);
     }
 
     return {
