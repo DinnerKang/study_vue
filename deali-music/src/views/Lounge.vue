@@ -59,11 +59,6 @@ const youtubeData = () => {
         addVideoStatus(data);
     };
 
-    const changeMusic = (idx) => {
-        console.log(idx);
-    };
-
-
     return {
         player,
         myMusicList,
@@ -97,7 +92,7 @@ export default {
     },
     setup(props, { root }) {
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
-        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList, changeMusic } = youtubeData();
+        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
@@ -129,7 +124,6 @@ export default {
         return{
             myMusicList,
             musicStatus,
-            changeMusic,
         }
     }
 }
