@@ -25,8 +25,6 @@ export default {
         watch(userState, () => {
             userState.value === '딜리언즈' ? store.commit('menu/showFooter') : store.commit('menu/disableFooter');
         });
-        // 이미지 전체 불러오기
-        root.$store.dispatch('image/getAllThumbnails');
 
         return {
             isFooter,

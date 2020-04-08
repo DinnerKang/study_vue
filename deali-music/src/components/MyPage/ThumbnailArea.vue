@@ -7,27 +7,21 @@
 </template>
 
 <script>
-import { computed, onMounted, ref } from '@vue/composition-api';
+import { computed } from '@vue/composition-api';
+import { getImageAll } from '@/composible/thumbnails';
 
-const thumbnailsData = (props, store, emit) => {
+const thumbnailsData = (props, emit) => {
     const selectThumbnail = computed(() => props.value);
-    const thumbnailLists = ref([]);
+    const thumbnailLists = getImageAll();
    
     const clickThumbnail = idx => {
         emit('input', idx);
     };
-    const getThumbnails = () => {
-        const img = computed(()=> store.getters['image/getAllImages']);
-        thumbnailLists.value = img.value;
-    }
-
-    onMounted(() => getThumbnails());
 
     return {
         selectThumbnail,
         thumbnailLists,
         clickThumbnail,
-        getThumbnails,
     }
 };
 
@@ -37,10 +31,10 @@ export default {
             type: Number
         },
     },
-    setup(props, { root, emit }){
+    setup(props, { emit }){
 
         return {
-            ...thumbnailsData(props, root.$store, emit),
+            ...thumbnailsData(props, emit),
         }
     }
 }

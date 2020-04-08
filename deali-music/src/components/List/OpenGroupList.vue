@@ -18,34 +18,20 @@
 <script>
 import { computed, ref, watch } from '@vue/composition-api';
 import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/services/Group';
+import { getImageByIdx } from '@/composible/thumbnails';
 
-const getGroupData = (userInfo, openGroupData, store) => {
+const getGroupData = (userInfo, openGroupData) => {
     const groupData = ref({});
-    let getImage = ref(null);
+    const getImage = ref(null);
     
-
     const data = {
         dealiName: openGroupData.dealiName,
         key: openGroupData.targetKey,
     };
     getGroupListByKey(data).on('value', async snapshot =>{
         groupData.value = snapshot.val();
-        let img = computed(()=> store.getters['image/getImages'](snapshot.val().thumbnailIdx) || null);
-
-        store.watch((state, getters) => getters['image/getImages'](snapshot.val().thumbnailIdx), () => {
-            getImage.value = computed(()=> store.getters['image/getImages'](snapshot.val().thumbnailIdx) || null);
-        });
-        
-        getImage.value = img.value;
+        getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
     });
-
-
-    watch(() => getImage.value, (newValue) => {
-        if (!newValue) return;
-        if (!newValue.value) return;
-        getImage.value = newValue.value;
-    })
-
 
     return {
         groupData,
@@ -121,7 +107,7 @@ export default {
     setup(props, { root }) {
         const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
         
-        const { groupData, getImage } = getGroupData(userInfo, props.openGroupData, root.$store);
+        const { groupData, getImage } = getGroupData(userInfo, props.openGroupData);
         const { isLike, notIcon, likeIcon } = iconList();
         const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router, isLike);
 

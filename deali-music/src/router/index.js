@@ -53,7 +53,8 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.unauthorized) === false 
       && !Store.state.login.dealiName) {
-        return alert('로그인 해주세요.');
+        alert('로그인 해주세요.');
+        return next('/');
   }
   return next();
 });
