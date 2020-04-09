@@ -1,64 +1,67 @@
 <template>
     <div class="search_container">
-        <input type="text" class="search_text" v-model="searchText" placeholder="검색어를 입력하세요." 
-                    @keyup.enter="clickSearchBtn" />
+        <input
+            type="text"
+            class="search_text"
+            v-model="searchText"
+            placeholder="검색어를 입력하세요."
+            @keyup.enter="clickSearchBtn"
+        />
         <button class="search_btn" @click="clickSearchBtn">검색</button>
         <img :src="searchIcon" class="search_icon" alt="검색창" />
     </div>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
+import { ref } from "@vue/composition-api";
 
-const searchYoutube = (router) => {
-    
-    const searchText = ref('');
-    const searchIcon = require('@/assets/icons/search-black.png');
+const searchYoutube = router => {
+    const searchText = ref("");
+    const searchIcon = require("@/assets/icons/search-black.png");
     let searchDelay = true;
-
 
     const clickSearchBtn = () => {
         if (!searchDelay) return;
         searchDelay = false;
 
         router.push({
-                path: '/search',
-                query: { q : searchText.value },
-         });
-         
-        setTimeout(()=>{
+            path: "/search",
+            query: { q: searchText.value }
+        });
+
+        setTimeout(() => {
             searchDelay = true;
         }, 500);
-    }
+    };
 
     return {
         clickSearchBtn,
         searchText,
-        searchIcon,
-    }
-}
-
+        searchIcon
+    };
+};
 
 export default {
     setup(props, { root }) {
+        const { clickSearchBtn, searchText, searchIcon } = searchYoutube(
+            root.$router
+        );
 
-        const { clickSearchBtn, searchText, searchIcon } = searchYoutube(root.$router);
-        
         return {
             clickSearchBtn,
             searchText,
-            searchIcon,
+            searchIcon
         };
-    },
+    }
 };
 </script>
 
 <style lang="scss" scoped>
-::placeholder{
+::placeholder {
     color: $Gray400;
 }
 
-.search_container{
+.search_container {
     position: relative;
     width: 100%;
     height: 100%;
@@ -71,17 +74,17 @@ export default {
     box-sizing: border-box;
     border-radius: 4px;
 
-    .search_text{
+    .search_text {
         width: calc(100% - 35px);
         height: 26px;
         border: none;
 
-        &:focus{
+        &:focus {
             outline: none;
         }
     }
 
-    .search_btn{
+    .search_btn {
         background-color: $White;
         border: none;
         height: 26px;
@@ -89,7 +92,7 @@ export default {
         width: 40px;
         cursor: pointer;
     }
-    .search_icon{
+    .search_icon {
         position: absolute;
         left: 6px;
         width: 20px;

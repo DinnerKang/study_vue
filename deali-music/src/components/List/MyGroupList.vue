@@ -19,8 +19,6 @@ import { ref } from '@vue/composition-api';
 import { getGroupListByKey } from '@/services/Group';
 import { getMusicListByGroup } from '@/services/Music';
 
-
-
 const getMusicData = (targetName, groupKey) => {
     const musicData = ref({});
     const data = {
@@ -30,7 +28,6 @@ const getMusicData = (targetName, groupKey) => {
 
     getMusicListByGroup(data).once('value', snapshot => {
         if(!snapshot.val()) return;
-        console.log(snapshot.val());
         musicData.value = Object.values(snapshot.val())[0];
     });
 

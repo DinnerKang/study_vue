@@ -1,16 +1,20 @@
 <template>
     <div>
         <div id="player"></div>
-        <music-list v-model="myMusicList" :group-name="'lounge'" :group-key="'lounge'" :is-list="true"/>
+        <music-list
+            v-model="myMusicList"
+            :group-name="'lounge'"
+            :group-key="'lounge'"
+            :is-list="true"
+        />
     </div>
 </template>
 
 <script>
 import MusicList from "@/components/list/MusicList";
 import { addVideoStatus } from "@/services/Status";
-import { getControlLoungeStatus } from '@/services/Control';
+import { getControlLoungeStatus } from "@/services/Control";
 import { ref, watch, onMounted } from "@vue/composition-api";
-
 
 const youtubeData = () => {
     const myMusicList = ref([]);
@@ -18,12 +22,12 @@ const youtubeData = () => {
     const player = ref({});
     const isReady = ref(false);
     const playList = ref([]);
-    
+
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
-            playerVars: { 
+            playerVars: {
                 origin: "https://vue-pwa-776e7.firebaseapp.com",
-                loop: 1, 
+                loop: 1
             },
             height: "360",
             width: "640",
@@ -37,24 +41,23 @@ const youtubeData = () => {
     const addPlayList = () => {
         playList.value = myMusicList.value.map(item => item.videoId);
         player.value.cuePlaylist({
-            playlist: playList.value,
+            playlist: playList.value
         });
         isReady.value = true;
 
-        setTimeout(()=>{
+        setTimeout(() => {
             player.value.playVideo();
         }, 1000);
     };
 
-    const stateChange = (event) => {
+    const stateChange = event => {
         const data = {
             status: event.data,
             currentTime: player.value.getCurrentTime(),
             playTime: player.value.getDuration(),
             videoName: myMusicList.value.filter(
-                item =>
-                    item.videoId === player.value.getVideoData()["video_id"]
-            )[0].musicName,
+                item => item.videoId === player.value.getVideoData()["video_id"]
+            )[0].musicName
         };
         addVideoStatus(data);
     };
@@ -64,10 +67,9 @@ const youtubeData = () => {
         myMusicList,
         isReady,
         onYouTubeIframeAPIReady,
-        addPlayList,
-    }
+        addPlayList
+    };
 };
-
 
 const youtubeStatus = () => {
     let musicStatus = ref({});
@@ -80,8 +82,8 @@ const youtubeStatus = () => {
 
     return {
         observeLoungeStatus,
-        musicStatus,
-    }
+        musicStatus
+    };
 };
 
 export default {
@@ -91,7 +93,13 @@ export default {
     },
     setup(props, { root }) {
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
-        const { player, myMusicList, isReady, onYouTubeIframeAPIReady, addPlayList } = youtubeData();
+        const {
+            player,
+            myMusicList,
+            isReady,
+            onYouTubeIframeAPIReady,
+            addPlayList
+        } = youtubeData();
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
@@ -102,12 +110,11 @@ export default {
             if (newValue.status === "stop") return player.value.pauseVideo();
             if (newValue.status === "prev") return player.value.previousVideo();
             if (newValue.status === "next") return player.value.nextVideo();
-            
         });
 
         watch(myMusicList, () => {
             if (myMusicList.value.length === 0) return;
-            
+
             if (isReady.value === true) {
                 addPlayList();
             } else {
@@ -115,18 +122,17 @@ export default {
             }
         });
 
-        root.$store.commit('menu/disableFooter');
-        onMounted(()=> {
+        root.$store.commit("menu/disableFooter");
+        onMounted(() => {
             observeLoungeStatus();
         });
 
-        return{
+        return {
             myMusicList,
-            musicStatus,
-        }
+            musicStatus
+        };
     }
-}
-
+};
 </script>
 
 <style lang="scss" scoped>

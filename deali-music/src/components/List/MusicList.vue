@@ -184,6 +184,7 @@ export default {
             border: none;
             background-color: $White;
             cursor: pointer;
+            margin-left: 10px;
           }
       }
     }
