@@ -61,7 +61,7 @@ export default {
 
             .close_area{
                 width: 100%;
-                height: 20px;
+                height: 30px;
                 padding-left: 10px;
                 margin-bottom: 30px;
                 display: flex;
@@ -70,8 +70,8 @@ export default {
                 box-sizing: border-box;
 
                 .close_icon{
-                    width: 10px;
-                    height: 10px;
+                    width: 15px;
+                    height: 15px;
                     border-radius: 50%;
                     background-color: #fa8282;
                     cursor: pointer;

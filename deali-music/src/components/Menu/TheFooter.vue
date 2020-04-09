@@ -6,26 +6,28 @@
                 <div class="music_name_area">{{ videoStatus.videoName }}</div>
             </div>
             <div class="controll_area">
-                <img class="icon_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
-                <img
-                    v-if="videoStatus.status!==1"
-                    class="icon_btn start_icon"
-                    :src="startIcon"
-                    @click="videoControl('start')"
-                    alt="시작"
-                />
-                <img v-else
-                    class="icon_btn start_icon"
-                    :src="stopIcon"
-                    @click="videoControl('stop')"
-                    alt="중지"
-                />
-                <img
-                    class="icon_btn next_btn"
-                    :src="nextIcon"
-                    @click="videoControl('next')"
-                    alt="다음곡"
-                />
+                <div class="controll_icon">
+                    <img class="icon_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
+                    <img
+                        v-if="videoStatus.status!==1"
+                        class="icon_btn start_icon"
+                        :src="startIcon"
+                        @click="videoControl('start')"
+                        alt="시작"
+                    />
+                    <img v-else
+                        class="icon_btn start_icon"
+                        :src="stopIcon"
+                        @click="videoControl('stop')"
+                        alt="중지"
+                    />
+                    <img
+                        class="icon_btn next_btn"
+                        :src="nextIcon"
+                        @click="videoControl('next')"
+                        alt="다음곡"
+                    />
+                </div>
                 <div class="bar_area">
                     <div>{{ videoStatus.currentTime | getTime(playerStart) }}</div>
                     <div class="percent_area">
@@ -100,7 +102,7 @@ const controlVideo = () => {
     };
 
     watch(controlSound, (newValue, oldValue) => {
-        sliderBackground.value = `linear-gradient(to right, #00dbdb 0%, #00dbdb ${newValue}%, #fff ${newValue}%, #fff 100%)`;
+        sliderBackground.value = `linear-gradient(to right, #00dbdb 0%, #00dbdb ${newValue}%, #888888 ${newValue}%, #888888 100%)`;
 
         if (oldValue === null) return;
         soundControl(newValue);
@@ -118,10 +120,10 @@ const controlVideo = () => {
 };
 
 const iconData = () => {
-    const startIcon = require("../../assets/icons/start-white.png");
-    const menuIcon = require("../../assets/icons/menu-white.png");
-    const soundIcon = require("../../assets/icons/sound-white.png");
-    const nextIcon = require("../../assets/icons/prev-white.png");
+    const startIcon = require("../../assets/icons/start-black.png");
+    const menuIcon = require("../../assets/icons/menu-black.png");
+    const soundIcon = require("../../assets/icons/sound-black.png");
+    const nextIcon = require("../../assets/icons/prev-black.png");
     const stopIcon = require('../../assets/icons/stop-white.png');
 
     return {
@@ -188,8 +190,8 @@ footer {
     width: 100%;
     min-width: 1024px;
     height: 72px;
-    background-color: #000;
-    color: $White;
+    background-color: $WhiteGray;
+    color: $Black;
 
     .footer_area {
         width: 1024px;
@@ -228,6 +230,7 @@ footer {
             text-overflow: ellipsis;
             width: 200px;
             white-space: nowrap;
+            color: $Black;
         }
     }
     .icon_btn {
@@ -251,12 +254,18 @@ footer {
         left: 50%;
         transform: translateX(-50%);
         display: flex;
-        align-items: center;
         justify-content: center;
+
+        .controll_icon{
+            position: absolute;
+            top: 25%;
+            display: flex;
+            align-items: center;
+        }
 
         .bar_area {
             position: absolute;
-            bottom: 4px;
+            bottom: 8px;
             font-size: 10px;
             display: flex;
             align-items: center;
@@ -322,13 +331,13 @@ input:focus{
     #slider{
         border-radius: 6px;
         border: none;
-        background: #fff;
+        background: $Gray600;
         height: 3px;
         width: 78px;
         cursor: pointer; 
     }
     #slider::-moz-range-thumb {
-        background: #ffffff; 
+        background: $White; 
         border: none;
         width: 5px;
         height: 10px; 

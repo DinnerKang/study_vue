@@ -22,6 +22,7 @@ export async function registMusic(searchResult) {
         videoId: searchResult.videoId,
         dealiName: searchResult.dealiName,
         duration: data.items[0].contentDetails.duration,
+        register: searchResult.register,
     });
     return alert('저장했습니다.');
 }

@@ -5,7 +5,7 @@
             <li class="item_lists" v-for="(list, idx) in searchResult.items" :key="idx">  
                 <img v-if="list.snippet.thumbnails" :src='list.snippet.thumbnails.medium.url' class="thumbnails" alt="유튜브 썸네일"/>
                 <div class="text_area">
-                    <h3>{{list.snippet.title}}</h3>
+                    <h3>{{list.snippet.title | decodeStr}}</h3>
                     <div class="sub_text">
                         <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
                         <button class="btn" @click="clickRegist(list)">담기</button>
@@ -24,19 +24,20 @@
 import { registMusic } from '@/services/Music';
 import { getGroupList } from '@/services/Group';
 import { computed, ref } from '@vue/composition-api';
+import { decodeStr } from '@/composible/decodeStr';
 
 const clickEvent = (userInfo) => {
     
     const clickRegist = (item, groupData='lounge') => {
-        console.log(item);
         const dealiName = groupData === 'lounge' ? 'lounge' : userInfo.value.dealiName;
-        
+        const register = userInfo.value.userName;
+
         const searchResult = {
             thumbnails: item.snippet.thumbnails.high.url,
-            musicName: item.snippet.title,
+            musicName: decodeStr(item.snippet.title),
             videoId: item.id.videoId,
             registDate: String(new Date()),
-            
+            register: register,
             dealiName: dealiName,
             groupKey: groupData.myKey || 'lounge',
         };

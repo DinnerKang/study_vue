@@ -65,7 +65,6 @@ const youtubeData = () => {
         isReady,
         onYouTubeIframeAPIReady,
         addPlayList,
-        changeMusic,
     }
 };
 

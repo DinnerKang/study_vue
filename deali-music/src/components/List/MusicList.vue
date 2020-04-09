@@ -6,9 +6,13 @@
       </div>
       <ul class="music_container__list_area">
         <li class="music_container__list" v-for="(list, idx) in musicList" :key="idx">
-          <div class="music_name" @click="clickMusic(idx)">{{list.musicName}}</div>
-          <div class="music_duration">{{list.duration | setYoutubeTime}}</div>
-          <button type="button" @click="removeMusic(idx)">X</button>
+          <div class="list_idx">{{idx + 1}}</div>
+          <div class="list_info">
+            <div class="list_music_register">{{list.register}}</div>
+            <div class="list_muisc_name" @click="clickMusic(idx)">{{list.musicName}}</div>
+          </div>
+          <div class="list_duration">{{list.duration | setYoutubeTime}}</div>
+          <button type="button" class="delete_btn" @click="removeMusic(idx)">X</button>
         </li>
       </ul>
     </article>
@@ -37,6 +41,7 @@ const setMusicList = (props, emit, dealiName, isLounge) => {
     };
 
     const removeMusic = (idx) => {
+        if (!confirm('삭제하시겠습니까 ?')) return;
         const data = {
             dealiName: isLounge ? 'lounge' : dealiName.value,
             groupKey: isLounge ? 'lounge' : props.groupKey,
@@ -108,23 +113,26 @@ export default {
   .music_container{
     width: 100%;
     height: 100%;
-    padding: 15px;
     box-sizing: border-box;
-    background-color: #000;
+    background-color: $White;
+    color: $Black;
+    box-shadow: 3px 0px 50px rgba(0, 0, 0, 0.05);
     
     .music_header{
       width: 100%;
       height: 45px;
-      border-bottom: 1px solid $White;
+      border-bottom: 1px solid $Gray400;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 0 15px;
+      box-sizing: border-box;
       margin-bottom: 20px;
 
       h2{
-        font-size: 15px;
+        margin: 0;
+        font-size: 12px;
         font-weight: bold;
-        color: $White;
       }
       .close_icon{
         width: 15px;
@@ -140,24 +148,42 @@ export default {
 
       .music_container__list{
         width: 100%;
-        padding: 0 30px;
+        height: 30px;
+        padding: 0 15px;
         box-sizing: border-box;
         display: flex;
         align-items: center;
-        margin-bottom : 25px;
+        margin-bottom : 20px;
 
-          .music_name{
-            width: 80%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: $White;
-            font-size: 15px;
-            cursor: pointer;
+          .list_idx{
+            width: 40px;
+            text-align: center;
           }
-          .music_duration{
+
+          .list_info{
+            width: 250px;
+
+            .list_music_register{
+              font-size: 11px;
+              color: $Gray400;
+            }
+
+            .list_muisc_name{
+              width: 100%;
+              font-size: 15px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              cursor: pointer;
+            }
+          }
+          .list_duration{
             font-size: 12px;
-            color: $White;
+          }
+          .delete_btn{
+            border: none;
+            background-color: $White;
+            cursor: pointer;
           }
       }
     }
