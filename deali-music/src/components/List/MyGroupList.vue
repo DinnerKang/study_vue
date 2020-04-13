@@ -114,6 +114,7 @@ export default {
         position: relative;
         cursor: pointer;
         background-color: $Black;
+        overflow: hidden;
 
         .youtube_img{
             width: 100%;

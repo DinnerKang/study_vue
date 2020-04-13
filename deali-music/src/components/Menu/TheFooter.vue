@@ -2,7 +2,7 @@
     <footer class="myPage_container">
         <div class="footer_area">
             <div class="name_area">
-                <div class="picture_area"></div>
+                <img :src="musicIcon" class="picture_area" />
                 <div class="music_name_area">{{ videoStatus.videoName }}</div>
             </div>
             <div class="controll_area">
@@ -15,7 +15,8 @@
                         @click="videoControl('start')"
                         alt="시작"
                     />
-                    <img v-else
+                    <img
+                        v-else
                         class="icon_btn start_icon"
                         :src="stopIcon"
                         @click="videoControl('stop')"
@@ -43,16 +44,33 @@
             </div>
             <div class="option_area" v-click-outside="menuControl">
                 <div class="sound_area">
-                    <img class="option_icon" :src="soundIcon" alt="소리"  @click="isSound=!isSound" />
-                    <div class="slider_area" v-if="isSound">
-                        <input id="slider" :style="{ background : sliderBackground }" 
-                        type="range" value="50" min="0" max="100" v-model="controlSound"/>
-                    </div>
+                    <img class="option_icon" :src="soundIcon" alt="소리" @click="isSound=!isSound" />
+                    <transition name="slide">
+                        <div class="slider_area" v-if="isSound">
+                                <input
+                                    id="slider"
+                                    :style="{ background : sliderBackground }"
+                                    type="range"
+                                    value="50"
+                                    min="0"
+                                    max="100"
+                                    v-model="controlSound"
+                                />
+                        </div>
+                    </transition>
                 </div>
                 <img class="option_icon" :src="menuIcon" alt="메뉴" @click="isMenu=!isMenu" />
-                <div class="menu_area" v-show="isMenu" >
-                    <music-list :group-name="'lounge'" :group-key="'lounge'" :is-list="true" @close-menu="isMenu = false" />
-                </div>
+                <transition name="slideTop">
+                    <div class="menu_area" v-if="isMenu">
+                        <music-list
+                            :group-name="'lounge'"
+                            :group-key="'lounge'"
+                            :is-list="true"
+                            :now-music="videoStatus.videoName"
+                            @close-menu="isMenu = false"
+                        />
+                    </div>
+                </transition>
             </div>
         </div>
     </footer>
@@ -60,10 +78,14 @@
 
 <script>
 import { ref, onMounted, onBeforeUnmount, watch } from "@vue/composition-api";
-import { videoController, soundControl, getControlLoungeStatus } from "@/services/Control";
+import {
+    videoController,
+    soundControl,
+    getControlLoungeStatus
+} from "@/services/Control";
 import { getLoungeStatus } from "@/services/Status";
-import MusicList from '@/components/list/MusicList';
-import ClickOutside from 'vue-click-outside';
+import MusicList from "@/components/list/MusicList";
+import ClickOutside from "vue-click-outside";
 
 let timer = null;
 const controlVideo = () => {
@@ -77,9 +99,13 @@ const controlVideo = () => {
             videoStatus.value = snapshot.val();
 
             if (videoStatus.value.status === 1) {
-                if (timer===null) {
-                    timer = setInterval(() =>{
-                        if (videoStatus.value.currentTime > videoStatus.value.playTime) return;
+                if (timer === null) {
+                    timer = setInterval(() => {
+                        if (
+                            videoStatus.value.currentTime >
+                            videoStatus.value.playTime
+                        )
+                            return;
                         videoStatus.value.currentTime += 1;
                     }, 1000);
                 }
@@ -96,7 +122,7 @@ const controlVideo = () => {
     };
 
     const initSound = () => {
-        getControlLoungeStatus().once('value', snapshot =>{
+        getControlLoungeStatus().once("value", snapshot => {
             controlSound.value = snapshot.val().volume;
         });
     };
@@ -115,16 +141,17 @@ const controlVideo = () => {
         getStatus,
         controlSound,
         sliderBackground,
-        initSound,
+        initSound
     };
 };
 
 const iconData = () => {
-    const startIcon = require("../../assets/icons/start-black.png");
-    const menuIcon = require("../../assets/icons/menu-black.png");
-    const soundIcon = require("../../assets/icons/sound-black.png");
-    const nextIcon = require("../../assets/icons/prev-black.png");
-    const stopIcon = require('../../assets/icons/stop-white.png');
+    const startIcon = require("../../assets/icons/icon_playbutton_x2(50x50).png");
+    const menuIcon = require("../../assets/icons/icon_menubutton_x2(50x50).png");
+    const soundIcon = require("../../assets/icons/icon_volumbutton_x2(50x50).png");
+    const nextIcon = require("../../assets/icons/icon_skipbutton_02_x2(40x40).png");
+    const stopIcon = require("../../assets/icons/icon_stop_x2(50x50).png");
+    const musicIcon = require('../../assets/icons/icon_Thumbnail_x2(80x80).png')
 
     return {
         startIcon,
@@ -132,17 +159,17 @@ const iconData = () => {
         soundIcon,
         nextIcon,
         stopIcon,
+        musicIcon,
     };
 };
 
-
 export default {
-    name: 'TheFooter',
+    name: "TheFooter",
     components: {
-        MusicList,
+        MusicList
     },
     directives: {
-        ClickOutside,
+        ClickOutside
     },
     setup() {
         const isSound = ref(false);
@@ -154,18 +181,18 @@ export default {
             getStatus,
             controlSound,
             sliderBackground,
-            initSound,
+            initSound
         } = controlVideo();
-        
+
         const menuControl = () => {
             isMenu.value = false;
-        }
+        };
 
-        onMounted(()=> {
+        onMounted(() => {
             getStatus();
             initSound();
         });
-        onBeforeUnmount(()=> {
+        onBeforeUnmount(() => {
             getLoungeStatus().off();
         });
 
@@ -201,13 +228,18 @@ footer {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        z-index: 10;
 
-        .menu_area{
+        .menu_area {
             width: 400px;
             height: 600px;
             position: absolute;
             right: 0;
             bottom: 72px;
+
+            .menu_list{
+                overflow: hidden;
+            }
         }
     }
 
@@ -219,9 +251,8 @@ footer {
         font-size: 12px;
 
         .picture_area {
-            width: 36px;
-            height: 36px;
-            border: 1px solid;
+            width: 40px;
+            height: 40px;
             margin-right: 24px;
             color: $Gray600;
         }
@@ -239,6 +270,7 @@ footer {
     }
     .start_icon {
         margin: 0 32px;
+        width: 25px;
     }
     .next_btn {
         transform: rotate(180deg);
@@ -256,7 +288,7 @@ footer {
         display: flex;
         justify-content: center;
 
-        .controll_icon{
+        .controll_icon {
             position: absolute;
             top: 25%;
             display: flex;
@@ -305,62 +337,78 @@ footer {
             cursor: pointer;
             margin-left: 20px;
         }
-        .sound_area{
+        .sound_area {
             height: 25px;
             display: flex;
             align-items: center;
             justify-content: center;
+            overflow: hidden;
         }
     }
 }
-input[type=range] { 
-    -webkit-appearance: none; 
-    background: transparent; 
+input[type="range"] {
+    -webkit-appearance: none;
+    background: transparent;
 }
-input:focus{
+input:focus {
     outline: none;
 }
 
-.slider_area{
+.slider_area {
     display: flex;
     align-items: center;
     height: 25px;
     width: 78px;
     margin-left: 12px;
 
-    #slider{
+    #slider {
         border-radius: 6px;
         border: none;
         background: $Gray600;
         height: 3px;
         width: 78px;
-        cursor: pointer; 
+        cursor: pointer;
     }
     #slider::-moz-range-thumb {
-        background: $White; 
+        background: $White;
         border: none;
         width: 5px;
-        height: 10px; 
+        height: 10px;
         border-radius: 0.8px;
         background-color: $Main;
     }
-    #slider::-webkit-slider-thumb{
-        -webkit-appearance: none; 
+    #slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
         background: #ffffff;
         border: none;
         width: 5px;
-        height: 10px; 
+        height: 10px;
         border-radius: 0.8px;
         background-color: $Main;
     }
     #slider::-ms-track {
-        -webkit-appearance: none; 
+        -webkit-appearance: none;
         background: #ffffff;
         border: none;
         width: 5px;
-        height: 10px; 
+        height: 10px;
         border-radius: 0.8px;
         background-color: $Main;
     }
+}
+
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s;
+}
+.slide-enter, .slide-leave-to{
+  width: 0;
+  margin-left: 0;
+}
+.slideTop-enter-active, .slideTop-leave-active {
+    transition: all .4s linear;
+}
+.slideTop-enter, .slideTop-leave-to {
+    height: 72px !important;
 }
 </style>

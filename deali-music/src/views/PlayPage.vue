@@ -1,24 +1,29 @@
 <template>
     <section class="play_page">
-        <div id="player"></div>
-        <div class="list_area">
-            <music-list
-                v-model="myMusicList"
-                :group-name="groupName"
-                :groupKey="groupKey"
-                :is-list="true"
-                @click-music="changeMusic"
-            />
-        </div>
-        <section class="recomend_play_list">
-            <h2>공개 플레이리스트</h2>
-            <div class="recomend_group">
-                <article v-for="(list, idx) in openGroups" :key="idx" class="recomend_group_list">
-                    <open-group-list :openGroupData="list"></open-group-list>
-                </article>
+        <div class="left_area">
+            <article class="plyaer_container">
+                <div id="player"></div>
+            </article>
+            <div class="list_area">
+                <music-list
+                    v-model="myMusicList"
+                    :group-name="groupName"
+                    :groupKey="groupKey"
+                    :is-list="true"
+                    @click-music="changeMusic"
+                />
             </div>
-        </section>
-        <div class="empty_area" v-if="!isList">노래를 추가해주세요.</div>
+        </div>
+        <div class="right_area">
+            <article class="recomend_play_list">
+                <h2 class="list_text">공개 플레이리스트</h2>
+                <div class="recomend_group">
+                    <div v-for="(list, idx) in openGroups" :key="idx" class="recomend_group_list">
+                        <open-group-list :openGroupData="list"></open-group-list>
+                    </div>
+                </div>
+            </article>
+        </div>
     </section>
 </template>
 
@@ -100,38 +105,39 @@ export default {
 <style lang="scss" scoped>
 .play_page {
     margin-top: 64px;
+    display: flex;
+    justify-content: space-between;
 
-    #player {
-        float: left;
+    .left_area{
+        width: 600px;
+
+        .plyaer_container{
+            width: 600px;
+            height: 360px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .list_area {
+            margin-top: 30px;
+            width: 100%;
+            height: 360px;
+        }
+        
     }
-    .list_area {
-        float: right;
-        width: 400px;
-        height: 360px;
-    }
-    .recomend_play_list {
-        margin-top: 64px;
+    .right_area{
+        width: 300px;
 
-        .recomend_group {
-            display: grid;
-            gap: 10px 20px;
-            grid-template-rows: 250px;
-            grid-template-columns: repeat(4, 1fr);
-            margin-bottom: 300px;
-
-            .recomend_group {
-                display: flex;
-                justify-content: center;
+        .recomend_play_list{
+            .list_text{
+                margin: 0 0 30px;
+            }
+            .recomend_group_list {
+                width: 240px;
+                margin-bottom: 30px;
             }
         }
+        
     }
 }
 
-.empty_area {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 </style>
