@@ -53,6 +53,7 @@ const clickEvent = (userInfo, router, isLike) => {
 
     const clickLikeGroup = (openGroupData) => {
         if (!userInfo.value.dealiName) return;
+        console.log(openGroupData);
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
@@ -74,9 +75,8 @@ const clickEvent = (userInfo, router, isLike) => {
 
 const iconList = () => {
     const isLike = ref(false);
-    const likeIcon = require('../../assets/icons/Heart-01.png');
-    const notIcon = require('../../assets/icons/Heart-02.png');
-
+    const likeIcon = require('../../assets/icons/icon_heart_x3(57x57).png');
+    const notIcon = require('../../assets/icons/icon_heartoutline_x3(58x58).png');
 
     return {
         isLike,

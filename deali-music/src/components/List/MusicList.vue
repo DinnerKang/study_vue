@@ -1,12 +1,18 @@
 <template>
     <article class="music_container" v-if="isList">
         <div class="music_header">
+            <div class="close_icon_area">
+                <div class="close_icon" @click="closeMenu" />
+            </div>
             <h2>{{ isLounge ? '라운지 ' : '' }}플레이리스트</h2>
-            <div class="close_icon" @click="closeMenu" />
         </div>
         <ul class="music_container__list_area">
-            <li class="music_container__list" v-for="(list, idx) in musicList" :key="idx" 
-                :class="{ active: nowMusic === list.musicName }">
+            <li
+                class="music_container__list"
+                v-for="(list, idx) in musicList"
+                :key="idx"
+                :class="{ active: nowMusic === list.musicName }"
+            >
                 <div class="list_idx">{{idx + 1}}</div>
                 <div class="list_info">
                     <div class="list_music_register">{{list.register}}</div>
@@ -63,11 +69,15 @@ const setMusicList = (props, emit, dealiName, isLounge) => {
 };
 
 const iconData = () => {
-  const removeIcon = require('@/assets/icons/icon_xbutton_x2(14x14).png');
+    const removeIcon = require("@/assets/icons/icon_xbutton_x2(14x14).png");
+    const likeIcon = require("../../assets/icons/icon_heart_x3(57x57).png");
+    const notIcon = require("../../assets/icons/icon_heartoutline_x3(58x58).png");
 
-  return {
-    removeIcon,
-  };
+    return {
+        removeIcon,
+        likeIcon,
+        notIcon
+    };
 };
 
 export default {
@@ -144,21 +154,25 @@ export default {
         border-bottom: 1px solid $Gray400;
         display: flex;
         align-items: center;
-        justify-content: space-between;
         padding: 0 15px;
         box-sizing: border-box;
 
+        .close_icon_area {
+            width: 40px;
+
+            .close_icon {
+                width: 15px;
+                height: 15px;
+                border-radius: 50%;
+                background-color: #fa8282;
+                cursor: pointer;
+                margin: 0 auto;
+            }
+        }
         h2 {
             margin: 0;
             font-size: 15px;
             font-weight: bold;
-        }
-        .close_icon {
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            background-color: #fa8282;
-            cursor: pointer;
         }
     }
     .music_container__list_area {
@@ -175,8 +189,8 @@ export default {
             align-items: center;
             margin-bottom: 20px;
 
-            &.active{
-              background-color: rgba(0, 0, 0, 0.1);
+            &.active {
+                background-color: rgba(0, 0, 0, 0.1);
             }
 
             .list_idx {
@@ -209,7 +223,6 @@ export default {
             }
             .delete_btn {
                 border: none;
-                background-color: $White;
                 cursor: pointer;
                 margin-left: 10px;
             }

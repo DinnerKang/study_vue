@@ -2,7 +2,7 @@
     <header>
         <div class="header_container">
             <div class="logo_area" @click="clickLogo">
-                Dealibeat
+                <img :src="logoIcon" alt="딜리비트" class="logo" />
             </div>
             <div class="search_area">
                 <search-bar />
@@ -28,6 +28,7 @@ import SearchBar from '../search/SearchBar';
 const getUserInfo = (store, router) => {
     const userName = computed(() => store.state.login.userName);
     const userState = computed(() => store.state.login.userState);
+    const logoIcon = require('@/assets/icons/logo_x2(400x60).png');
 
     const userLogin = async() => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -43,40 +44,28 @@ const getUserInfo = (store, router) => {
         store.commit('login/logoutUser');
         router.replace('/');
     }
+
+    const clickLogo = () => {
+        router.push('/');
+    };
     
     return { 
         userName,
         userState,
         userLogin,
         userLogout,
+        clickLogo,
+        logoIcon,
     }
 }
-
-const clickEvent = (router) => {
-
-    const clickLogo = () => {
-        router.push('/');
-    };
-
-    return {
-        clickLogo,
-    }
-};
 
 export default {
     components: {
         SearchBar,
     },
     setup(props, { root }) {
-        const { userName, userState, userLogin, userLogout } = getUserInfo(root.$store, root.$router);
-        const { clickLogo } = clickEvent(root.$router);
-
         return {
-            userName,
-            userState,
-            userLogin,
-            userLogout,
-            clickLogo,
+            ...getUserInfo(root.$store, root.$router),
         };
     },
 };
@@ -97,17 +86,22 @@ export default {
             font-size:12px;
 
             .logo_area{
-                width: 150px;
                 height: 30px;
                 display: flex;
                 align-items: center;
+
+                .logo{
+                    width: 150px;
+                }
             }
             .search_area{
-                width: 630px;
+                width: 600px;
                 height: 30px;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
             }
             .info_area{
-                width: 245px;
                 height: 30px;
                 display: flex;
                 align-items: center;
@@ -119,24 +113,23 @@ export default {
                     display: flex;
                     height: 100%;
                     align-items: center;
-                    justify-content: flex-end;
+                    justify-content: space-between;
                     
                     .name_area{
-                        width: 100px;
+                        width: 70px;
                         text-align: center;
                     }
                 }
             }  
             .page_link {
                 color: $Gray600;
-                width: 70px;
                 text-align: center;
                 font-size:12px;
+                width: 70px;
             }
             .login_btn{
                 border: none;
                 background-color: #fff;
-                margin-left: 20px;
                 cursor: pointer;
                 color: $Gray600;
                 width: 70px;
