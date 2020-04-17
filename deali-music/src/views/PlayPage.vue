@@ -10,7 +10,8 @@
                     :group-host="groupHost"
                     :group-name="groupName"
                     :groupKey="groupKey"
-                    :is-list="true"
+                    :is-like="isLike"
+                    :show-like="true"
                     @click-music="changeMusic"
                 />
             </div>
@@ -29,10 +30,11 @@
 </template>
 
 <script>
-import { ref, watch } from "@vue/composition-api";
+import { ref, watch , computed } from "@vue/composition-api";
 import MusicList from "@/components/list/MusicList";
 import OpenGroupList from "@/components/list/OpenGroupList";
 import { openGroup } from "@/composible/openGroup";
+import { getLikeGroupByKey } from '@/services/Group';
 
 const youtubeData = () => {
     let player = {};
@@ -67,11 +69,29 @@ const youtubeData = () => {
     };
 };
 
+const getLike = (key, userInfo) => {
+    const isLike = ref(false);
+    getLikeGroupByKey(key).on('value', snapshot => {
+        const result = snapshot.val();
+        if (result){
+            isLike.value = result[userInfo.value.dealiName];
+        } else {
+            isLike.value = false;
+        }
+    });
+
+    return {
+        isLike,
+    };
+};
+
 export default {
     name: "PlayPage",
     components: { MusicList, OpenGroupList },
     setup(props, { root }) {
         const { groupKey, groupName, groupHost } = root.$route.query;
+        const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
+
         const {
             player,
             myMusicList,
@@ -97,7 +117,8 @@ export default {
             onYouTubeIframeAPIReady,
             isList,
             changeMusic,
-            ...openGroup()
+            ...openGroup(),
+            ...getLike(groupKey, userInfo),
         };
     }
 };

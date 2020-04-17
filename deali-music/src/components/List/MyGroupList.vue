@@ -53,23 +53,6 @@ const getGroupData = (targetName, groupKey) => {
     }
 };
 
-const clickEvent = (router) => {
-
-    const clickGroup = (groupData) => {
-        router.push({
-            path: `/playPage`,
-            query: {
-                groupName: groupData.groupName,
-                groupKey: groupData.myKey,
-            },
-        });
-    }
-
-    return {
-        clickGroup,
-    }
-}
-
 export default {
     name: 'GroupList',
     props: {
@@ -95,7 +78,17 @@ export default {
     setup(props, { root }) {
         const { musicData } = getMusicData(props.targetName, props.groupKey);
         const { groupData } = getGroupData(props.targetName, props.groupKey);
-        const { clickGroup } = clickEvent(root.$router);
+
+        const clickGroup = (groupData) => {
+            root.$router.push({
+                path: `/playPage`,
+                query: {
+                    groupHost: props.targetName,
+                    groupName: groupData.groupName,
+                    groupKey: groupData.myKey,
+                },
+            });
+        }
 
         return {
             musicData,

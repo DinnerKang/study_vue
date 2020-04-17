@@ -5,7 +5,6 @@
             v-model="myMusicList"
             :group-name="'lounge'"
             :group-key="'lounge'"
-            :is-list="true"
         />
     </div>
 </template>

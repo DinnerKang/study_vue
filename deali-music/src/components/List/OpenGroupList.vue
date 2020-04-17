@@ -8,7 +8,7 @@
         <div class="outside_area">
             <div class="main_text">
                 <span>{{groupData.groupName}}</span>
-                <img class="img_area" v-if="isLikes" :src="isLike ? likeIcon : notIcon" @click="clickLikeGroup(openGroupData)" alt="하트" />
+                <img class="img_area" v-if="showLikes" :src="isLike ? likeIcon : notIcon" @click="clickLikeGroup(openGroupData)" alt="하트" />
             </div>
             <div class="sub_text">{{groupData.description}}</div>
         </div>
@@ -99,7 +99,7 @@ export default {
             type: String,
             default: '180',
         },
-        isLikes: {
+        showLikes: {
             type: Boolean,
             default: true,
         }
@@ -112,7 +112,6 @@ export default {
         const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router, isLike);
 
         const likeUser = computed(() => props.openGroupData.likes);
-
 
         watch(() => userInfo.value.dealiName, () => {
             if (!likeUser.value || !userInfo.value.dealiName) return isLike.value = false;

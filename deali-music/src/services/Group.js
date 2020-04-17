@@ -20,6 +20,10 @@ export function getLikeGroupList(data) {
     return firebase.database().ref(`group/likes/${data.dealiName}`);
 }
 
+export function getLikeGroupByKey(key) {
+    return firebase.database().ref(`group/showGroup/${key}/likes`);
+}
+
 
 // WRITE
 

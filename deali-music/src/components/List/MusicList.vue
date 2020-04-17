@@ -1,8 +1,10 @@
 <template>
-    <article class="music_container" v-if="isList">
+    <article class="music_container">
         <div class="music_header">
             <div class="close_icon_area">
-                <div class="close_icon" @click="closeMenu" />
+                <div class="close_icon" @click="closeMenu" v-show="!showLike" />
+                <img class="img_area" v-if="showLike" :src="isLike ? likeIcon : notIcon" 
+                    @click="clickLikeGroup" alt="하트" />
             </div>
             <h2>{{ isLounge ? '라운지 ' : '' }}플레이리스트</h2>
         </div>
@@ -28,7 +30,8 @@
 <script>
 import { musicControl } from "@/services/Control";
 import { getMusicListByGroup, deleteMusic } from "@/services/Music";
-import { ref, watch } from "@vue/composition-api";
+import { addLikeGroup, deleteLikeGroup } from '@/services/Group';
+import { ref, watch, computed } from "@vue/composition-api";
 
 const setMusicList = (props, emit, isLounge) => {
     const musicList = ref([]);
@@ -84,12 +87,8 @@ export default {
     name: "MusicList",
     props: {
         value: {},
-        isList: {
-            type: Boolean,
-            defaults: true
-        },
         groupHost: {
-            type: String,
+            type: String
         },
         groupName: {
             type: String
@@ -100,9 +99,19 @@ export default {
         nowMusic: {
             type: String
         },
+        showLike: {
+            type: Boolean,
+            default: false
+        },
+        isLike: {
+            type: Boolean,
+            default: false
+        }
     },
-    setup(props, { emit }) {
+    setup(props, { root, emit }) {
         const isLounge = props.groupName === "lounge";
+        const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
+        
         const { getMusicList, musicList, removeMusic } = setMusicList(
             props,
             emit,
@@ -119,6 +128,21 @@ export default {
                 emit("click-music", idx);
             }
         };
+        
+         const clickLikeGroup = () => {
+            if (!userInfo.value.dealiName) return;
+            const data = {
+                dealiName: userInfo.value.dealiName,
+                targetName: userInfo.value.dealiName,
+                targetKey: props.groupKey,
+            };
+            if (props.isLike === false) {
+                addLikeGroup(data);
+            } else {
+                deleteLikeGroup(data);
+            }
+        };
+
 
         watch(props.groupHost, () => {
             getMusicList();
@@ -132,6 +156,7 @@ export default {
             clickMusic,
             isLounge,
             ...iconData(),
+            clickLikeGroup,
         };
     }
 };
@@ -158,6 +183,7 @@ export default {
 
         .close_icon_area {
             width: 40px;
+            text-align: center;
 
             .close_icon {
                 width: 15px;
@@ -166,6 +192,10 @@ export default {
                 background-color: #fa8282;
                 cursor: pointer;
                 margin: 0 auto;
+            }
+            .img_area {
+                width: 15px;
+                cursor: pointer;
             }
         }
         h2 {

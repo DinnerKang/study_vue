@@ -84,6 +84,7 @@ export default {
             align-items: center;
             justify-content: space-between;
             font-size:12px;
+            position: relative;
 
             .logo_area{
                 height: 30px;

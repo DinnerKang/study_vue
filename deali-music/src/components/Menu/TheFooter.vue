@@ -65,7 +65,7 @@
                         <music-list
                             :group-name="'lounge'"
                             :group-key="'lounge'"
-                            :is-list="true"
+                            :group-host="'lounge'"
                             :now-music="videoStatus.videoName"
                             @close-menu="isMenu = false"
                         />
