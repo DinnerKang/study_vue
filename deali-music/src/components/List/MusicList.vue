@@ -28,14 +28,14 @@
 <script>
 import { musicControl } from "@/services/Control";
 import { getMusicListByGroup, deleteMusic } from "@/services/Music";
-import { ref, computed, watch } from "@vue/composition-api";
+import { ref, watch } from "@vue/composition-api";
 
-const setMusicList = (props, emit, dealiName, isLounge) => {
+const setMusicList = (props, emit, isLounge) => {
     const musicList = ref([]);
 
     const getMusicList = () => {
         const data = {
-            dealiName: isLounge ? "lounge" : dealiName.value,
+            dealiName: isLounge ? "lounge" : props.groupHost,
             groupKey: isLounge ? "lounge" : props.groupKey
         };
 
@@ -49,7 +49,7 @@ const setMusicList = (props, emit, dealiName, isLounge) => {
     const removeMusic = idx => {
         if (!confirm("삭제하시겠습니까 ?")) return;
         const data = {
-            dealiName: isLounge ? "lounge" : dealiName.value,
+            dealiName: isLounge ? "lounge" : props.groupHost,
             groupKey: isLounge ? "lounge" : props.groupKey
         };
         getMusicListByGroup(data)
@@ -88,6 +88,9 @@ export default {
             type: Boolean,
             defaults: true
         },
+        groupHost: {
+            type: String,
+        },
         groupName: {
             type: String
         },
@@ -96,17 +99,13 @@ export default {
         },
         nowMusic: {
             type: String
-        }
+        },
     },
-    setup(props, { root, emit }) {
-        const dealiName = computed(
-            () => root.$store.getters["login/getUserStatus"].dealiName
-        );
+    setup(props, { emit }) {
         const isLounge = props.groupName === "lounge";
         const { getMusicList, musicList, removeMusic } = setMusicList(
             props,
             emit,
-            dealiName,
             isLounge
         );
 
@@ -121,7 +120,7 @@ export default {
             }
         };
 
-        watch(dealiName, () => {
+        watch(props.groupHost, () => {
             getMusicList();
         });
 

@@ -7,6 +7,7 @@
             <div class="list_area">
                 <music-list
                     v-model="myMusicList"
+                    :group-host="groupHost"
                     :group-name="groupName"
                     :groupKey="groupKey"
                     :is-list="true"
@@ -70,8 +71,7 @@ export default {
     name: "PlayPage",
     components: { MusicList, OpenGroupList },
     setup(props, { root }) {
-        const { groupKey } = root.$route.query;
-        const { groupName } = root.$route.query;
+        const { groupKey, groupName, groupHost } = root.$route.query;
         const {
             player,
             myMusicList,
@@ -91,6 +91,7 @@ export default {
         return {
             groupName,
             groupKey,
+            groupHost,
             myMusicList,
             player,
             onYouTubeIframeAPIReady,

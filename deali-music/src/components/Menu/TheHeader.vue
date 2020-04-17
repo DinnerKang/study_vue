@@ -89,6 +89,7 @@ export default {
                 height: 30px;
                 display: flex;
                 align-items: center;
+                cursor: pointer;
 
                 .logo{
                     width: 150px;

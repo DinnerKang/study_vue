@@ -37,6 +37,7 @@ const routes = [
     path: '/playPage',
     name: 'PlayPage',
     component: PlayPage,
+    meta: { unauthorized: true },
   },
   {
       path: '*',

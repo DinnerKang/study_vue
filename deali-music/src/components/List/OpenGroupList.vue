@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="group_container open_group_container"
-            @click="clickGroup(groupData)"
+            @click="clickGroup(groupData, openGroupData)"
             :style="{ width : `${width}px`, height: `${height}px`}">
             <img :src="getImage" alt="썸네일"/>
         </div>
@@ -41,10 +41,11 @@ const getGroupData = (userInfo, openGroupData) => {
 
 const clickEvent = (userInfo, router, isLike) => {
 
-    const clickGroup = (groupData) => {
+    const clickGroup = (groupData, openGroupData) => {
         router.push({
             path: `/playPage`,
             query: {
+                groupHost: openGroupData.dealiName,
                 groupName: groupData.groupName,
                 groupKey: groupData.targetKey || groupData.myKey,
             },
@@ -53,7 +54,6 @@ const clickEvent = (userInfo, router, isLike) => {
 
     const clickLikeGroup = (openGroupData) => {
         if (!userInfo.value.dealiName) return;
-        console.log(openGroupData);
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
