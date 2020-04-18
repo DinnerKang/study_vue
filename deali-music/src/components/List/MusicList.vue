@@ -2,11 +2,11 @@
     <article class="music_container">
         <div class="music_header">
             <div class="close_icon_area">
-                <div class="close_icon" @click="closeMenu" v-show="!showLike" />
-                <img class="img_area" v-if="showLike" :src="isLike ? likeIcon : notIcon" 
-                    @click="clickLikeGroup" alt="하트" />
+                <div class="close_icon" @click="closeMenu" v-if="!showLike" />
             </div>
             <h2>{{ isLounge ? '라운지 ' : '' }}플레이리스트</h2>
+            <img class="img_area" v-if="showLike" :src="isLike ? likeIcon : notIcon" 
+                @click="clickLikeGroup" alt="하트" />
         </div>
         <ul class="music_container__list_area">
             <li
@@ -173,6 +173,7 @@ export default {
     box-shadow: 3px 0px 50px rgba(0, 0, 0, 0.1);
 
     .music_header {
+        position: relative;
         width: 100%;
         height: 45px;
         border-bottom: 1px solid $Gray400;
@@ -193,15 +194,17 @@ export default {
                 cursor: pointer;
                 margin: 0 auto;
             }
-            .img_area {
-                width: 15px;
-                cursor: pointer;
-            }
         }
         h2 {
             margin: 0;
             font-size: 15px;
             font-weight: bold;
+        }
+        .img_area {
+            width: 15px;
+            cursor: pointer;
+            position: absolute;
+            right: 50px;
         }
     }
     .music_container__list_area {

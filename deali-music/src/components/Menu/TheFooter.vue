@@ -406,7 +406,7 @@ input:focus {
   margin-left: 0;
 }
 .slideTop-enter-active, .slideTop-leave-active {
-    transition: all .4s linear;
+    transition: all .3s linear;
 }
 .slideTop-enter, .slideTop-leave-to {
     height: 72px !important;

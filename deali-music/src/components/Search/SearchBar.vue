@@ -43,14 +43,9 @@ const searchYoutube = router => {
 
 export default {
     setup(props, { root }) {
-        const { clickSearchBtn, searchText, searchIcon } = searchYoutube(
-            root.$router
-        );
 
         return {
-            clickSearchBtn,
-            searchText,
-            searchIcon
+            ...searchYoutube(root.$router),
         };
     }
 };

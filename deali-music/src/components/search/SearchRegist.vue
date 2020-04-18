@@ -13,22 +13,28 @@
                         <h3>{{list.snippet.title | decodeStr}}</h3>
                         <div class="sub_text">
                             <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
-                            <button class="btn" @click="clickRegist(list)">담기</button>
+                            <button class="btn" v-if="dealiName" @click="clickRegist(list)">담기</button>
+                            <!--
                             <div v-for="(btn, idx) in groupList" :key="idx">
                                 <button
                                     class="btn"
                                     @click="clickRegist(list, btn)"
                                 >{{btn.groupName}}</button>
                             </div>
+                            -->
                         </div>
                     </div>
                 </li>
             </ul>
         </article>
+        <modal :is-open="isOpen">
+            test
+        </modal>
     </section>
 </template>
 
 <script>
+import Modal from '@/components/common/Modal';
 import { registMusic } from "@/services/Music";
 import { getGroupList } from "@/services/Group";
 import { computed, ref } from "@vue/composition-api";
@@ -57,10 +63,10 @@ const clickEvent = userInfo => {
     };
 };
 
-const groupData = dealiName => {
+const groupData = (userInfo) => {
     const groupList = ref([]);
 
-    getGroupList(dealiName.value).on("value", snapshot => {
+    getGroupList(userInfo.value.dealiName).on("value", snapshot => {
         groupList.value = Object.values(snapshot.val());
     });
 
@@ -71,20 +77,16 @@ const groupData = dealiName => {
 
 export default {
     name: "MusicRegist",
+    components: { Modal },
     props: {
         searchResult: {
             type: [Object, String]
         }
     },
     setup(props, { root }) {
-        const userInfo = computed(
-            () => root.$store.getters["login/getUserStatus"]
-        );
-        const dealiName = computed(
-            () => root.$store.getters["login/getUserStatus"].dealiName
-        );
+        const userInfo = computed(() => root.$store.getters["login/getUserStatus"]);
         const { clickRegist } = clickEvent(userInfo);
-        const { groupList } = groupData(dealiName);
+        const { groupList } = groupData(userInfo);
 
         return {
             clickRegist,

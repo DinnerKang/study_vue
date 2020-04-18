@@ -3,6 +3,7 @@
         <div class="left_area">
             <article class="plyaer_container">
                 <div id="player"></div>
+                <div v-if="!isList">혜지님 노래 없는데 멘트 짜주세용</div>
             </article>
             <div class="list_area">
                 <music-list
@@ -89,6 +90,7 @@ export default {
     name: "PlayPage",
     components: { MusicList, OpenGroupList },
     setup(props, { root }) {
+        const isList = ref(true);
         const { groupKey, groupName, groupHost } = root.$route.query;
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
 
@@ -98,7 +100,7 @@ export default {
             onYouTubeIframeAPIReady,
             changeMusic
         } = youtubeData();
-        const isList = ref(true);
+
         watch(myMusicList, () => {
             if (myMusicList.value.length === 0) {
                 return (isList.value = false);
@@ -138,6 +140,9 @@ export default {
             height: 360px;
             border-radius: 8px;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .list_area {
             margin-top: 30px;

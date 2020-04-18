@@ -1,14 +1,24 @@
 <template>
     <div>
-        <div class="group_container open_group_container"
+        <div
+            class="group_container open_group_container"
             @click="clickGroup(groupData, openGroupData)"
-            :style="{ width : `${width}px`, height: `${height}px`}">
-            <img :src="getImage" alt="썸네일"/>
+            :style="{ width : `${width}px`, height: `${height}px`}"
+        >
+            <img :src="getImage" alt="썸네일" />
         </div>
         <div class="outside_area">
             <div class="main_text">
                 <span>{{groupData.groupName}}</span>
-                <img class="img_area" v-if="showLikes" :src="isLike ? likeIcon : notIcon" @click="clickLikeGroup(openGroupData)" alt="하트" />
+                <div class="like-area">
+                    <div v-if="likeUserNumber > 0">{{ likeUserNumber }}</div>
+                    <img
+                    class="img_area"
+                    v-if="showLikes"
+                    :src="isLike ? likeIcon : notIcon"
+                    @click="clickLikeGroup(openGroupData)"
+                    alt="하트" />
+                </div>
             </div>
             <div class="sub_text">{{groupData.description}}</div>
         </div>
@@ -16,154 +26,168 @@
 </template>
 
 <script>
-import { computed, ref, watch } from '@vue/composition-api';
-import { getGroupListByKey, addLikeGroup, deleteLikeGroup } from '@/services/Group';
-import { getImageByIdx } from '@/composible/thumbnails';
+import { computed, ref, watch } from "@vue/composition-api";
+import {
+    getGroupListByKey,
+    addLikeGroup,
+    deleteLikeGroup
+} from "@/services/Group";
+import { getImageByIdx } from "@/composible/thumbnails";
 
 const getGroupData = (userInfo, openGroupData) => {
     const groupData = ref({});
     const getImage = ref(null);
-    
+
     const data = {
         dealiName: openGroupData.dealiName,
-        key: openGroupData.targetKey,
+        key: openGroupData.targetKey
     };
-    getGroupListByKey(data).on('value', async snapshot =>{
+    getGroupListByKey(data).on("value", async snapshot => {
         groupData.value = snapshot.val();
         getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
     });
 
     return {
         groupData,
-        getImage,
-    }
+        getImage
+    };
 };
 
-const clickEvent = (userInfo, router, isLike) => {
 
+const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
     const clickGroup = (groupData, openGroupData) => {
         router.push({
-            path: `/playPage`,
+            path: "/playPage",
             query: {
                 groupHost: openGroupData.dealiName,
                 groupName: groupData.groupName,
-                groupKey: groupData.targetKey || groupData.myKey,
-            },
+                groupKey: groupData.targetKey || groupData.myKey
+            }
         });
-    }
-
-    const clickLikeGroup = (openGroupData) => {
+    };
+    
+    const clickLikeGroup = openGroupData => {
         if (!userInfo.value.dealiName) return;
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
-            targetKey: openGroupData.targetKey,
+            targetKey: openGroupData.targetKey
         };
         if (isLike.value === false) {
             addLikeGroup(data);
             isLike.value = true;
+            likeUserNumber.value += 1;
         } else {
             deleteLikeGroup(data);
             isLike.value = false;
+            likeUserNumber.value -= 1;
         }
-    }
+    };
     return {
         clickGroup,
         clickLikeGroup,
-    }
-}
+    };
+};
 
 const iconList = () => {
     const isLike = ref(false);
-    const likeIcon = require('../../assets/icons/icon_heart_x3(57x57).png');
-    const notIcon = require('../../assets/icons/icon_heartoutline_x3(58x58).png');
-
+    const likeIcon = require("../../assets/icons/icon_heart_x3(57x57).png");
+    const notIcon = require("../../assets/icons/icon_heartoutline_x3(58x58).png");
     return {
         isLike,
         likeIcon,
-        notIcon,
-    }
+        notIcon
+    };
 };
 
 export default {
-    name: 'OpenGroup',
+    name: "OpenGroup",
     props: {
         openGroupData: {
-            type: [String, Object],
+            type: [String, Object]
         },
         width: {
             type: String,
-            default: '240',
+            default: "240"
         },
         height: {
             type: String,
-            default: '180',
+            default: "180"
         },
         showLikes: {
             type: Boolean,
-            default: true,
+            default: true
         }
     },
     setup(props, { root }) {
-        const userInfo = computed(()=> root.$store.getters['login/getUserStatus']);
-        
-        const { groupData, getImage } = getGroupData(userInfo, props.openGroupData);
+        const userInfo = computed(() => root.$store.getters["login/getUserStatus"]);
         const { isLike, notIcon, likeIcon } = iconList();
-        const { clickGroup, clickLikeGroup } = clickEvent(userInfo, root.$router, isLike);
-
         const likeUser = computed(() => props.openGroupData.likes);
+        const likeUserNumber = ref(0);
 
-        watch(() => userInfo.value.dealiName, () => {
-            if (!likeUser.value || !userInfo.value.dealiName) return isLike.value = false;
-            if (userInfo.value.dealiName !== '') {
-                if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
-                    isLike.value = true;
-                } else {
-                    isLike.value = false;
+        watch(
+            () => userInfo.value.dealiName,
+            () => {
+                if (!likeUser.value || !userInfo.value.dealiName)
+                    return (isLike.value = false);
+                if (userInfo.value.dealiName !== "") {
+                    if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
+                        isLike.value = true;
+                    } else {
+                        isLike.value = false;
+                    }
+                    likeUserNumber.value = Object.keys(likeUser.value).length;
                 }
             }
-        });
-        
+        );
+
         return {
-            groupData,
-            getImage,
+            ...getGroupData(userInfo, props.openGroupData),
             isLike,
             notIcon,
             likeIcon,
-            clickGroup,
-            clickLikeGroup,
+            ...clickEvent(userInfo, root.$router, isLike, likeUserNumber),
             likeUser,
-        }
+            likeUserNumber,
+        };
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-    .group_container{
-        box-sizing: border-box;
-        border-radius: 8px;
-        color: $White;
-        position: relative;
-        cursor: pointer;
-    }
-    .outside_area{
-        color: $Black;
-        .main_text{
+.group_container {
+    box-sizing: border-box;
+    border-radius: 8px;
+    color: $White;
+    position: relative;
+    cursor: pointer;
+}
+.outside_area {
+    color: $Black;
+    .main_text {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 15px;
+        font-weight: bold;
+        margin: 16px 0 8px;
+
+        .like-area{
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 15px;
-            font-weight: bold;
-            margin: 16px 0 8px;
-            .img_area{
+
+            .img_area {
                 width: 19px;
                 height: 19px;
                 cursor: pointer;
+                margin-left: 5px;
             }
         }
-        .sub_text{
-            font-size: 12px;
-            color: $Gray600;
-        }
+        
     }
+    .sub_text {
+        font-size: 12px;
+        color: $Gray600;
+    }
+}
 </style>
