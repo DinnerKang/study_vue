@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isOpen" class="modal_container">
+    <div v-if="value" class="modal_container">
         <div class="modal_area" :style="{ width: width + 'px', height: height + 'px'}">
             <div class="close_area">
                 <div class="close_icon" @click="closeModal"></div>
@@ -15,7 +15,7 @@
 export default {
     name: 'Modal',
     props: {
-        isOpen: {
+        value: {
             type: Boolean,
             default: false,
         },
@@ -31,9 +31,8 @@ export default {
     setup(props, { emit }) {
 
         const closeModal = () => {
-            emit('close-modal');
+            emit('input', false);
         }
-
         return {
             closeModal,
         }

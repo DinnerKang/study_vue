@@ -13,7 +13,7 @@
                         <h3>{{list.snippet.title | decodeStr}}</h3>
                         <div class="sub_text">
                             <h5>{{list.snippet.publishedAt | timeForToday}}</h5>
-                            <button class="btn" v-if="dealiName" @click="clickRegist(list)">담기</button>
+                            <button class="btn" @click="isModal=true">담기</button>
                             <!--
                             <div v-for="(btn, idx) in groupList" :key="idx">
                                 <button
@@ -27,7 +27,7 @@
                 </li>
             </ul>
         </article>
-        <modal :is-open="isOpen">
+        <modal v-model="isModal">
             test
         </modal>
     </section>
@@ -40,10 +40,11 @@ import { getGroupList } from "@/services/Group";
 import { computed, ref } from "@vue/composition-api";
 import { decodeStr } from "@/composible/decodeStr";
 
-const clickEvent = userInfo => {
+const clickEvent = (userInfo) => {
+    const isModal = ref(false);
+    
     const clickRegist = (item, groupData = "lounge") => {
-        const dealiName =
-            groupData === "lounge" ? "lounge" : userInfo.value.dealiName;
+        const dealiName = groupData === "lounge" ? "lounge" : userInfo.value.dealiName;
         const register = userInfo.value.userName;
 
         const searchResult = {
@@ -59,7 +60,8 @@ const clickEvent = userInfo => {
     };
 
     return {
-        clickRegist
+        isModal,
+        clickRegist,
     };
 };
 
@@ -85,13 +87,10 @@ export default {
     },
     setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters["login/getUserStatus"]);
-        const { clickRegist } = clickEvent(userInfo);
-        const { groupList } = groupData(userInfo);
 
         return {
-            clickRegist,
-            groupList,
-            dealiName
+            ...clickEvent(userInfo),
+            ...groupData(userInfo),
         };
     }
 };

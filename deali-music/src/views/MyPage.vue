@@ -16,7 +16,7 @@
                 </li>
             </ul>
         </article>
-        <modal :isOpen="isModal" @close-modal="closeModal">
+        <modal v-model="isModal">
             <div class="group_container">
                 <div class="group_img_area">
                     <h5>썸네일 이미지</h5>
@@ -135,7 +135,6 @@ const likeGroup = (userInfo) => {
     }
 };
 
-
 const modalEvent = (userInfo) => {
     const isModal = ref(false);
     const isEdit = ref(false);
@@ -149,11 +148,17 @@ const modalEvent = (userInfo) => {
         targetKey: '',
     });
 
+    watch(isModal, (newValue) => {
+        if (!newValue) {
+            initGroup();
+        }
+    });
+
     const saveGroup = () => {
         if (!modalData.groupName) return alert('그룹 이름을 적어주세요.');
         if (modalData.thumbnailIdx === null) return alert('썸네일을 선택해주세요.');
         isEdit.value === false ? addMyGroup(modalData) : editMyGroup(modalData);
-        closeModal();
+        isModal.value = false;
     };
 
     const initGroup = () => {
@@ -182,18 +187,9 @@ const modalEvent = (userInfo) => {
         });
     };
 
-    const closeModal = () => {
-        isModal.value = false;
-        isEdit.value = false;
-
-        initGroup();
-        modalData.key = '';
-    };
-
     return {
         isModal,
         saveGroup,
-        closeModal,
         editGroup,
         initGroup,
         ...toRefs(modalData),
