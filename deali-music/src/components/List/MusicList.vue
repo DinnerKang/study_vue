@@ -21,7 +21,8 @@
                     <div class="list_muisc_name" @click="clickMusic(idx)" :title="list.musicName">{{list.musicName}}</div>
                 </div>
                 <div class="list_duration">{{list.duration | setYoutubeTime}}</div>
-                <img :src="removeIcon" class="delete_btn" @click="removeMusic(idx)" alt="삭제" />
+                <img v-if="groupHost === userInfo.dealiName || 'lounge'" :src="removeIcon" 
+                class="delete_btn" @click="removeMusic(idx)" alt="삭제" />
             </li>
         </ul>
     </article>
@@ -158,6 +159,7 @@ export default {
             isLounge,
             ...iconData(),
             clickLikeGroup,
+            userInfo,
         };
     }
 };
