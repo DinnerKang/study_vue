@@ -148,12 +148,6 @@ const modalEvent = (userInfo) => {
         targetKey: '',
     });
 
-    watch(isModal, (newValue) => {
-        if (!newValue) {
-            initGroup();
-        }
-    });
-
     const saveGroup = () => {
         if (!modalData.groupName) return alert('그룹 이름을 적어주세요.');
         if (modalData.thumbnailIdx === null) return alert('썸네일을 선택해주세요.');
@@ -186,6 +180,10 @@ const modalEvent = (userInfo) => {
             modalData.targetKey = list.targetKey;
         });
     };
+
+    watch(isModal, (newValue) => {
+        if (!newValue) initGroup();
+    });
 
     return {
         isModal,

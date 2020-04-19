@@ -219,6 +219,7 @@ footer {
     height: 72px;
     background-color: $WhiteGray;
     color: $Black;
+    z-index: 100;
 
     .footer_area {
         width: 1024px;
