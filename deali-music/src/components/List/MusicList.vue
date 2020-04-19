@@ -12,13 +12,13 @@
             <li
                 class="music_container__list"
                 v-for="(list, idx) in musicList"
-                :key="idx"
+                :key="list.videoId + idx"
                 :class="{ active: nowMusic === list.musicName }"
             >
                 <div class="list_idx">{{idx + 1}}</div>
                 <div class="list_info">
                     <div class="list_music_register">{{list.register}}</div>
-                    <div class="list_muisc_name" @click="clickMusic(idx)">{{list.musicName}}</div>
+                    <div class="list_muisc_name" @click="clickMusic(idx)" :title="list.musicName">{{list.musicName}}</div>
                 </div>
                 <div class="list_duration">{{list.duration | setYoutubeTime}}</div>
                 <img :src="removeIcon" class="delete_btn" @click="removeMusic(idx)" alt="삭제" />
@@ -121,6 +121,7 @@ export default {
         const closeMenu = () => {
             emit("close-menu");
         };
+
         const clickMusic = idx => {
             if (isLounge) {
                 musicControl(idx);

@@ -3,6 +3,7 @@
         <div id="player"></div>
         <music-list
             v-model="myMusicList"
+            :group-host="'lounge'"
             :group-name="'lounge'"
             :group-key="'lounge'"
         />

@@ -10,7 +10,7 @@
                     v-model="myMusicList"
                     :group-host="groupHost"
                     :group-name="groupName"
-                    :groupKey="groupKey"
+                    :group-key="groupKey"
                     :is-like="isLike"
                     :show-like="true"
                     @click-music="changeMusic"
@@ -38,11 +38,12 @@ import { openGroup } from "@/composible/openGroup";
 import { getLikeGroupByKey } from '@/services/Group';
 
 const youtubeData = () => {
-    let player = {};
+    const player = ref({});
     const myMusicList = ref([]);
+    const isReady = ref(false);
 
     const onYouTubeIframeAPIReady = () => {
-        player = new YT.Player("player", {
+        player.value = new YT.Player("player", {
             playerVars: { origin: "https://vue-pwa-776e7.firebaseapp.com" },
             width: "600",
             events: {
@@ -53,20 +54,26 @@ const youtubeData = () => {
 
     const addPlayList = () => {
         const playList = myMusicList.value.map(item => item.videoId);
-        player.cuePlaylist({
+        player.value.cuePlaylist({
             playlist: playList
         });
+        isReady.value = true;
+
+        setTimeout(() => {
+            player.value.playVideo();
+        }, 1000);
     };
 
-    const changeMusic = idx => {
-        player.playVideoAt(idx);
+    const changeMusic = (idx) => {
+        player.value.playVideoAt(idx);
     };
 
     return {
-        player,
         myMusicList,
         onYouTubeIframeAPIReady,
-        changeMusic
+        changeMusic,
+        addPlayList,
+        isReady,
     };
 };
 
@@ -95,19 +102,25 @@ export default {
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
 
         const {
-            player,
             myMusicList,
             onYouTubeIframeAPIReady,
-            changeMusic
+            changeMusic,
+            addPlayList,
+            isReady,
         } = youtubeData();
 
         watch(myMusicList, () => {
             if (myMusicList.value.length === 0) {
-                return (isList.value = false);
+                return isList.value = false;
             } else {
                 isList.value = true;
             }
-            onYouTubeIframeAPIReady();
+
+            if (isReady.value === true) {
+                addPlayList();
+            } else {
+                onYouTubeIframeAPIReady();
+            }
         });
 
         return {
@@ -115,7 +128,6 @@ export default {
             groupKey,
             groupHost,
             myMusicList,
-            player,
             onYouTubeIframeAPIReady,
             isList,
             changeMusic,
