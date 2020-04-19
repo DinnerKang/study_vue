@@ -14,17 +14,23 @@ export function getMusicListByGroup(data) {
 // Write
 
 export async function registMusic(searchResult) {
-    const { data } = await getYoutubeDetail(searchResult.videoId);
+    try {
+        const { data } = await getYoutubeDetail(searchResult.videoId);
+        
+        await firebase.database().ref(`music/${searchResult.dealiName}/${searchResult.groupKey}`).push({
+            thumbnails: searchResult.thumbnails,
+            musicName: searchResult.musicName,
+            videoId: searchResult.videoId,
+            dealiName: searchResult.dealiName,
+            duration: data.items[0].contentDetails.duration,
+            register: searchResult.register,
+        });
+        return alert('저장했습니다.');
+    } catch (e) {
+        alert('이 영상은 저장 불가능합니다.');
+        return e;
+    }
     
-    await firebase.database().ref(`music/${searchResult.dealiName}/${searchResult.groupKey}`).push({
-        thumbnails: searchResult.thumbnails,
-        musicName: searchResult.musicName,
-        videoId: searchResult.videoId,
-        dealiName: searchResult.dealiName,
-        duration: data.items[0].contentDetails.duration,
-        register: searchResult.register,
-    });
-    return alert('저장했습니다.');
 }
 
 // Delete
