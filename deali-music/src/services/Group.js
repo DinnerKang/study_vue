@@ -28,10 +28,8 @@ export function getLikeGroupByKey(key) {
 // WRITE
 
 export function addMyGroup(data) {
-    // if (Store.state.login.userState !== '딜리언즈') return alert('딜리언즈만 사용 가능합니다.');
     const ref = firebase.database().ref(`group/all/${data.dealiName}`);
     const myKey = ref.push().key;
-    console.log(data);
 
     if (data.isShowGroup === true) {
         const data1 = {
@@ -53,7 +51,8 @@ export function addMyGroup(data) {
 export function addLikeGroup(data) {
     firebase.database().ref(`group/likes/${data.dealiName}`).update({
         [data.targetKey] :  data.targetName,
-    });
+    }); 
+    if (!data.isShowGroup) return;
     return firebase.database().ref(`group/showGroup/${data.targetKey}/likes`).update({
         [data.dealiName] : true,
     });

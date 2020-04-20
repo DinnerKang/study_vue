@@ -12,6 +12,7 @@
                     :group-name="groupName"
                     :group-key="groupKey"
                     :is-like="isLike"
+                    :is-show-group="isShowGroup"
                     :show-like="true"
                     @click-music="changeMusic"
                 />
@@ -35,7 +36,7 @@ import { ref, watch , computed } from "@vue/composition-api";
 import MusicList from "@/components/list/MusicList";
 import OpenGroupList from "@/components/list/OpenGroupList";
 import { openGroup } from "@/composible/openGroup";
-import { getLikeGroupByKey } from '@/services/Group';
+import { getLikeGroupByKey, getGroupListByKey } from '@/services/Group';
 
 const youtubeData = () => {
     const player = ref({});
@@ -79,6 +80,12 @@ const youtubeData = () => {
 
 const getLike = (key, userInfo) => {
     const isLike = ref(false);
+    const isShowGroup = ref(false);
+    const data = {
+        dealiName: userInfo.value.dealiName,
+        key,
+    };
+
     getLikeGroupByKey(key).on('value', snapshot => {
         const result = snapshot.val();
         if (result){
@@ -87,9 +94,14 @@ const getLike = (key, userInfo) => {
             isLike.value = false;
         }
     });
+    
+    getGroupListByKey(data).once('value', snapshot => {
+        isShowGroup.value = snapshot.val().isShowGroup;
+    });
 
     return {
         isLike,
+        isShowGroup,
     };
 };
 

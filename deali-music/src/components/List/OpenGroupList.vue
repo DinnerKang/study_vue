@@ -67,7 +67,10 @@ const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
     };
     
     const clickLikeGroup = openGroupData => {
-        if (!userInfo.value.dealiName) return;
+        if (!userInfo.value.dealiName) {
+            alert('로그인 후 하트 눌러주세요 !');
+            return;
+        }
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
@@ -90,11 +93,9 @@ const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
 };
 
 const iconList = () => {
-    const isLike = ref(false);
     const likeIcon = require("../../assets/icons/icon_heart_x3(57x57).png");
     const notIcon = require("../../assets/icons/icon_heartoutline_x3(58x58).png");
     return {
-        isLike,
         likeIcon,
         notIcon
     };
@@ -121,33 +122,26 @@ export default {
     },
     setup(props, { root }) {
         const userInfo = computed(() => root.$store.getters["login/getUserStatus"]);
-        const { isLike, notIcon, likeIcon } = iconList();
+        const isLike = ref(false);
         const likeUser = computed(() => props.openGroupData.likes);
         const likeUserNumber = ref(0);
 
-        watch(
-            () => userInfo.value.dealiName,
-            () => {
-                if (!likeUser.value || !userInfo.value.dealiName)
-                    return (isLike.value = false);
-                if (userInfo.value.dealiName !== "") {
-                    if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
-                        isLike.value = true;
-                    } else {
-                        isLike.value = false;
-                    }
-                    likeUserNumber.value = Object.keys(likeUser.value).length;
-                }
+        watch(() => userInfo.value.dealiName, () => {
+            if (!likeUser.value) return;
+
+            if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
+                isLike.value = true;
+            } else {
+                isLike.value = false;
             }
-        );
+            likeUserNumber.value = Object.keys(likeUser.value).length;
+        });
 
         return {
             ...getGroupData(userInfo, props.openGroupData),
             isLike,
-            notIcon,
-            likeIcon,
+            ...iconList(),
             ...clickEvent(userInfo, root.$router, isLike, likeUserNumber),
-            likeUser,
             likeUserNumber,
         };
     }

@@ -107,7 +107,10 @@ export default {
         isLike: {
             type: Boolean,
             default: false
-        }
+        },
+        isShowGroup: {
+            type: Boolean,
+        },
     },
     setup(props, { root, emit }) {
         const isLounge = props.groupName === "lounge";
@@ -137,6 +140,7 @@ export default {
                 dealiName: userInfo.value.dealiName,
                 targetName: userInfo.value.dealiName,
                 targetKey: props.groupKey,
+                isShowGroup: props.isShowGroup,
             };
             if (props.isLike === false) {
                 addLikeGroup(data);
