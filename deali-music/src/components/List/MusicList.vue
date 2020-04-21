@@ -2,7 +2,7 @@
     <article class="music_container">
         <div class="music_header">
             <div class="close_icon_area">
-                <div class="close_icon" @click="closeMenu" v-if="!showLike" />
+                <img :src="closeIcon" class="close_icon" @click="closeMenu" v-if="!showLike" />
             </div>
             <h2>{{ isLounge ? '라운지 ' : '' }}플레이리스트</h2>
             <img class="img_area" v-if="showLike" :src="isLike ? likeIcon : notIcon" 
@@ -21,7 +21,7 @@
                     <div class="list_muisc_name" @click="clickMusic(idx)" :title="list.musicName">{{list.musicName}}</div>
                 </div>
                 <div class="list_duration">{{list.duration | setYoutubeTime}}</div>
-                <img v-if="groupHost === userInfo.dealiName || 'lounge'" :src="removeIcon" 
+                <img v-if="groupHost === userInfo.dealiName || groupHost === 'lounge'" :src="removeIcon" 
                 class="delete_btn" @click="removeMusic(idx)" alt="삭제" />
             </li>
         </ul>
@@ -73,14 +73,16 @@ const setMusicList = (props, emit, isLounge) => {
 };
 
 const iconData = () => {
+    const closeIcon = require('@/assets/icons/Icon_close_20x20(x2).png');
     const removeIcon = require("@/assets/icons/icon_xbutton_x2(14x14).png");
-    const likeIcon = require("../../assets/icons/icon_heart_x3(57x57).png");
-    const notIcon = require("../../assets/icons/icon_heartoutline_x3(58x58).png");
+    const likeIcon = require("@/assets/icons/Icon_heart_18x18(x2).png");
+    const notIcon = require("@/assets/icons/Icon_heart_outline18x18(x2).png");
 
     return {
+        closeIcon,
         removeIcon,
         likeIcon,
-        notIcon
+        notIcon,
     };
 };
 
@@ -108,7 +110,7 @@ export default {
             type: Boolean,
             default: false
         },
-        isShowGroup: {
+        showGroup: {
             type: Boolean,
         },
     },
@@ -140,7 +142,7 @@ export default {
                 dealiName: userInfo.value.dealiName,
                 targetName: userInfo.value.dealiName,
                 targetKey: props.groupKey,
-                isShowGroup: props.isShowGroup,
+                isShowGroup: props.showGroup,
             };
             if (props.isLike === false) {
                 addLikeGroup(data);
@@ -174,16 +176,15 @@ export default {
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    background-color: $White;
-    color: $Black;
-    border-radius: 8px;
-    box-shadow: 3px 0px 50px rgba(0, 0, 0, 0.1);
+    background-color: $Black;
+    color: $White;
+    border: 1px solid $Main;
 
     .music_header {
         position: relative;
         width: 100%;
         height: 45px;
-        border-bottom: 1px solid $Gray400;
+        border-bottom: 1px solid $Main;
         display: flex;
         align-items: center;
         padding: 0 15px;
@@ -191,13 +192,13 @@ export default {
 
         .close_icon_area {
             width: 40px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             .close_icon {
                 width: 15px;
                 height: 15px;
-                border-radius: 50%;
-                background-color: #fa8282;
                 cursor: pointer;
                 margin: 0 auto;
             }
@@ -206,6 +207,7 @@ export default {
             margin: 0;
             font-size: 15px;
             font-weight: bold;
+            color: $Main;
         }
         .img_area {
             width: 15px;
@@ -215,21 +217,19 @@ export default {
         }
     }
     .music_container__list_area {
-        padding-top: 20px;
         overflow-y: auto;
         height: calc(100% - 65px);
 
         .music_container__list {
             width: 100%;
-            height: 30px;
-            padding: 0 15px;
+            height: 70px;
+            padding: 20px 15px 0;
             box-sizing: border-box;
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
 
             &.active {
-                background-color: rgba(0, 0, 0, 0.1);
+                background-color: $Main
             }
 
             .list_idx {
@@ -243,7 +243,7 @@ export default {
 
                 .list_music_register {
                     font-size: 11px;
-                    color: $Gray400;
+                    color: $White;
                     position: absolute;
                     top: -15px;
                 }
@@ -261,9 +261,10 @@ export default {
                 font-size: 12px;
             }
             .delete_btn {
+                width: 7px;
                 border: none;
                 cursor: pointer;
-                margin-left: 10px;
+                margin-left: 20px;
             }
         }
     }

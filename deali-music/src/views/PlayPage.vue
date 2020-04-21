@@ -12,7 +12,7 @@
                     :group-name="groupName"
                     :group-key="groupKey"
                     :is-like="isLike"
-                    :is-show-group="isShowGroup"
+                    :show-group="isShowGroup"
                     :show-like="true"
                     @click-music="changeMusic"
                 />
@@ -96,6 +96,7 @@ const getLike = (key, userInfo) => {
     });
     
     getGroupListByKey(data).once('value', snapshot => {
+        if (!snapshot.val()) return isShowGroup.value = false;
         isShowGroup.value = snapshot.val().isShowGroup;
     });
 
@@ -162,7 +163,6 @@ export default {
         .plyaer_container{
             width: 600px;
             height: 360px;
-            border-radius: 8px;
             overflow: hidden;
             display: flex;
             align-items: center;

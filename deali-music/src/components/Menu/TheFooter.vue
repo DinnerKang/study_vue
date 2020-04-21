@@ -7,7 +7,7 @@
             </div>
             <div class="controll_area">
                 <div class="controll_icon">
-                    <img class="icon_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
+                    <img class="icon_btn next_btn" :src="nextIcon" @click="videoControl('prev')" alt="이전곡" />
                     <img
                         v-if="videoStatus.status!==1"
                         class="icon_btn start_icon"
@@ -23,7 +23,7 @@
                         alt="중지"
                     />
                     <img
-                        class="icon_btn next_btn"
+                        class="icon_btn"
                         :src="nextIcon"
                         @click="videoControl('next')"
                         alt="다음곡"
@@ -128,7 +128,7 @@ const controlVideo = () => {
     };
 
     watch(controlSound, (newValue, oldValue) => {
-        sliderBackground.value = `linear-gradient(to right, #00dbdb 0%, #00dbdb ${newValue}%, #888888 ${newValue}%, #888888 100%)`;
+        sliderBackground.value = `linear-gradient(to right, #000 0%, #000 ${newValue}%, #ffffff ${newValue}%, #ffffff 100%)`;
 
         if (oldValue === null) return;
         soundControl(newValue);
@@ -146,12 +146,12 @@ const controlVideo = () => {
 };
 
 const iconData = () => {
-    const startIcon = require("../../assets/icons/icon_playbutton_x2(50x50).png");
-    const menuIcon = require("../../assets/icons/icon_menubutton_x2(50x50).png");
-    const soundIcon = require("../../assets/icons/icon_volumbutton_x2(50x50).png");
-    const nextIcon = require("../../assets/icons/icon_skipbutton_02_x2(40x40).png");
-    const stopIcon = require("../../assets/icons/icon_stop_x2(50x50).png");
-    const musicIcon = require('../../assets/icons/icon_Thumbnail_x2(80x80).png')
+    const startIcon = require("@/assets/icons/Icon_play_20x20(x3).png");
+    const menuIcon = require("@/assets/icons/Icon_menu_20x20(x2).png");
+    const soundIcon = require("@/assets/icons/Icon_volume_20x20(x2).png");
+    const nextIcon = require("@/assets/icons/Icon_skip_20x20(x3).png");
+    const stopIcon = require("@/assets/icons/Icon_stop_20x20(x2).png");
+    const musicIcon = require('@/assets/icons/Icon_Thumbnail_36x36(x2).png')
 
     return {
         startIcon,
@@ -217,7 +217,7 @@ footer {
     width: 100%;
     min-width: 1024px;
     height: 72px;
-    background-color: $WhiteGray;
+    background-color: $Main;
     color: $Black;
     z-index: 100;
 
@@ -262,11 +262,11 @@ footer {
             text-overflow: ellipsis;
             width: 200px;
             white-space: nowrap;
-            color: $Black;
+            color: $White;
         }
     }
     .icon_btn {
-        width: 20px;
+        width: 18px;
         cursor: pointer;
     }
     .start_icon {
@@ -302,7 +302,7 @@ footer {
             font-size: 10px;
             display: flex;
             align-items: center;
-            color: $Gray600;
+            color: $White;
 
             .percent_area {
                 position: relative;
@@ -314,13 +314,13 @@ footer {
                     position: absolute;
                     width: 300px;
                     height: 2px;
-                    background-color: $Gray600;
+                    background-color: $White;
                 }
                 .percent_bar {
                     position: absolute;
                     width: 0px;
                     height: 2px;
-                    background-color: $Main;
+                    background-color: $Black;
                     z-index: 1;
                     max-width: 100%;
                 }
@@ -365,7 +365,7 @@ input:focus {
     #slider {
         border-radius: 6px;
         border: none;
-        background: $Gray600;
+        background: $White;
         height: 3px;
         width: 78px;
         cursor: pointer;
@@ -376,7 +376,7 @@ input:focus {
         width: 5px;
         height: 10px;
         border-radius: 0.8px;
-        background-color: $Main;
+        background-color: $White;
     }
     #slider::-webkit-slider-thumb {
         -webkit-appearance: none;
@@ -385,7 +385,7 @@ input:focus {
         width: 5px;
         height: 10px;
         border-radius: 0.8px;
-        background-color: $Main;
+        background-color: $White;
     }
     #slider::-ms-track {
         -webkit-appearance: none;
@@ -394,7 +394,7 @@ input:focus {
         width: 5px;
         height: 10px;
         border-radius: 0.8px;
-        background-color: $Main;
+        background-color: $White;
     }
 }
 

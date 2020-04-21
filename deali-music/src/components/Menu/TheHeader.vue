@@ -28,7 +28,7 @@ import SearchBar from '../search/SearchBar';
 const getUserInfo = (store, router) => {
     const userName = computed(() => store.state.login.userName);
     const userState = computed(() => store.state.login.userState);
-    const logoIcon = require('@/assets/icons/logo_x2(400x60).png');
+    const logoIcon = require('@/assets/icons/logo_153x20_(x2).png');
 
     const userLogin = async() => {
         const provider = new firebase.auth.GoogleAuthProvider();
@@ -108,7 +108,7 @@ export default {
                 display: flex;
                 align-items: center;
                 justify-content: flex-end;
-                color: $Gray600;
+                color: $White;
 
                 .logout_area{
                     width: 100%;
@@ -124,16 +124,16 @@ export default {
                 }
             }  
             .page_link {
-                color: $Gray600;
+                color: $White;
                 text-align: center;
                 font-size:12px;
                 width: 70px;
             }
             .login_btn{
                 border: none;
-                background-color: #fff;
+                background-color: $Black;
                 cursor: pointer;
-                color: $Gray600;
+                color: $White;
                 width: 70px;
                 text-align: center;
                 font-size:12px;

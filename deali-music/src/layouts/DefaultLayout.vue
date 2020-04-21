@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="default-layout">
         <the-header />
         <slot />
         <the-footer v-if="isFooter" />
@@ -32,3 +32,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+ .default-layout{
+     background-color: $Black;
+ }
+</style>

@@ -93,8 +93,9 @@ const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
 };
 
 const iconList = () => {
-    const likeIcon = require("../../assets/icons/icon_heart_x3(57x57).png");
-    const notIcon = require("../../assets/icons/icon_heartoutline_x3(58x58).png");
+    const likeIcon = require("@/assets/icons/Icon_heart_18x18(x2).png");
+    const notIcon = require("@/assets/icons/Icon_heart_outline18x18(x2).png");
+
     return {
         likeIcon,
         notIcon
@@ -151,7 +152,6 @@ export default {
 <style lang="scss" scoped>
 .group_container {
     box-sizing: border-box;
-    border-radius: 8px;
     color: $White;
     position: relative;
     cursor: pointer;
@@ -165,6 +165,7 @@ export default {
         font-size: 15px;
         font-weight: bold;
         margin: 16px 0 8px;
+        color: $White;
 
         .like-area{
             display: flex;

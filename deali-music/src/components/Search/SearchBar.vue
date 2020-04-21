@@ -17,7 +17,7 @@ import { ref } from "@vue/composition-api";
 
 const searchYoutube = router => {
     const searchText = ref("");
-    const searchIcon = require("@/assets/icons/search-black.png");
+    const searchIcon = require("@/assets/icons/Icon_search_20x20(x2).png");
     let searchDelay = true;
 
     const clickSearchBtn = () => {
@@ -63,16 +63,17 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid $Gray400;
+    border: 1px solid $Main;
     margin: 0 auto;
     padding: 0 12px 0 32px;
     box-sizing: border-box;
-    border-radius: 4px;
 
     .search_text {
         width: calc(100% - 35px);
         height: 26px;
         border: none;
+        background-color: $Black;
+        color: $White;
 
         &:focus {
             outline: none;
@@ -80,7 +81,7 @@ export default {
     }
 
     .search_btn {
-        background-color: $White;
+        background-color: $Black;
         border: none;
         height: 26px;
         color: $Gray400;

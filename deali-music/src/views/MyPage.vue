@@ -342,7 +342,6 @@ export default {
                     width: 260px;
                     height: 30px;
                     border: 1px solid $Gray400;
-                    border-radius: 4px;
                     font-size: 12px;
                     padding-left: 8px;
                 }

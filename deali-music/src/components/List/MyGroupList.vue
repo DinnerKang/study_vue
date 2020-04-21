@@ -102,7 +102,6 @@ export default {
 <style lang="scss" scoped>
     .group_container{
         border: none;
-        border-radius: 8px;
         color: $White;
         position: relative;
         cursor: pointer;
