@@ -74,7 +74,7 @@ const setMusicList = (props, emit, isLounge) => {
 
 const iconData = () => {
     const closeIcon = require('@/assets/icons/Icon_close_20x20(x2).png');
-    const removeIcon = require("@/assets/icons/icon_xbutton_x2(14x14).png");
+    const removeIcon = require("@/assets/icons/Icon_close_white_20x20(x2).png");
     const likeIcon = require("@/assets/icons/Icon_heart_18x18(x2).png");
     const notIcon = require("@/assets/icons/Icon_heart_outline18x18(x2).png");
 
@@ -121,7 +121,7 @@ export default {
         const { getMusicList, musicList, removeMusic } = setMusicList(
             props,
             emit,
-            isLounge
+            isLounge,
         );
 
         const closeMenu = () => {
@@ -140,14 +140,15 @@ export default {
             if (!userInfo.value.dealiName) return;
             const data = {
                 dealiName: userInfo.value.dealiName,
-                targetName: userInfo.value.dealiName,
+                targetName: props.groupHost,
                 targetKey: props.groupKey,
                 isShowGroup: props.showGroup,
             };
-            if (props.isLike === false) {
-                addLikeGroup(data);
-            } else {
+
+            if (props.isLike) {
                 deleteLikeGroup(data);
+            } else {
+                addLikeGroup(data);
             }
         };
 
@@ -179,6 +180,7 @@ export default {
     background-color: $Black;
     color: $White;
     border: 1px solid $Main;
+    border-bottom: none;
 
     .music_header {
         position: relative;

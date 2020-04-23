@@ -17,7 +17,7 @@ import { ref } from "@vue/composition-api";
 
 const searchYoutube = router => {
     const searchText = ref("");
-    const searchIcon = require("@/assets/icons/Icon_search_20x20(x2).png");
+    const searchIcon = require("@/assets/icons/Icon_search_20x20(x3).png");
     let searchDelay = true;
 
     const clickSearchBtn = () => {
@@ -87,6 +87,7 @@ export default {
         color: $Gray400;
         width: 40px;
         cursor: pointer;
+        outline: none;
     }
     .search_icon {
         position: absolute;

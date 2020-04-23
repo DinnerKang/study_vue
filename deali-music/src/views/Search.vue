@@ -1,6 +1,6 @@
 <template>
   <div class="myPage_container">
-    <music-regist :search-result="searchResult"></music-regist>
+    <search-regist :search-result="searchResult"></search-regist>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 import { ref, watch } from "@vue/composition-api";
 import { getYoutubeData } from "@/services/Youtube.js";
 
-import MusicRegist from '@/components/search/SearchRegist';
+import SearchRegist from '@/components/search/SearchRegist';
 
 const showYoutubeData = () => {
   let searchResult = ref("");
@@ -30,7 +30,7 @@ const showYoutubeData = () => {
 
 export default {
   name: "search",
-  components: {MusicRegist},
+  components: { SearchRegist },
   setup(props, { root }) {
     
     const { searchResult, getYotube } = showYoutubeData();

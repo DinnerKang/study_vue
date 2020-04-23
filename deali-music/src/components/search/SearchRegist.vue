@@ -35,7 +35,7 @@ import { registMusic } from "@/services/Music";
 import { getGroupList } from "@/services/Group";
 import { computed, ref } from "@vue/composition-api";
 import { decodeStr } from "@/composible/decodeStr";
-import menuIcon from '@/assets/icons/button-of-three-vertical-squares.png';
+import menuIcon from '@/assets/icons/Icon_dot_menu_20x20(x2).png';
 import RegistList from '@/components/list/RegistList';
 
 const clickEvent = (userInfo) => {
@@ -113,6 +113,7 @@ export default {
 <style lang="scss" scoped>
 .music_list_container {
     margin-top: 56px;
+    color: $White;
 
     .list_area {
         width: 100%;

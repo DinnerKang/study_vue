@@ -42,7 +42,9 @@ const getGroupData = (userInfo, openGroupData) => {
         dealiName: openGroupData.dealiName,
         key: openGroupData.targetKey
     };
-    getGroupListByKey(data).on("value", async snapshot => {
+    getGroupListByKey(data).on("value", (snapshot) => {
+        console.log('g', snapshot.val());
+        if (!snapshot.val()) return;
         groupData.value = snapshot.val();
         getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
     });
@@ -74,7 +76,8 @@ const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
-            targetKey: openGroupData.targetKey
+            targetKey: openGroupData.targetKey,
+            isShowGroup: true,
         };
         if (isLike.value === false) {
             addLikeGroup(data);
@@ -129,7 +132,6 @@ export default {
 
         watch(() => userInfo.value.dealiName, () => {
             if (!likeUser.value) return;
-
             if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
                 isLike.value = true;
             } else {

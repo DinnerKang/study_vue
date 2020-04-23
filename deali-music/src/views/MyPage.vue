@@ -197,7 +197,7 @@ const modalEvent = (userInfo) => {
 
 
 const iconData = () => {
-    const addGroupIcon = require('@/assets/icons/plus-icon.png');
+    const addGroupIcon = require('@/assets/icons/mypage_button_40x40(x2).png');
     const editGroupIcon = require('@/assets/icons/edit-icon.png');
     const deleteGroupIcon = require('@/assets/icons/delete-icon.png');
 

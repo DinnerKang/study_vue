@@ -50,6 +50,7 @@ export default {
     z-index: 3;
     background-color: $White;
     border: 1px solid $Gray400;
+    color: $Black;
 
     .menu_list{
         height: 36px;

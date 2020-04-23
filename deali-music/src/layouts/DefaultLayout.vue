@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
- .default-layout{
+html{
      background-color: $Black;
  }
 </style>

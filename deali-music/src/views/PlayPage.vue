@@ -36,7 +36,7 @@ import { ref, watch , computed } from "@vue/composition-api";
 import MusicList from "@/components/list/MusicList";
 import OpenGroupList from "@/components/list/OpenGroupList";
 import { openGroup } from "@/composible/openGroup";
-import { getLikeGroupByKey, getGroupListByKey } from '@/services/Group';
+import { getLikeGroupList, getGroupListByKey } from '@/services/Group';
 
 const youtubeData = () => {
     const player = ref({});
@@ -78,24 +78,31 @@ const youtubeData = () => {
     };
 };
 
-const getLike = (key, userInfo) => {
+const getLike = (key, groupHost, userInfo) => {
     const isLike = ref(false);
     const isShowGroup = ref(false);
-    const data = {
+    const myData = {
         dealiName: userInfo.value.dealiName,
         key,
     };
+    const hostData = {
+        dealiName: groupHost,
+        key,
+    };
 
-    getLikeGroupByKey(key).on('value', snapshot => {
+
+    getLikeGroupList(myData).on('value', snapshot => {
         const result = snapshot.val();
-        if (result){
-            isLike.value = result[userInfo.value.dealiName];
+        console.log(result);
+        if (Object.keys(result).includes(key)){
+            isLike.value = true;
         } else {
             isLike.value = false;
         }
     });
     
-    getGroupListByKey(data).once('value', snapshot => {
+    getGroupListByKey(hostData).once('value', (snapshot) => {
+         console.log(snapshot.val());
         if (!snapshot.val()) return isShowGroup.value = false;
         isShowGroup.value = snapshot.val().isShowGroup;
     });
@@ -145,7 +152,7 @@ export default {
             isList,
             changeMusic,
             ...openGroup(),
-            ...getLike(groupKey, userInfo),
+            ...getLike(groupKey, groupHost, userInfo),
         };
     }
 };

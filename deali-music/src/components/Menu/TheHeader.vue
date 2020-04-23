@@ -28,7 +28,7 @@ import SearchBar from '../search/SearchBar';
 const getUserInfo = (store, router) => {
     const userName = computed(() => store.state.login.userName);
     const userState = computed(() => store.state.login.userState);
-    const logoIcon = require('@/assets/icons/logo_153x20_(x2).png');
+    const logoIcon = require('@/assets/icons/logo_135x23(x2).png');
 
     const userLogin = async() => {
         const provider = new firebase.auth.GoogleAuthProvider();

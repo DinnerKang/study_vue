@@ -150,9 +150,9 @@ const iconData = () => {
     const menuIcon = require("@/assets/icons/Icon_menu_20x20(x2).png");
     const soundIcon = require("@/assets/icons/Icon_volume_20x20(x2).png");
     const nextIcon = require("@/assets/icons/Icon_skip_20x20(x3).png");
-    const stopIcon = require("@/assets/icons/Icon_stop_20x20(x2).png");
+    const stopIcon = require("@/assets/icons/Icon_stop_20x20(x3).png");
     const musicIcon = require('@/assets/icons/Icon_Thumbnail_36x36(x2).png')
-
+ 
     return {
         startIcon,
         menuIcon,
