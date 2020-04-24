@@ -188,6 +188,7 @@ export default {
         .recomend_play_list{
             .list_text{
                 margin: 0 0 30px;
+                color: $White;
             }
             .recomend_group_list {
                 width: 240px;
