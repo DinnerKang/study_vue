@@ -179,8 +179,7 @@ export default {
     box-sizing: border-box;
     background-color: $Black;
     color: $White;
-    border: 1px solid $Main;
-    border-bottom: none;
+    border: 2px solid $Main;
 
     .music_header {
         position: relative;

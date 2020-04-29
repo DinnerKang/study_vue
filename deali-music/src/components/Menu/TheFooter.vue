@@ -241,6 +241,9 @@ footer {
             .menu_list{
                 overflow: hidden;
             }
+            .music_container{
+                border-bottom: none;
+            }
         }
     }
 

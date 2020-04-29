@@ -245,6 +245,7 @@ export default {
     }
 
     .myPage_container{
+        color: $White;
 
         .my_group_list{
             display: grid;
@@ -334,15 +335,16 @@ export default {
                     margin: 0 0 15px;
                     
                     .inner_text{
-                        color: $Gray600;
+                        color: $White;
                         font-weight: bold;
                     }
                 }
                 .group_input{
                     width: 260px;
                     height: 30px;
-                    border: 1px solid $Gray400;
+                    border: 1px solid $Main;
                     font-size: 12px;
+                    background-color: $Black;
                     padding-left: 8px;
                 }
             }
@@ -358,7 +360,9 @@ export default {
 
                     .radio_text{
                         font-size: 12px;
-                        color: $Gray400;
+                    }
+                    .radio_btn{
+                        color: $White;
                     }
                 }
             }
@@ -370,13 +374,12 @@ export default {
                     outline: none;
                     width: 120px;
                     height: 30px;
-                    border: 1px solid $Gray400;
-                    border-radius: 15px;
-                    color: $Gray600;
+                    border: 1px solid $Main;
+                    color: $White;
                     font-weight: bold;
                     font-size: 15px;
                     padding: 0;
-                    background-color: $White;
+                    background-color: $Black;
                     cursor: pointer;
                 }
             }
