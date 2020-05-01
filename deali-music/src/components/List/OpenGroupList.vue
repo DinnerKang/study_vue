@@ -13,11 +13,12 @@
                 <div class="like-area">
                     <div v-if="likeUserNumber > 0">{{ likeUserNumber }}</div>
                     <img
-                    class="img_area"
-                    v-if="showLikes"
-                    :src="isLike ? likeIcon : notIcon"
-                    @click="clickLikeGroup(openGroupData)"
-                    alt="하트" />
+                        class="img_area"
+                        v-if="showLikes"
+                        :src="isLike ? likeIcon : notIcon"
+                        @click="clickLikeGroup(openGroupData)"
+                        alt="하트"
+                    />
                 </div>
             </div>
             <div class="sub_text">{{groupData.description}}</div>
@@ -42,8 +43,7 @@ const getGroupData = (userInfo, openGroupData) => {
         dealiName: openGroupData.dealiName,
         key: openGroupData.targetKey
     };
-    getGroupListByKey(data).on("value", (snapshot) => {
-        console.log('g', snapshot.val());
+    getGroupListByKey(data).on("value", snapshot => {
         if (!snapshot.val()) return;
         groupData.value = snapshot.val();
         getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
@@ -55,8 +55,7 @@ const getGroupData = (userInfo, openGroupData) => {
     };
 };
 
-
-const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
+const clickEvent = (userInfo, router, isLike) => {
     const clickGroup = (groupData, openGroupData) => {
         router.push({
             path: "/playPage",
@@ -67,31 +66,29 @@ const clickEvent = (userInfo, router, isLike, likeUserNumber) => {
             }
         });
     };
-    
+
     const clickLikeGroup = openGroupData => {
         if (!userInfo.value.dealiName) {
-            alert('로그인 후 하트 눌러주세요 !');
+            alert("로그인 후 하트 눌러주세요 !");
             return;
         }
         const data = {
             dealiName: userInfo.value.dealiName,
             targetName: openGroupData.dealiName,
             targetKey: openGroupData.targetKey,
-            isShowGroup: true,
+            isShowGroup: true
         };
         if (isLike.value === false) {
             addLikeGroup(data);
             isLike.value = true;
-            likeUserNumber.value += 1;
         } else {
             deleteLikeGroup(data);
             isLike.value = false;
-            likeUserNumber.value -= 1;
         }
     };
     return {
         clickGroup,
-        clickLikeGroup,
+        clickLikeGroup
     };
 };
 
@@ -125,27 +122,40 @@ export default {
         }
     },
     setup(props, { root }) {
-        const userInfo = computed(() => root.$store.getters["login/getUserStatus"]);
+        const userInfo = computed(
+            () => root.$store.getters["login/getUserStatus"]
+        );
         const isLike = ref(false);
         const likeUser = computed(() => props.openGroupData.likes);
-        const likeUserNumber = ref(0);
-
-        watch(() => userInfo.value.dealiName, () => {
-            if (!likeUser.value) return;
-            if (Object.keys(likeUser.value).includes(userInfo.value.dealiName)) {
-                isLike.value = true;
-            } else {
-                isLike.value = false;
+        const likeUserNumber = computed(() => {
+            if (props.openGroupData.likes) {
+                return props.openGroupData.likes.count;
             }
-            likeUserNumber.value = Object.keys(likeUser.value).length;
+            return 0;
         });
+
+        watch(
+            () => userInfo.value.dealiName,
+            () => {
+                if (!likeUser.value) return;
+                if (
+                    Object.keys(likeUser.value).includes(
+                        userInfo.value.dealiName
+                    )
+                ) {
+                    isLike.value = true;
+                } else {
+                    isLike.value = false;
+                }
+            }
+        );
 
         return {
             ...getGroupData(userInfo, props.openGroupData),
             isLike,
             ...iconList(),
-            ...clickEvent(userInfo, root.$router, isLike, likeUserNumber),
-            likeUserNumber,
+            ...clickEvent(userInfo, root.$router, isLike),
+            likeUserNumber
         };
     }
 };
@@ -169,7 +179,7 @@ export default {
         margin: 16px 0 8px;
         color: $White;
 
-        .like-area{
+        .like-area {
             display: flex;
             align-items: center;
 
@@ -180,7 +190,6 @@ export default {
                 margin-left: 5px;
             }
         }
-        
     }
     .sub_text {
         font-size: 12px;

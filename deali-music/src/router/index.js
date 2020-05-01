@@ -6,6 +6,7 @@ import Lounge from '../views/Lounge';
 import Search from '../views/Search.vue';
 import PlayPage from '../views/PlayPage';
 import Store from '../store/index';
+import Mobile from '../views/Mobile.vue';
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,12 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: { unauthorized: true },
+    beforeEnter: (to, from, next) => {
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        next('/mobile');
+      }
+      next();
+    },
   },
   {
     path: '/myPage',
@@ -40,6 +47,12 @@ const routes = [
     meta: { unauthorized: true },
   },
   {
+    path: '/mobile',
+    name: 'Mobile',
+    component: Mobile,
+    meta: { unauthorized: true, layout: 'MobileLayout' },
+  },
+  {
       path: '*',
       component: Home,
   },
@@ -60,6 +73,7 @@ router.beforeEach((to, from, next) => {
         alert('로그인 해주세요.');
         return next('/');
   }
+  
   return next();
 });
 

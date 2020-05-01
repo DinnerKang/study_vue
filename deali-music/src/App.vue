@@ -44,8 +44,8 @@ export default {
     }
  }
  .main{
-        width: 1024px;
-        min-height: calc(100vh - 128px);
-        margin: 0 auto;
-    }
+    width: 1024px;
+    min-height: calc(100vh - 128px);
+    margin: 0 auto;
+}
 </style>

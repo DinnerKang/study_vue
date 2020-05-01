@@ -93,7 +93,6 @@ const getLike = (key, groupHost, userInfo) => {
 
     getLikeGroupList(myData).on('value', snapshot => {
         const result = snapshot.val();
-        console.log(result);
         if (Object.keys(result).includes(key)){
             isLike.value = true;
         } else {
@@ -102,7 +101,6 @@ const getLike = (key, groupHost, userInfo) => {
     });
     
     getGroupListByKey(hostData).once('value', (snapshot) => {
-         console.log(snapshot.val());
         if (!snapshot.val()) return isShowGroup.value = false;
         isShowGroup.value = snapshot.val().isShowGroup;
     });
@@ -151,7 +149,7 @@ export default {
             onYouTubeIframeAPIReady,
             isList,
             changeMusic,
-            ...openGroup(),
+            ...openGroup(4),
             ...getLike(groupKey, groupHost, userInfo),
         };
     }

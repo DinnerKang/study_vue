@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import VueMeta from 'vue-meta';
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -6,7 +7,7 @@ import filters from './filters';
 import VueCompositionApi from '@vue/composition-api';
 
 Vue.use(VueCompositionApi);
-
+Vue.use(VueMeta);
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
 

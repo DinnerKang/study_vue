@@ -137,7 +137,10 @@ export default {
         };
         
          const clickLikeGroup = () => {
-            if (!userInfo.value.dealiName) return;
+            if (!userInfo.value.dealiName) {
+                alert('로그인 후 하트 눌러주세요 !');
+                return;
+            }
             const data = {
                 dealiName: userInfo.value.dealiName,
                 targetName: props.groupHost,
@@ -219,7 +222,7 @@ export default {
     }
     .music_container__list_area {
         overflow-y: auto;
-        height: calc(100% - 65px);
+        height: calc(100% - 45px);
 
         .music_container__list {
             width: 100%;
