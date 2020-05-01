@@ -63,7 +63,7 @@
 
 <script>
 import { ref, computed, watch, onBeforeUnmount, reactive, toRefs } from "@vue/composition-api";
-import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroup } from '@/services/Group';
+import { getGroupList, getLikeGroupList, addMyGroup, deleteMyGroup, getGroupListByKey, editMyGroup } from '@/services/group';
 
 import Modal  from '@/components/common/Modal';
 import OpenGroupList from '@/components/list/OpenGroupList';

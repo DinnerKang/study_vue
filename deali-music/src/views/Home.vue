@@ -26,7 +26,7 @@
 <script>
 import { ref, computed, watch } from '@vue/composition-api';
 import MyGroupList from '@/components/list/MyGroupList';
-import { getMusicListByGroup } from '@/services/Music';
+import { getMusicListByGroup } from '@/services/music';
 import { openGroup } from '@/composible/openGroup';
 import openGroupList from '@/components/list/OpenGroupList';
 

@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import { musicControl } from "@/services/Control";
-import { getMusicListByGroup, deleteMusic } from "@/services/Music";
-import { addLikeGroup, deleteLikeGroup } from '@/services/Group';
+import { musicControl } from "@/services/control";
+import { getMusicListByGroup, deleteMusic } from "@/services/music";
+import { addLikeGroup, deleteLikeGroup } from '@/services/group';
 import { ref, watch, computed } from "@vue/composition-api";
 
 const setMusicList = (props, emit, isLounge) => {

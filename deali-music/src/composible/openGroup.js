@@ -1,5 +1,5 @@
 import { ref } from "@vue/composition-api";
-import { getOpenGroup } from '@/services/Group';
+import { getOpenGroup } from '@/services/group';
 
 export const openGroup = () => {
     const openGroups = ref([]);

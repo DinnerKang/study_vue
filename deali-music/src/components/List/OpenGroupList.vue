@@ -31,7 +31,7 @@ import {
     getGroupListByKey,
     addLikeGroup,
     deleteLikeGroup
-} from "@/services/Group";
+} from "@/services/group";
 import { getImageByIdx } from "@/composible/thumbnails";
 
 const getGroupData = (userInfo, openGroupData) => {

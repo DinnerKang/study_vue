@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from './services/Axios';
 import filters from './filters';
 import VueCompositionApi from '@vue/composition-api';
 
@@ -10,7 +9,6 @@ Vue.use(VueCompositionApi);
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
-Vue.prototype.$axios = axios;
 
 // 필터 등록
 Object.entries(filters).map((item) => {

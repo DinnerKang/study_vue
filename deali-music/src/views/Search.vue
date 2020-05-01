@@ -6,7 +6,7 @@
 
 <script>
 import { ref, watch } from "@vue/composition-api";
-import { getYoutubeData } from "@/services/Youtube.js";
+import { getYoutubeData } from "@/services/youtube.js";
 
 import SearchRegist from '@/components/search/SearchRegist';
 

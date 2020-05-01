@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
-import { getYoutubeDetail } from './Youtube';
+import { getYoutubeDetail } from './youtube';
 // import Store from '@/store';
 
 

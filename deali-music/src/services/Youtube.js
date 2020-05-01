@@ -1,4 +1,4 @@
-import axios from './Axios';
+import axios from 'axios';
 import youtubeKey from "../../youtubeConfig";
 
 export function getYoutubeData(searchText) {

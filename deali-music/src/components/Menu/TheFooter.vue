@@ -82,8 +82,8 @@ import {
     videoController,
     soundControl,
     getControlLoungeStatus
-} from "@/services/Control";
-import { getLoungeStatus } from "@/services/Status";
+} from "@/services/control";
+import { getLoungeStatus } from "@/services/status";
 import MusicList from "@/components/list/MusicList";
 import ClickOutside from "vue-click-outside";
 

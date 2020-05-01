@@ -36,7 +36,7 @@ import { ref, watch , computed } from "@vue/composition-api";
 import MusicList from "@/components/list/MusicList";
 import OpenGroupList from "@/components/list/OpenGroupList";
 import { openGroup } from "@/composible/openGroup";
-import { getLikeGroupList, getGroupListByKey } from '@/services/Group';
+import { getLikeGroupList, getGroupListByKey } from '@/services/group';
 
 const youtubeData = () => {
     const player = ref({});
@@ -174,6 +174,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: center;
+            color: $White;
         }
         .list_area {
             margin-top: 30px;

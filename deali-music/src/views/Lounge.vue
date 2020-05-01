@@ -12,8 +12,8 @@
 
 <script>
 import MusicList from "@/components/list/MusicList";
-import { addVideoStatus } from "@/services/Status";
-import { getControlLoungeStatus } from "@/services/Control";
+import { addVideoStatus } from "@/services/status";
+import { getControlLoungeStatus } from "@/services/control";
 import { ref, watch, onMounted } from "@vue/composition-api";
 
 const youtubeData = () => {

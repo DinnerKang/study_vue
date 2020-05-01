@@ -52,7 +52,7 @@ export function addLikeGroup(data) {
     firebase.database().ref(`group/likes/${data.dealiName}`).update({
         [data.targetKey] :  data.targetName,
     }); 
-    if (!data.isShowGroup) return;
+    if (data.isShowGroup === false) return;
     return firebase.database().ref(`group/showGroup/${data.targetKey}/likes`).update({
         [data.dealiName] : true,
     });

@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import { registMusic } from "@/services/Music";
-import { getGroupList } from "@/services/Group";
+import { registMusic } from "@/services/music";
+import { getGroupList } from "@/services/group";
 import { computed, ref } from "@vue/composition-api";
 import { decodeStr } from "@/composible/decodeStr";
 import menuIcon from '@/assets/icons/Icon_dot_menu_20x20(x2).png';
