@@ -153,7 +153,7 @@ export default {
                         position: relative;
 
                         .menu_icon{
-                            width: 20px;
+                            width: 14px;
                             cursor: pointer;
                         }
                     }

@@ -26,6 +26,11 @@ export const openGroup = (defaultPage) => {
       });
   };
 
+  const readMore = () => {
+    perPage.value = perPage.value * 2;
+    getOpenGroupData(perPage.value);
+  };
+
   const scroll = () => {
     isFirst.value = true;
     window.onscroll = () => {
@@ -53,6 +58,7 @@ export const openGroup = (defaultPage) => {
 
   return {
     perPage,
-    openGroups
+    openGroups,
+    readMore,
   };
 };

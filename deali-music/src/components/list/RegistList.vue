@@ -1,11 +1,14 @@
 <template>
-    <ul class="menu_list_area" v-click-outside="closeMenu">
-        <li class="menu_list" @click="$emit('click-regist', item, 'lounge')">라운지</li>
-        <li v-for="list in groupList" :key="list.myKey"
-            class="menu_list"
-            @click="$emit('click-regist', item, list.myKey)">
-            {{ list.groupName }}
-        </li>
+    <ul class="menu_list" v-click-outside="closeMenu">
+        <li class="title">저장 위치</li>
+        <ul class="menu_list_area">
+            <li class="list" @click="$emit('click-regist', item, 'lounge')">라운지</li>
+            <li v-for="list in groupList" :key="list.myKey"
+                class="list"
+                @click="$emit('click-regist', item, list.myKey)">
+                {{ list.groupName }}
+            </li>
+        </ul>
     </ul>
 </template>
 
@@ -41,23 +44,45 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.menu_list_area{
+.menu_list{
     position: absolute;
-    overflow: auto;
     width: 240px;
     height: 180px;
-    bottom: 30px;
+    bottom: -190px;
+    right: 0;
     z-index: 3;
-    background-color: $White;
-    border: 1px solid $Gray400;
-    color: $Black;
+    background-color: $Black;
+    border: 2px solid $Main;
+    color: $White;
 
-    .menu_list{
+    .title{
         height: 36px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
         width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        border-bottom: 1px solid $Main;
+    }
+    .menu_list_area{
+        overflow: auto;
+        height: 144px;
+
+        .list {
+            height: 36px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            cursor: pointer;
+
+            &:hover {
+                background-color: $Gray400;
+            }
+        }
     }
 }
+
+
+
 </style>

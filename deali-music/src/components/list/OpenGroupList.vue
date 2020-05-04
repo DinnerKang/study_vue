@@ -11,7 +11,6 @@
             <div class="main_text">
                 <span>{{groupData.groupName}}</span>
                 <div class="like-area">
-                    <div v-if="likeUserNumber > 0">{{ likeUserNumber }}</div>
                     <img
                         class="img_area"
                         v-if="showLikes"
@@ -19,6 +18,9 @@
                         @click="clickLikeGroup(openGroupData)"
                         alt="하트"
                     />
+                    <div class="user-number" v-if="likeUserNumber > 0">{{ likeUserNumber }}</div>
+                    <div class="bar">|</div>
+                    <div class="user-number">{{ musicLength }}곡</div>
                 </div>
             </div>
             <div class="sub_text">{{groupData.description}}</div>
@@ -33,15 +35,18 @@ import {
     addLikeGroup,
     deleteLikeGroup
 } from "@/services/group";
+import { getMusicListByGroup } from '@/services/music';
 import { getImageByIdx } from "@/composible/thumbnails";
 
 const getGroupData = (userInfo, openGroupData) => {
     const groupData = ref({});
     const getImage = ref(null);
+    const musicLength = ref(0);
 
     const data = {
         dealiName: openGroupData.dealiName,
-        key: openGroupData.targetKey
+        key: openGroupData.targetKey,
+        groupKey: openGroupData.targetKey,
     };
     getGroupListByKey(data).on("value", snapshot => {
         if (!snapshot.val()) return;
@@ -49,9 +54,14 @@ const getGroupData = (userInfo, openGroupData) => {
         getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
     });
 
+    getMusicListByGroup(data).on('value', snapshot => {
+        if (!snapshot.val()) return musicLength.value = 0;
+        musicLength.value = Object.keys(snapshot.val()).length;
+    });
     return {
         groupData,
-        getImage
+        getImage,
+        musicLength,
     };
 };
 
@@ -170,6 +180,7 @@ export default {
 }
 .outside_area {
     color: $Black;
+
     .main_text {
         display: flex;
         justify-content: space-between;
@@ -182,12 +193,24 @@ export default {
         .like-area {
             display: flex;
             align-items: center;
+            color: $Gray400;
+            width: 70px;
 
             .img_area {
-                width: 19px;
-                height: 19px;
+                width: 15px;
                 cursor: pointer;
-                margin-left: 5px;
+                margin-right: 5px;
+            }
+            .user-number{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                font-weight: normal;
+            }
+            .bar{
+                margin: 0 10px;
+                font-size: 12px;
             }
         }
     }

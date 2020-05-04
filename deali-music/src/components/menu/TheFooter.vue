@@ -128,7 +128,7 @@ const controlVideo = () => {
     };
 
     watch(controlSound, (newValue, oldValue) => {
-        sliderBackground.value = `linear-gradient(to right, #000 0%, #000 ${newValue}%, #ffffff ${newValue}%, #ffffff 100%)`;
+        sliderBackground.value = `linear-gradient(to right, #fff 0%, #fff ${newValue}%, #000 ${newValue}%, #000 100%)`;
 
         if (oldValue === null) return;
         soundControl(newValue);
@@ -317,13 +317,13 @@ footer {
                     position: absolute;
                     width: 300px;
                     height: 2px;
-                    background-color: $White;
+                    background-color: $Black;
                 }
                 .percent_bar {
                     position: absolute;
                     width: 0px;
                     height: 2px;
-                    background-color: $Black;
+                    background-color: $White;
                     z-index: 1;
                     max-width: 100%;
                 }
@@ -374,7 +374,6 @@ input:focus {
         cursor: pointer;
     }
     #slider::-moz-range-thumb {
-        background: $White;
         border: none;
         width: 5px;
         height: 10px;

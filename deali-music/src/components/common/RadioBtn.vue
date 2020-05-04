@@ -10,8 +10,8 @@
 
 <script>
 const iconData = () => {
-    const checkIcon = require('../../assets/icons/check-icon.png');
-    const disableIcon = require('../../assets/icons/empty-icon.png');
+    const checkIcon = require('../../assets/icons/Icon_checkbox_20x20(x2).png');
+    const disableIcon = require('../../assets/icons/Icon_checkbox2_20x20(x2).png');
 
     return {
         checkIcon,

@@ -383,6 +383,7 @@ input:focus {
                 }
                 .radio_btn {
                     color: $White;
+                    background-color: $Black;
                 }
             }
         }
