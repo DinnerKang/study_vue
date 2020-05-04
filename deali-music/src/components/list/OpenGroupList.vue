@@ -19,7 +19,7 @@
                         alt="하트"
                     />
                     <div class="user-number" v-if="likeUserNumber > 0">{{ likeUserNumber }}</div>
-                    <div class="bar">|</div>
+                    <div class="bar" v-if="likeUserNumber > 0">|</div>
                     <div class="user-number">{{ musicLength }}곡</div>
                 </div>
             </div>
@@ -54,7 +54,7 @@ const getGroupData = (userInfo, openGroupData) => {
         getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
     });
 
-    getMusicListByGroup(data).on('value', snapshot => {
+    getMusicListByGroup(data).once('value', snapshot => {
         if (!snapshot.val()) return musicLength.value = 0;
         musicLength.value = Object.keys(snapshot.val()).length;
     });
@@ -193,6 +193,7 @@ export default {
         .like-area {
             display: flex;
             align-items: center;
+            justify-content: flex-end;
             color: $Gray400;
             width: 70px;
 

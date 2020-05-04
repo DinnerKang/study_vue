@@ -113,6 +113,7 @@ export default {
 <style lang="scss" scoped>
 .music_list_container {
     margin-top: 56px;
+    margin-bottom: 120px;
     color: $White;
 
     .list_area {
