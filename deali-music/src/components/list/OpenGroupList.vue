@@ -210,7 +210,7 @@ export default {
                 font-weight: normal;
             }
             .bar{
-                margin: 0 10px;
+                margin: 0 5px;
                 font-size: 12px;
             }
         }

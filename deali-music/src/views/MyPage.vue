@@ -24,7 +24,7 @@
             <div class="group_container">
                 <div class="group_img_area">
                     <h5>썸네일 이미지</h5>
-                    <thumbnail-area v-model="thumbnailIdx" />
+                    <thumbnail-area v-model="thumbnailIdx" :deali-name="userInfo.dealiName" />
                 </div>
                 <div class="group_text_area">
                     <div class="text_box">
@@ -253,7 +253,8 @@ export default {
             deleteGroup,
             likeGroupList,
             ...modalEvent(userInfo),
-            ...iconData()
+            ...iconData(),
+            userInfo,
         };
     }
 };
