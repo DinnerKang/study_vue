@@ -20,8 +20,5 @@ export function getAllThumbnails(){
 export function updateFile(dealiName, file) {
     console.log(dealiName, file);
     const ref = firebase.storage().ref(`thumbnail/${dealiName}/${file.name}`);
-    ref.put(file).then(() => {
-        console.log('성공')
-        getThumbnail();
-    });
+    return ref.put(file);
 }

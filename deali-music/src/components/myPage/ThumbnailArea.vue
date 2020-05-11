@@ -32,8 +32,9 @@ const thumbnailsData = (props, emit) => {
         emit("input", data.i);
     };
     const file = ref('');
-    const fileChange = (e) => {
-        updateFile(props.dealiName, e.target.files[0]);
+    const fileChange = async (e) => {
+        await updateFile(props.dealiName, e.target.files[0]);
+        await getThumbnails();
     };
 
     return {
