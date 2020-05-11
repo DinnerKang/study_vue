@@ -55,7 +55,7 @@ export function addMyGroup(data) {
     return ref.child(myKey).set({
         groupName : data.groupName,
         description: data.description,
-        thumbnailIdx: data.thumbnailIdx,
+        thumbnailUrl: data.thumbnailUrl,
         myKey: myKey,
         isShowGroup: data.isShowGroup,
     });
@@ -92,7 +92,7 @@ export function editMyGroup(data) {
         groupName: data.groupName,
         description: data.description,
         isShowGroup: data.isShowGroup,
-        thumbnailIdx: data.thumbnailIdx,
+        thumbnailUrl: data.thumbnailUrl,
     });
     if (data.isShowGroup === true) {
         addShowGroup(data);

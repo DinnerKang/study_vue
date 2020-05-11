@@ -53,6 +53,7 @@ const clickEvent = (userInfo) => {
             dealiName: key === 'lounge' ? 'lounge' : userInfo.value.dealiName,
             groupKey: key,
         };
+        isMenu.value = '';
         registMusic(searchResult);
     };
 
@@ -62,7 +63,6 @@ const clickEvent = (userInfo) => {
     };
 
     const closeMenu = () => {
-        console.log('hi');
         isMenu.value = '';
     };
 

@@ -3,32 +3,37 @@
         <img
             v-for="(data, idx) in thumbnailList"
             :key="idx"
-            :class="{ active_btn : idx === selectThumbnail }"
+            :class="{ active_btn : data.i === selectThumbnail }"
             :src="data.i"
             alt="이미지"
-            @click="clickThumbnail(idx)"
+            @click="clickThumbnail(data)"
         />
         <div class="icon_area">
-            <img class="add_icon" :src="addImageIcon" alt='이미지 추가' @click="openFile" />
+            <img class="add_icon" :src="addImageIcon" alt='이미지 추가' @click="$refs.file.click()" />
         </div>
+        <input type="file" ref="file" @change="fileChange" style="display:none" multiple/>
     </div>
 </template>
 
 <script>
 import { computed, ref } from "@vue/composition-api";
 import addImageIcon from '@/assets/icons/mypage_button_40x40(x2).png';
-import { getThumbnail } from '@/services/storage';
+import { getThumbnail, updateFile } from '@/services/storage';
 
 const thumbnailsData = (props, emit) => {
     const selectThumbnail = computed(() => props.value);
     const thumbnailList = ref([]);
-
+    
     const getThumbnails = async () => {
         thumbnailList.value = await getThumbnail(props.dealiName);
     };
 
-    const clickThumbnail = async (idx) => {
-        emit("input", idx);
+    const clickThumbnail = (data) => {
+        emit("input", data.i);
+    };
+    const file = ref('');
+    const fileChange = (e) => {
+        updateFile(props.dealiName, e.target.files[0]);
     };
 
     return {
@@ -36,26 +41,27 @@ const thumbnailsData = (props, emit) => {
         clickThumbnail,
         addImageIcon,
         thumbnailList,
+        file,
+        fileChange,
         ...getThumbnails(),
+            
     };
 };
 
 export default {
     props: {
         value: {
-            type: Number,
+            type: String,
         },
         dealiName: {
             type: String,
         }
     },
     setup(props, { emit }) {
-        const openFile = () => {
-        };
+        
 
         return {
             ...thumbnailsData(props, emit),
-            openFile,
         };
     }
 };

@@ -2,13 +2,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 
-const list = [
-    '2.jpg',
-    '3.jpg',
-    'images.jpeg',
-];
-
-
 export async function getThumbnail(dealiName) {
     const { items } = await firebase.storage().ref(`thumbnail/${dealiName}`).listAll();
     let thumbnaills = [];
@@ -18,7 +11,17 @@ export async function getThumbnail(dealiName) {
     })
     return thumbnaills;
 }
-
+/*
 export function getAllThumbnails(){
     return list.map((item, idx) => firebase.storage().ref(`thumbnail/${list[idx]}`).getDownloadURL());
 } 
+*/
+
+export function updateFile(dealiName, file) {
+    console.log(dealiName, file);
+    const ref = firebase.storage().ref(`thumbnail/${dealiName}/${file.name}`);
+    ref.put(file).then(() => {
+        console.log('성공')
+        getThumbnail();
+    });
+}

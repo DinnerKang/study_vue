@@ -24,7 +24,7 @@
             <div class="group_container">
                 <div class="group_img_area">
                     <h5>썸네일 이미지</h5>
-                    <thumbnail-area v-model="thumbnailIdx" :deali-name="userInfo.dealiName" />
+                    <thumbnail-area v-model="thumbnailUrl" :deali-name="userInfo.dealiName" />
                 </div>
                 <div class="group_text_area">
                     <div class="text_box">
@@ -161,14 +161,14 @@ const modalEvent = userInfo => {
         dealiName: userInfo.value.dealiName,
         groupName: "",
         description: "",
-        thumbnailIdx: null,
+        thumbnailUrl: null,
         isShowGroup: true,
         targetKey: ""
     });
 
     const saveGroup = () => {
         if (!modalData.groupName) return alert("그룹 이름을 적어주세요.");
-        if (modalData.thumbnailIdx === null)
+        if (modalData.thumbnailUrl === null)
             return alert("썸네일을 선택해주세요.");
         isEdit.value === false ? addMyGroup(modalData) : editMyGroup(modalData);
         isModal.value = false;
@@ -178,7 +178,7 @@ const modalEvent = userInfo => {
         modalData.groupName = "";
         modalData.description = "";
         modalData.isShowGroup = true;
-        modalData.thumbnailIdx = null;
+        modalData.thumbnailUrl = null;
     };
 
     const editGroup = list => {
@@ -195,7 +195,7 @@ const modalEvent = userInfo => {
             modalData.groupName = result.groupName;
             modalData.description = result.description;
             modalData.isShowGroup = result.isShowGroup;
-            modalData.thumbnailIdx = result.thumbnailIdx;
+            modalData.thumbnailUrl = result.thumbnailUrl;
             modalData.targetKey = list.targetKey;
         });
     };

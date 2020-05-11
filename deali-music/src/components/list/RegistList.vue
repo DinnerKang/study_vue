@@ -5,7 +5,7 @@
             <li class="list" @click="$emit('click-regist', item, 'lounge')">라운지</li>
             <li v-for="list in groupList" :key="list.myKey"
                 class="list"
-                @click="$emit('click-regist', item, list.myKey)">
+                @click="registMusic(item, list.myKey)">
                 {{ list.groupName }}
             </li>
         </ul>
@@ -35,9 +35,13 @@ export default {
             if (isOpen.value) emit('close-menu');
             isOpen.value = true;
         };
+        const regitstMusic = (item, myKey) => {
+            emit('click-regist', item, myKey);
+        };
 
         return {
             closeMenu,
+            regitstMusic,
         };
     },
 }

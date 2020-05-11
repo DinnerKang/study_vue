@@ -5,7 +5,7 @@
             @click="clickGroup(groupData, openGroupData)"
             :style="{ width : `${width}px`, height: `${height}px`}"
         >
-            <img :src="getImage" alt="썸네일" />
+            <img :src="groupData.thumbnailUrl" alt="썸네일" />
         </div>
         <div class="outside_area">
             <div class="main_text">
@@ -36,7 +36,7 @@ import {
     deleteLikeGroup
 } from "@/services/group";
 import { getMusicListByGroup } from '@/services/music';
-import { getImageByIdx } from "@/composible/thumbnails";
+// import { getImageByIdx } from "@/composible/thumbnails";
 
 const getGroupData = (userInfo, openGroupData) => {
     const groupData = ref({});
@@ -51,7 +51,6 @@ const getGroupData = (userInfo, openGroupData) => {
     getGroupListByKey(data).on("value", snapshot => {
         if (!snapshot.val()) return;
         groupData.value = snapshot.val();
-        getImage.value = getImageByIdx(snapshot.val().thumbnailIdx);
     });
 
     getMusicListByGroup(data).once('value', snapshot => {
