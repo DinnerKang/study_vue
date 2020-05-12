@@ -35,13 +35,13 @@ export default {
             if (isOpen.value) emit('close-menu');
             isOpen.value = true;
         };
-        const regitstMusic = (item, myKey) => {
+        const registMusic = (item, myKey) => {
             emit('click-regist', item, myKey);
         };
 
         return {
             closeMenu,
-            regitstMusic,
+            registMusic,
         };
     },
 }

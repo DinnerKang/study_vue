@@ -31,7 +31,7 @@ export function getLikeGroupByKey(key) {
 function countLikes(key) {
     getLikeGroupByKey(key).once('value', snapshot => {
         if (!snapshot.val()) return;
-        const count = Object.keys(snapshot.val()).length;
+        const count = Object.keys(snapshot.val()).length -1;
         firebase.database().ref(`group/showGroup/${key}/likes`).update({
             count, 
         });
@@ -84,6 +84,9 @@ export function addShowGroup(data) {
         targetKey: data.targetKey,
         dealiName: data.dealiName,
         groupName: data.groupName,
+        likes: {
+            count: 0
+        },
     });
 }
 

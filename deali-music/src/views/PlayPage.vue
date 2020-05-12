@@ -27,6 +27,7 @@
                     </div>
                 </div>
             </article>
+            <button type="button" @click="readMore">더보기 버튼 넣을껀데... 디자인이 없네...</button>
         </div>
     </section>
 </template>
@@ -115,6 +116,8 @@ export default {
     name: "PlayPage",
     components: { MusicList, OpenGroupList },
     setup(props, { root }) {
+        const perPage = 4;
+        const page = ref(1);
         const isList = ref(true);
         const { groupKey, groupName, groupHost } = root.$route.query;
         const userInfo = computed(() => root.$store.getters['login/getUserStatus']);
@@ -149,7 +152,7 @@ export default {
             onYouTubeIframeAPIReady,
             isList,
             changeMusic,
-            ...openGroup(4),
+            ...openGroup(perPage, page),
             ...getLike(groupKey, groupHost, userInfo),
         };
     }

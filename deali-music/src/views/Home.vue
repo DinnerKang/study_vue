@@ -77,6 +77,8 @@ export default {
         const userInfo = computed(
             () => root.$store.getters["login/getUserStatus"]
         );
+        const perPage = 12;
+        const page = ref(1);
         const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
 
         watch(() => userInfo.value.dealiName, newValue => {
@@ -86,7 +88,8 @@ export default {
         return {
             myGroupKeys,
             userInfo,
-            ...openGroup(12)
+            page,
+            ...openGroup(perPage, page),
         };
     }
 };

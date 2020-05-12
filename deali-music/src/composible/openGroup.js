@@ -1,34 +1,26 @@
 import {
-  ref, watch, onMounted 
+  ref, onMounted, watch
 } from "@vue/composition-api";
 import {
   getOpenGroup
 } from '@/services/group';
 
-export const openGroup = (defaultPage) => {
-  const perPage = ref(defaultPage);
+export const openGroup = (perPage, page) => {
   const openGroups = ref([]);
   const isFirst = ref(false);
-  const tempArr = [];
 
   const getOpenGroupData = () => {
     getOpenGroup()
-      .limitToLast(perPage.value)
-      .on("child_added", snapshot => {
+      .limitToLast(perPage * page.value)
+      .on("value", snapshot => {
         if (!snapshot.val()) return;
-        if (tempArr.includes(snapshot.key)) return;
-        tempArr.push(snapshot.key);
-        if (isFirst.value) {
-          openGroups.value.push(snapshot.val());
-        } else {
-          openGroups.value.unshift(snapshot.val());
-        }
+        const data = Object.values(snapshot.val()).sort((a,b) => b.likes.count - a.likes.count);
+        openGroups.value = data;
       });
   };
-
+  
   const readMore = () => {
-    perPage.value = perPage.value * 2;
-    getOpenGroupData(perPage.value);
+    page.value += 1;
   };
 
   const scroll = () => {
@@ -44,12 +36,13 @@ export const openGroup = (defaultPage) => {
         document.documentElement.offsetHeight;
 
       if (bottomOfWindow) {
-        perPage.value = perPage.value * 2;
+        page.value += 1;
       }
     };
   };
-  watch(perPage, () => {
-    getOpenGroupData(perPage.value);
+
+  watch(page, () => {
+    getOpenGroupData();
   });
 
   onMounted(() => {
@@ -57,7 +50,6 @@ export const openGroup = (defaultPage) => {
   });
 
   return {
-    perPage,
     openGroups,
     readMore,
   };

@@ -227,7 +227,7 @@ export default {
         .music_container__list {
             width: 100%;
             height: 70px;
-            padding: 20px 15px 0;
+            padding: 10px 15px 0;
             box-sizing: border-box;
             display: flex;
             align-items: center;
