@@ -7,18 +7,19 @@ export async function getThumbnail(dealiName) {
     let thumbnaills = [];
     items.map((i) => {
         const { fullPath } = i;
-        thumbnaills.push(firebase.storage().ref(fullPath).getDownloadURL());
+        thumbnaills.push({
+            url: firebase.storage().ref(fullPath).getDownloadURL(),
+            fullPath,
+        });
     })
     return thumbnaills;
 }
-/*
-export function getAllThumbnails(){
-    return list.map((item, idx) => firebase.storage().ref(`thumbnail/${list[idx]}`).getDownloadURL());
-} 
-*/
 
-export function updateFile(dealiName, file) {
-    console.log(dealiName, file);
+export function uploadFile(dealiName, file) {
+    console.log(file);
     const ref = firebase.storage().ref(`thumbnail/${dealiName}/${file.name}`);
     return ref.put(file);
+}
+export function deleteFile(fullPath) {
+    return firebase.storage().ref(fullPath).delete();
 }
