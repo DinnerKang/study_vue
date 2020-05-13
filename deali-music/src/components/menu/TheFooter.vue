@@ -128,7 +128,7 @@ const controlVideo = () => {
     };
 
     watch(controlSound, (newValue, oldValue) => {
-        sliderBackground.value = `linear-gradient(to right, #fff 0%, #fff ${newValue}%, #000 ${newValue}%, #000 100%)`;
+        sliderBackground.value = `linear-gradient(to right, #fff 0%, #fff ${newValue}%, #00A1A1 ${newValue}%, #00A1A1 100%)`;
 
         if (oldValue === null) return;
         soundControl(newValue);
@@ -146,12 +146,12 @@ const controlVideo = () => {
 };
 
 const iconData = () => {
-    const startIcon = require("@/assets/icons/Icon_play_20x20(x3).png");
+    const startIcon = require("@/assets/icons/Icon_play_25x25(x3).png");
     const menuIcon = require("@/assets/icons/Icon_menu_20x20(x2).png");
     const soundIcon = require("@/assets/icons/Icon_volume_20x20(x2).png");
-    const nextIcon = require("@/assets/icons/Icon_skip_20x20(x3).png");
-    const stopIcon = require("@/assets/icons/Icon_stop_20x20(x3).png");
-    const musicIcon = require('@/assets/icons/Icon_Thumbnail_36x36(x2).png')
+    const nextIcon = require("@/assets/icons/Icon_skip_18x18(x3).png");
+    const stopIcon = require("@/assets/icons/Icon_stop_25x25(x3).png");
+    const musicIcon = require('@/assets/icons/Icon_Thumbnail_40x40(x2).png')
  
     return {
         startIcon,
@@ -317,7 +317,7 @@ footer {
                     position: absolute;
                     width: 300px;
                     height: 2px;
-                    background-color: $Black;
+                    background-color: #00A1A1;
                 }
                 .percent_bar {
                     position: absolute;

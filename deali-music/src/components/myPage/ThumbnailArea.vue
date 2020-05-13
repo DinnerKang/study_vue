@@ -11,7 +11,7 @@
             <img class="icon" :src="deleteIcon" alt="삭제" @click="deleteThumbnail(data.fullPath)" />
         </div>
 
-        <div class="icon_area">
+        <div class="icon_area" v-if="thumbnailList.length < 10">
             <img class="add_icon" :src="addImageIcon" alt="이미지 추가" @click="$refs.file.click()" />
         </div>
         <input type="file" ref="file" @change="fileChange" style="display:none" multiple />
@@ -90,6 +90,8 @@ export default {
 
     &-list {
         position: relative;
+        width: 90px;
+        height: 68px;
 
         &:hover {
             .icon {
@@ -106,8 +108,8 @@ export default {
         .icon{
             position: absolute;
             width: 20px;
-            bottom: 10px;
-            right: 10px;
+            top: 3px;
+            right: 3px;
             visibility: hidden;
             cursor: pointer;
         }

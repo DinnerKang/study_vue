@@ -27,7 +27,9 @@
                     </div>
                 </div>
             </article>
-            <button type="button" @click="readMore">더보기 버튼 넣을껀데... 디자인이 없네...</button>
+            <button class="read-more" type="button" @click="readMore">
+                <img class="read-more__icon" :src="readMoreIcon" alt="더보기"/>더보기
+            </button>
         </div>
     </section>
 </template>
@@ -36,6 +38,7 @@
 import { ref, watch , computed } from "@vue/composition-api";
 import MusicList from "@/components/list/MusicList";
 import OpenGroupList from "@/components/list/OpenGroupList";
+import readMoreIcon from '@/assets/icons/Icon_detail_16x16(x3).png';
 import { openGroup } from "@/composible/openGroup";
 import { getLikeGroupList, getGroupListByKey } from '@/services/group';
 
@@ -152,8 +155,9 @@ export default {
             onYouTubeIframeAPIReady,
             isList,
             changeMusic,
-            ...openGroup(perPage, page),
+            ...openGroup(perPage, page, false),
             ...getLike(groupKey, groupHost, userInfo),
+            readMoreIcon,
         };
     }
 };
@@ -197,7 +201,24 @@ export default {
                 margin-bottom: 30px;
             }
         }
-        
+        .read-more{
+            width: 240px;
+            height: 30px;
+            font-size: 15px;
+            border: 1px solid $White;
+            background-color: $Black;
+            color: $Main;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 100px;
+            cursor: pointer;
+            
+            &__icon{
+                margin-right: 12px;
+                width: 16px;
+            }
+        }
     }
 }
 

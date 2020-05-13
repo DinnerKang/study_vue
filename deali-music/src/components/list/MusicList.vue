@@ -1,5 +1,5 @@
 <template>
-    <article class="music_container">
+    <article class="music_container" v-if="musicList.length > 0">
         <div class="music_header">
             <div class="close_icon_area">
                 <img :src="closeIcon" class="close_icon" @click="closeMenu" v-if="!showLike" />

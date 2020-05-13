@@ -5,26 +5,13 @@ import {
   getOpenGroup
 } from '@/services/group';
 
-export const openGroup = (perPage, page) => {
+export const openGroup = (perPage, page, isScroll = true) => {
   const openGroups = ref([]);
   const isFirst = ref(false);
   let tempArr = [];
   const checkKeyArr = [];
   const lastKey = ref('');
 
-  // 0513 기존 코드
-  /*
-  const getOpenGroupData = () => {
-    getOpenGroup()
-      .limitToLast(perPage * page.value)
-      .on("value", snapshot => {
-        if (!snapshot.val()) return;
-        const data = Object.values(snapshot.val()).sort((a,b) => b.likes.count - a.likes.count);
-        openGroups.value = data;
-      });
-  };
-  */
- // 테스트 코드
  const getOpenGroupData = () => {
     tempArr = [];
     getOpenGroup()
@@ -50,7 +37,6 @@ export const openGroup = (perPage, page) => {
         }
       });
   }; 
-  // 테스트용
   const init = () => {
     console.log('init');
     getOpenGroup()
@@ -76,6 +62,7 @@ export const openGroup = (perPage, page) => {
 
   const scroll = () => {
     isFirst.value = true;
+    if (!isScroll) return;
     window.onscroll = () => {
       let bottomOfWindow =
         Math.max(

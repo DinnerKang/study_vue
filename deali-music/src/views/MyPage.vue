@@ -266,6 +266,7 @@ input:focus {
 
 .myPage_container {
     color: $White;
+    margin-top: 64px;
 
     .my_group_list {
         display: grid;

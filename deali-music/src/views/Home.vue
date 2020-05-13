@@ -9,7 +9,6 @@
             </div>
         </section>
         <section class="recomend_play_list">
-            <button @click="readMore">테스트용</button>
             <h2>공개 플레이리스트</h2>
             <div class="recomend_group">
                 <article
@@ -78,7 +77,7 @@ export default {
         const userInfo = computed(
             () => root.$store.getters["login/getUserStatus"]
         );
-        const perPage = 2;
+        const perPage = 12;
         const page = ref(1);
         const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
 
