@@ -8,7 +8,12 @@ import {
 export const openGroup = (perPage, page) => {
   const openGroups = ref([]);
   const isFirst = ref(false);
+  let tempArr = [];
+  const checkKeyArr = [];
+  const lastKey = ref('');
 
+  // 0513 기존 코드
+  /*
   const getOpenGroupData = () => {
     getOpenGroup()
       .limitToLast(perPage * page.value)
@@ -18,7 +23,53 @@ export const openGroup = (perPage, page) => {
         openGroups.value = data;
       });
   };
-  
+  */
+ // 테스트 코드
+ const getOpenGroupData = () => {
+    tempArr = [];
+    getOpenGroup()
+      .startAt(null, lastKey.value)
+      .limitToLast(perPage * page.value + 1)
+      .on("child_added", snapshot => {
+        if (!snapshot.val()) return;
+      
+        // 중복값일때
+        if (!checkKeyArr.includes(snapshot.key)) {
+          checkKeyArr.unshift(snapshot.key);
+        } else {
+          return;
+        }
+        openGroups.value.unshift(snapshot.val());
+        tempArr.push(snapshot.key);
+        lastKey.value = tempArr[0];
+
+        if (tempArr[perPage]) {
+          openGroups.value.pop();
+          checkKeyArr.pop();
+          return;
+        }
+      });
+  }; 
+  // 테스트용
+  const init = () => {
+    console.log('init');
+    getOpenGroup()
+      .limitToLast(perPage * page.value +1)
+      .on("child_added", snapshot => {
+        if (!snapshot.val()) return;
+
+        openGroups.value.unshift(snapshot.val());
+        checkKeyArr.unshift(snapshot.key);
+        tempArr.push(snapshot.key);
+        lastKey.value = tempArr[0];
+
+        if (tempArr[perPage]) {
+          openGroups.value.pop();
+          checkKeyArr.pop();
+        }
+      });
+  };
+
   const readMore = () => {
     page.value += 1;
   };
@@ -42,6 +93,7 @@ export const openGroup = (perPage, page) => {
   };
 
   watch(page, () => {
+    if (page.value === 1) return init();
     getOpenGroupData();
   });
 
