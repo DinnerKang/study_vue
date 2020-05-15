@@ -3,7 +3,7 @@
         <article>
             <h2>내 그룹 설정</h2>
             <ul class="my_group_list">
-                <li v-for="(list, idx) in groupData" :key="idx" class="my_group_area">
+                <li v-for="list in groupData" :key="list.targetKey" class="my_group_area">
                     <open-group-list :openGroupData="list" :show-likes="false"></open-group-list>
                     <div class="setting_area">
                         <img class="icon" :src="editGroupIcon" alt="수정" @click="editGroup(list)" />
@@ -112,7 +112,7 @@ const myGroup = userInfo => {
         });
     };
 
-    const deleteGroup = list => {
+    const deleteGroup = (list) => {
         const data = {
             targetKey: list.targetKey,
             dealiName: list.dealiName

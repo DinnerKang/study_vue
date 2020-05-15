@@ -7,7 +7,9 @@
                         v-if="item.snippet.thumbnails"
                         :src="item.snippet.thumbnails.medium.url"
                         class="thumbnails"
+                        :class="{ isLogin: userInfo.dealiName}"
                         alt="유튜브 썸네일"
+                        @click="controlMenu(idx)"
                     />
                     <div class="text_area" >
                         <div class="main_text_area">
@@ -129,6 +131,9 @@ export default {
             .thumbnails {
                 width: 320px;
                 height: 180px;
+            }
+            .isLogin{
+                cursor: pointer;
             }
             .text_area {
                 width: 320px;

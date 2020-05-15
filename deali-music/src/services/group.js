@@ -118,7 +118,8 @@ export function deleteOpenGroup(data) {
 
 export function deleteMyGroup(data) {
     firebase.database().ref(`group/all/${data.dealiName}/${data.targetKey}`).remove();
+    firebase.database().ref(`group/showGroup/${data.targetKey}`).remove();
     firebase.database().ref(`music/${data.dealiName}/${data.targetKey}`).remove();
-    return deleteLikeGroup(data);
+    firebase.database().ref(`group/likes/${data.dealiName}/${data.targetKey}`).remove();
 }
 
