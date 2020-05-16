@@ -231,6 +231,7 @@ export default {
             box-sizing: border-box;
             display: flex;
             align-items: center;
+            justify-content: space-around;
 
             &.active {
                 background-color: $Main
@@ -242,7 +243,7 @@ export default {
             }
 
             .list_info {
-                width: 250px;
+                width: 65%;
                 position: relative;
 
                 .list_music_register {

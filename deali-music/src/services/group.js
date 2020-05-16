@@ -119,7 +119,16 @@ export function deleteOpenGroup(data) {
 export function deleteMyGroup(data) {
     firebase.database().ref(`group/all/${data.dealiName}/${data.targetKey}`).remove();
     firebase.database().ref(`group/showGroup/${data.targetKey}`).remove();
-    firebase.database().ref(`music/${data.dealiName}/${data.targetKey}`).remove();
     firebase.database().ref(`group/likes/${data.dealiName}/${data.targetKey}`).remove();
+    firebase.database().ref(`music/${data.dealiName}/${data.targetKey}`).remove();
+    
+    firebase.database().ref('group/likes')
+        .orderByChild(data.targetKey)
+        .equalTo(data.dealiName).once('value', (snapshot) => {
+        const likeUser = Object.keys(snapshot.val());
+        likeUser.map(name => {
+            firebase.database().ref(`group/likes/${name}`).child(data.targetKey).remove();
+        });
+    });
 }
 

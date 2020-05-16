@@ -61,11 +61,14 @@
 
         <article class="my_likes">
             <h2>내가 좋아하는 그룹</h2>
-            <ul class="my_group_list">
+            <ul class="my_group_list" v-if="likeGroupList.length !== 0">
                 <li v-for="list in likeGroupList" :key="list.targetKey">
                     <open-group-list :openGroupData="list"></open-group-list>
                 </li>
             </ul>
+            <div v-else class="empty-list">
+                    좋아하는 그룹을 추가해주세요.
+            </div>
         </article>
     </section>
 </template>
@@ -113,6 +116,7 @@ const myGroup = userInfo => {
     };
 
     const deleteGroup = (list) => {
+        if (!confirm('삭제하시겠습니까?')) return;
         const data = {
             targetKey: list.targetKey,
             dealiName: list.dealiName
@@ -312,6 +316,11 @@ input:focus {
             height: 40px;
             cursor: pointer;
         }
+    }
+    .empty-list{
+        height: 100px;
+        display: flex;
+        justify-content: center;
     }
 
     .my_likes {

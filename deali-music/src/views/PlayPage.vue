@@ -3,7 +3,7 @@
         <div class="left_area">
             <article class="plyaer_container">
                 <div id="player"></div>
-                <div v-if="!isList">혜지님 노래 없는데 멘트 짜주세용</div>
+                <div v-if="!isList">저장된 노래가 없습니다.</div>
             </article>
             <div class="list_area">
                 <music-list
