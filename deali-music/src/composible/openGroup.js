@@ -11,8 +11,10 @@ export const openGroup = (perPage, page, isScroll = true) => {
   let tempArr = [];
   const checkKeyArr = [];
   const lastKey = ref('');
+  const isFinish = ref(false);
 
  const getOpenGroupData = () => {
+    if (isFinish.value) return;
     tempArr = [];
     getOpenGroup()
       .startAt(null, lastKey.value)
@@ -24,6 +26,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
         if (!checkKeyArr.includes(snapshot.key)) {
           checkKeyArr.unshift(snapshot.key);
         } else {
+          isFinish.value = true;
           return;
         }
         openGroups.value.unshift(snapshot.val());
@@ -38,7 +41,6 @@ export const openGroup = (perPage, page, isScroll = true) => {
       });
   }; 
   const init = () => {
-    console.log('init');
     getOpenGroup()
       .limitToLast(perPage * page.value +1)
       .on("child_added", snapshot => {
@@ -91,5 +93,6 @@ export const openGroup = (perPage, page, isScroll = true) => {
   return {
     openGroups,
     readMore,
+    isFinish,
   };
 };

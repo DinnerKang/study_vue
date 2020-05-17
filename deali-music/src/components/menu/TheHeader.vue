@@ -41,8 +41,9 @@ const getUserInfo = (store, router) => {
     }
 
     const userLogout = () => {
+        if (!confirm('로그아웃하시겠습니까?')) return;
         store.commit('login/logoutUser');
-        router.replace('/');
+        router.push('/');
     }
 
     const clickLogo = () => {

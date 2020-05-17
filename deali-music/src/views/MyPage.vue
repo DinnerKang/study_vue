@@ -102,8 +102,8 @@ const myGroup = userInfo => {
 
     const getMyGroup = () => {
         getGroupList(userInfo.value.dealiName).on("value", snapshot => {
-            if (!snapshot.val()) return;
             groupData.value = [];
+            if (!snapshot.val()) return;
             const keys = Object.keys(snapshot.val());
             const values = Object.values(snapshot.val());
             for (let i = 0; i < keys.length; i += 1) {

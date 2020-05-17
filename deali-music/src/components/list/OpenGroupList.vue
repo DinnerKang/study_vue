@@ -18,8 +18,8 @@
                         @click="clickLikeGroup(openGroupData)"
                         alt="하트"
                     />
-                    <div class="user-number" v-if="likeUserNumber > 0">{{ likeUserNumber }}</div>
-                    <div class="bar" v-if="likeUserNumber > 0">|</div>
+                    <div class="user-number" v-if="likeUserCount > 0">{{ likeUserCount }}</div>
+                    <div class="bar" v-if="likeUserCount > 0">|</div>
                     <div class="user-number">{{ musicLength }}곡</div>
                 </div>
             </div>
@@ -36,7 +36,6 @@ import {
     deleteLikeGroup
 } from "@/services/group";
 import { getMusicListByGroup } from '@/services/music';
-// import { getImageByIdx } from "@/composible/thumbnails";
 
 const getGroupData = (userInfo, openGroupData) => {
     const groupData = ref({});
@@ -64,7 +63,7 @@ const getGroupData = (userInfo, openGroupData) => {
     };
 };
 
-const clickEvent = (userInfo, router, isLike) => {
+const clickEvent = (userInfo, router, isLike, likeUserCount) => {
     const clickGroup = (groupData, openGroupData) => {
         router.push({
             path: "/playPage",
@@ -76,7 +75,7 @@ const clickEvent = (userInfo, router, isLike) => {
         });
     };
 
-    const clickLikeGroup = openGroupData => {
+    const clickLikeGroup = (openGroupData) => {
         if (!userInfo.value.dealiName) {
             alert("로그인 후 하트 눌러주세요 !");
             return;
@@ -90,9 +89,11 @@ const clickEvent = (userInfo, router, isLike) => {
         if (isLike.value === false) {
             addLikeGroup(data);
             isLike.value = true;
+            likeUserCount.value += 1;
         } else {
             deleteLikeGroup(data);
             isLike.value = false;
+            likeUserCount.value -= 1;
         }
     };
     return {
@@ -136,12 +137,8 @@ export default {
         );
         const isLike = ref(false);
         const likeUser = computed(() => props.openGroupData.likes);
-        const likeUserNumber = computed(() => {
-            if (props.openGroupData.likes) {
-                return props.openGroupData.likes.count;
-            }
-            return 0;
-        });
+        const likeUserCount = ref(0);
+        if (props.openGroupData.likes) likeUserCount.value = props.openGroupData.likes.count;
 
         watch(
             () => userInfo.value.dealiName,
@@ -163,8 +160,8 @@ export default {
             ...getGroupData(userInfo, props.openGroupData),
             isLike,
             ...iconList(),
-            ...clickEvent(userInfo, root.$router, isLike),
-            likeUserNumber
+            ...clickEvent(userInfo, root.$router, isLike, likeUserCount),
+            likeUserCount,
         };
     }
 };

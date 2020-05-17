@@ -81,7 +81,7 @@ export default {
         const page = ref(1);
         const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
 
-        watch(() => userInfo.value.dealiName, newValue => {
+        watch(() => userInfo.value.dealiName, (newValue) => {
             if (newValue) getMyGroupList();
         });
 

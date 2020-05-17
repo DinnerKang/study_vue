@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </article>
-            <button class="read-more" type="button" @click="readMore">
+            <button class="read-more" type="button" @click="readMore" v-if="!isFinish">
                 <img class="read-more__icon" :src="readMoreIcon" alt="더보기"/>더보기
             </button>
         </div>
