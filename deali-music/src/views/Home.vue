@@ -1,5 +1,6 @@
 <template>
     <div class="home">
+        <button @click="readMore">버튼</button>
         <section class="my_play_list" v-if="myGroupKeys.length > 0">
             <h2>나의 플레이리스트</h2>
             <div class="group_list">

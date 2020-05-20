@@ -17,7 +17,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
     tempArr = [];
     console.log(lastKey.value);
     getOpenGroup()
-      .startAt(null, '-M7fhwG_MJ1OOw05AFCm')
+      .startAt(null, "-M7CkPRfuLU-7XDKt-VU")
       .limitToLast(2)
       .on("child_added", snapshot => {
         console.log('test', snapshot.val());
