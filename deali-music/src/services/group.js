@@ -18,7 +18,9 @@ export function getOpenGroup() {
 export function getOpenGroupByKey(key) {
     return firebase.database().ref(`group/showGroup/${key}`);
 }
-
+export function getOpenGroupLength() {
+    return firebase.database().ref('group/showGroup');
+}
 export function getLikeGroupList(data) {
     return firebase.database().ref(`group/likes/${data.dealiName}`);
 }

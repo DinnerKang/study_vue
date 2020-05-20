@@ -1,69 +1,83 @@
 import {
-  ref, onMounted, watch
+  ref,
+  onMounted,
+  watch
 } from "@vue/composition-api";
 import {
-  getOpenGroup
+  getOpenGroup,
+  getOpenGroupLength
 } from '@/services/group';
 
 export const openGroup = (perPage, page, isScroll = true) => {
   const openGroups = ref([]);
+  let tempKey = [];
+  let tempValue = [];
   let tempArr = [];
-  const checkKeyArr = [];
+  const groupLength = ref(0);
   const lastKey = ref('');
+  const lastValue = ref(0);
   const isFinish = ref(false);
 
- const getOpenGroupData = () => {
+  const getOpenGroupData = () => {
     if (isFinish.value) return;
     tempArr = [];
-    console.log(lastKey.value);
-    getOpenGroup()
-      .startAt(null, "-M7CkPRfuLU-7XDKt-VU")
-      .limitToLast(2)
-      .on("child_added", snapshot => {
-        console.log('test', snapshot.val());
-      });
+    tempKey = [];
+    tempValue = [];
 
-    /*
     getOpenGroup()
-      .startAt(null, lastKey.value)
-      .limitToLast(perPage +1)
+      .endAt(lastValue.value, lastKey.value)
+      .limitToLast(perPage + 1)
       .on("child_added", snapshot => {
         if (!snapshot.val()) return;
-        // 중복값일때
-        if (!checkKeyArr.includes(snapshot.key)) {
-          checkKeyArr.unshift(snapshot.key);
-        } else {
+        tempArr.push(snapshot.val());
+
+        tempKey.push(snapshot.key);
+        tempValue.push(snapshot.val().likes.count);
+        lastKey.value = tempKey[0];
+        lastValue.value = tempValue[0];
+
+        if (tempArr.length === groupLength.value) {
           isFinish.value = true;
-          return;
+          openGroups.value.push(...tempArr.reverse());
         }
-        openGroups.value.unshift(snapshot.val());
-        tempArr.push(snapshot.key);
-        lastKey.value = tempArr[0];
 
-        if (tempArr[perPage]) {
-          openGroups.value.pop();
-          checkKeyArr.pop();
-          return;
+        if (tempArr.length === 5) {
+          tempArr.shift();
+          openGroups.value.push(...tempArr.reverse());
+          groupLength.value -= perPage;
         }
+
       });
-      */
-  }; 
+  };
+
   const init = () => {
-    getOpenGroup()
-      .limitToLast(perPage +1)
-      .on("child_added", snapshot => {
-        console.log(snapshot.val());
-        if (!snapshot.val()) return;
+    getOpenGroupLength()
+      .once('value', snapshot => {
+        groupLength.value += snapshot.numChildren();
 
-        openGroups.value.unshift(snapshot.val());
-        checkKeyArr.unshift(snapshot.key);
-        tempArr.push(snapshot.key);
-        lastKey.value = tempArr[0];
+        getOpenGroup()
+          .limitToLast(perPage + 1)
+          .on("child_added", snapshot => {
+            if (!snapshot.val()) return;
+            console.log(snapshot.val());
+            tempArr.push(snapshot.val());
 
-        if (tempArr[perPage]) {
-          openGroups.value.pop();
-          checkKeyArr.pop();
-        }
+            tempKey.push(snapshot.key);
+            tempValue.push(snapshot.val().likes.count);
+            lastKey.value = tempKey[0];
+            lastValue.value = tempValue[0];
+
+            if (tempArr.length === groupLength.value) {
+              isFinish.value = true;
+              openGroups.value.push(...tempArr.reverse());
+            }
+
+            if (tempArr.length === perPage + 1) {
+              tempArr.shift();
+              openGroups.value.push(...tempArr.reverse());
+              groupLength.value -= perPage;
+            }
+          });
       });
   };
 
