@@ -1,7 +1,7 @@
 <template>
     <section class="myPage_container">
         <article>
-            <h2>내 그룹 설정</h2>
+            <h2>내 플레이리스트 설정</h2>
             <ul class="my_group_list">
                 <li v-for="list in groupData" :key="list.targetKey" class="my_group_area">
                     <open-group-list :openGroupData="list" :show-likes="false"></open-group-list>
@@ -60,7 +60,7 @@
         </modal>
 
         <article class="my_likes">
-            <h2>내가 좋아하는 그룹</h2>
+            <h2>내가 좋아하는 플레이리스트</h2>
             <ul class="my_group_list" v-if="likeGroupList.length !== 0">
                 <li v-for="list in likeGroupList" :key="list.targetKey">
                     <open-group-list :openGroupData="list"></open-group-list>

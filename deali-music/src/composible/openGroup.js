@@ -7,7 +7,6 @@ import {
 
 export const openGroup = (perPage, page, isScroll = true) => {
   const openGroups = ref([]);
-  const isFirst = ref(false);
   let tempArr = [];
   const checkKeyArr = [];
   const lastKey = ref('');
@@ -16,12 +15,20 @@ export const openGroup = (perPage, page, isScroll = true) => {
  const getOpenGroupData = () => {
     if (isFinish.value) return;
     tempArr = [];
+    console.log(lastKey.value);
+    getOpenGroup()
+      .startAt(null, '-M7fhwG_MJ1OOw05AFCm')
+      .limitToLast(2)
+      .on("child_added", snapshot => {
+        console.log('test', snapshot.val());
+      });
+
+    /*
     getOpenGroup()
       .startAt(null, lastKey.value)
-      .limitToLast(perPage * page.value + 1)
+      .limitToLast(perPage +1)
       .on("child_added", snapshot => {
         if (!snapshot.val()) return;
-      
         // 중복값일때
         if (!checkKeyArr.includes(snapshot.key)) {
           checkKeyArr.unshift(snapshot.key);
@@ -39,11 +46,13 @@ export const openGroup = (perPage, page, isScroll = true) => {
           return;
         }
       });
+      */
   }; 
   const init = () => {
     getOpenGroup()
-      .limitToLast(perPage * page.value +1)
+      .limitToLast(perPage +1)
       .on("child_added", snapshot => {
+        console.log(snapshot.val());
         if (!snapshot.val()) return;
 
         openGroups.value.unshift(snapshot.val());
@@ -59,11 +68,11 @@ export const openGroup = (perPage, page, isScroll = true) => {
   };
 
   const readMore = () => {
+    if (isFinish.value) return;
     page.value += 1;
   };
 
   const scroll = () => {
-    isFirst.value = true;
     if (!isScroll) return;
     window.onscroll = () => {
       let bottomOfWindow =

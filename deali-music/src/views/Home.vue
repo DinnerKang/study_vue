@@ -77,7 +77,7 @@ export default {
         const userInfo = computed(
             () => root.$store.getters["login/getUserStatus"]
         );
-        const perPage = 12;
+        const perPage = 4;
         const page = ref(1);
         const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
 

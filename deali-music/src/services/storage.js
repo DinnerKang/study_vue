@@ -15,10 +15,8 @@ export async function getThumbnail(dealiName) {
     return thumbnaills;
 }
 
-export function uploadFile(dealiName, file) {
-    console.log(file);
-    const ref = firebase.storage().ref(`thumbnail/${dealiName}/${file.name}`);
-    return ref.put(file);
+export async function uploadFile(dealiName, file) {
+    await firebase.storage().ref(`thumbnail/${dealiName}/${file.name}`).put(file);
 }
 export function deleteFile(fullPath) {
     return firebase.storage().ref(fullPath).delete();

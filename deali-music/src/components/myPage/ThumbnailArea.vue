@@ -15,6 +15,9 @@
             <img class="add_icon" :src="addImageIcon" alt="이미지 추가" @click="$refs.file.click()" />
         </div>
         <input type="file" ref="file" @change="fileChange" style="display:none" multiple />
+        <div class="loader-area" v-if="loading">
+            <div class="loader"></div>
+        </div>
     </div>
 </template>
 
@@ -28,9 +31,11 @@ const thumbnailsData = (props, emit) => {
     const selectThumbnail = computed(() => props.value);
     const thumbnailList = ref([]);
     const file = ref("");
+    const loading = ref(false);
 
     const getThumbnails = async () => {
         thumbnailList.value = await getThumbnail(props.dealiName);
+        loading.value = false;
     };
 
     const clickThumbnail = (data) => {
@@ -43,8 +48,11 @@ const thumbnailsData = (props, emit) => {
     };
 
     const fileChange = async (e) => {
+        loading.value = true;
         await uploadFile(props.dealiName, e.target.files[0]);
-        await getThumbnails();
+        await setTimeout(() => {
+            getThumbnails();
+        }, 5000);
     };
 
     return {
@@ -56,6 +64,7 @@ const thumbnailsData = (props, emit) => {
         fileChange,
         deleteIcon,
         deleteThumbnail,
+        loading,
         ...getThumbnails()
     };
 };
@@ -130,5 +139,41 @@ export default {
     .active_btn {
         border: 1px solid $Main;
     }
+}
+$size: 100px;
+$thickness: 6px;
+$base-color: #fff;
+$wheel-color: $Main;
+$speed: 800ms;
+
+.loader-area{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 3;
+
+    .loader {
+        transform: translate3d(-50%);
+        height: $size;
+        width: $size;
+        border: $thickness solid $base-color;
+        border: {
+            right-color: $wheel-color;
+            top-color: $wheel-color;
+            radius: 100%;
+        }
+    animation: spin $speed infinite linear;
+    }
+}
+
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(359deg); }
 }
 </style>

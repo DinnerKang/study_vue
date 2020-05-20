@@ -5,7 +5,10 @@
             @click="clickGroup(groupData, openGroupData)"
             :style="{ width : `${width}px`, height: `${height}px`}"
         >
-            <img :src="groupData.thumbnailUrl" alt="썸네일" />
+            <img :src="groupData.thumbnailUrl" alt="썸네일" @error="imageError" v-if="!isErrorImg" />
+            <div v-else class="error-tumbnail">
+                썸네일 오류입니다 바꿔주세요 !!
+            </div>
         </div>
         <div class="outside_area">
             <div class="main_text">
@@ -102,6 +105,7 @@ const clickEvent = (userInfo, router, isLike, likeUserCount) => {
     };
 };
 
+
 const iconList = () => {
     const likeIcon = require("@/assets/icons/Icon_heart_18x18(x2).png");
     const notIcon = require("@/assets/icons/Icon_heart_outline18x18(x2).png");
@@ -138,7 +142,10 @@ export default {
         const isLike = ref(false);
         const likeUser = computed(() => props.openGroupData.likes);
         const likeUserCount = ref(0);
+        const isErrorImg = ref(false);
         if (props.openGroupData.likes) likeUserCount.value = props.openGroupData.likes.count;
+
+        const imageError = () => isErrorImg.value = true;
 
         watch(
             () => userInfo.value.dealiName,
@@ -162,6 +169,8 @@ export default {
             ...iconList(),
             ...clickEvent(userInfo, root.$router, isLike, likeUserCount),
             likeUserCount,
+            imageError,
+            isErrorImg,
         };
     }
 };
@@ -173,6 +182,15 @@ export default {
     color: $White;
     position: relative;
     cursor: pointer;
+
+    .error-tumbnail{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $White;
+        height: 100%;
+        width: 100%;
+    }
 }
 .outside_area {
     color: $Black;
