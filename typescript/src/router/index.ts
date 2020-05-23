@@ -4,7 +4,7 @@ import Todo from '../views/Todo.vue'
 
 Vue.use(VueRouter)
 
-  const routes: Array<RouteConfig> = [
+const routes: Array<RouteConfig> = [
   {
     path: '/',
     name: 'Todo',
