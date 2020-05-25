@@ -18,6 +18,28 @@ export const openGroup = (perPage, page, isScroll = true) => {
   const lastValue = ref(0);
   const isFinish = ref(false);
 
+  const getData = (snapshot) => {
+    if (!snapshot.val()) return;
+        tempArr.push(snapshot.val());
+
+        tempKey.push(snapshot.key);
+        tempValue.push(snapshot.val().likes.count);
+        lastKey.value = tempKey[0];
+        lastValue.value = tempValue[0];
+        
+        if (groupLength.value < perPage + 1) {
+          isFinish.value = true;
+          openGroups.value.push(...tempArr.reverse());
+        }
+
+        if (tempArr.length === perPage + 1) {
+          tempArr.shift();
+          openGroups.value.push(...tempArr.reverse());
+          groupLength.value -= perPage;
+        }
+
+  };
+
   const getOpenGroupData = () => {
     if (isFinish.value) return;
     tempArr = [];
@@ -29,27 +51,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
       .endAt(lastValue.value, lastKey.value)
       .limitToLast(perPage + 1)
       .on("child_added", snapshot => {
-        if (!snapshot.val()) return;
-        if (isFinish.value) return;
-        tempArr.push(snapshot.val());
-
-        tempKey.push(snapshot.key);
-        tempValue.push(snapshot.val().likes.count);
-        lastKey.value = tempKey[0];
-        lastValue.value = tempValue[0];
-        
-        if (groupLength.value < perPage + 1) {
-          isFinish.value = true;
-          console.log('isFinish', tempArr);
-          openGroups.value.push(...tempArr.reverse());
-        }
-
-        if (tempArr.length === perPage + 1) {
-          tempArr.shift();
-          openGroups.value.push(...tempArr.reverse());
-          groupLength.value -= perPage;
-        }
-
+          getData(snapshot);
       });
   };
 
@@ -61,24 +63,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
         getOpenGroup()
           .limitToLast(perPage + 1)
           .on("child_added", snapshot => {
-            if (!snapshot.val()) return;
-            tempArr.push(snapshot.val());
-
-            tempKey.push(snapshot.key);
-            tempValue.push(snapshot.val().likes.count);
-            lastKey.value = tempKey[0];
-            lastValue.value = tempValue[0];
-
-            if (groupLength.value < perPage + 1) {
-              isFinish.value = true;
-              openGroups.value.push(...tempArr.reverse());
-            }
-
-            if (tempArr.length === perPage + 1) {
-              tempArr.shift();
-              openGroups.value.push(...tempArr.reverse());
-              groupLength.value -= perPage;
-            }
+            getData(snapshot);
           });
       });
   };
