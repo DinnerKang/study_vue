@@ -24,24 +24,27 @@ export const openGroup = (perPage, page, isScroll = true) => {
     tempKey = [];
     tempValue = [];
 
+    console.log('call', groupLength.value);
     getOpenGroup()
       .endAt(lastValue.value, lastKey.value)
       .limitToLast(perPage + 1)
       .on("child_added", snapshot => {
         if (!snapshot.val()) return;
+        if (isFinish.value) return;
         tempArr.push(snapshot.val());
 
         tempKey.push(snapshot.key);
         tempValue.push(snapshot.val().likes.count);
         lastKey.value = tempKey[0];
         lastValue.value = tempValue[0];
-
-        if (tempArr.length === groupLength.value) {
+        
+        if (groupLength.value < perPage + 1) {
           isFinish.value = true;
+          console.log('isFinish', tempArr);
           openGroups.value.push(...tempArr.reverse());
         }
 
-        if (tempArr.length === 5) {
+        if (tempArr.length === perPage + 1) {
           tempArr.shift();
           openGroups.value.push(...tempArr.reverse());
           groupLength.value -= perPage;
@@ -54,12 +57,11 @@ export const openGroup = (perPage, page, isScroll = true) => {
     getOpenGroupLength()
       .once('value', snapshot => {
         groupLength.value += snapshot.numChildren();
-
+        console.log('init',  groupLength.value);
         getOpenGroup()
           .limitToLast(perPage + 1)
           .on("child_added", snapshot => {
             if (!snapshot.val()) return;
-            console.log(snapshot.val());
             tempArr.push(snapshot.val());
 
             tempKey.push(snapshot.key);
@@ -67,7 +69,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
             lastKey.value = tempKey[0];
             lastValue.value = tempValue[0];
 
-            if (tempArr.length === groupLength.value) {
+            if (groupLength.value < perPage + 1) {
               isFinish.value = true;
               openGroups.value.push(...tempArr.reverse());
             }
