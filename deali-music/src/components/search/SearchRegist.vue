@@ -81,6 +81,7 @@ const groupData = (userInfo) => {
     const groupList = ref([]);
 
     getGroupList(userInfo.value.dealiName).on("value", snapshot => {
+        if (!snapshot.val()) return;
         groupList.value = Object.values(snapshot.val());
     });
 

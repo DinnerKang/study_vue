@@ -29,7 +29,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
         
         if (groupLength.value < perPage + 1) {
           isFinish.value = true;
-          openGroups.value.push(...tempArr.reverse());
+          openGroups.value.push(snapshot.val());
           return;
         }
 
@@ -55,7 +55,6 @@ export const openGroup = (perPage, page, isScroll = true) => {
   };
 
   const init = () => {
-    console.log('init');
     getOpenGroupLength()
       .once('value', snapshot => {
         groupLength.value += snapshot.numChildren();
