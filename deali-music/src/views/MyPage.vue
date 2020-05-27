@@ -145,6 +145,7 @@ const likeGroup = userInfo => {
             const keys = Object.keys(snapshot.val());
             for (let i = 0; i < keys.length; i += 1) {
                 getOpenGroupByKey(keys[i]).once("value", snapshot => {
+                    if (!snapshot.val()) return;
                     likeGroupList.value.push(snapshot.val());
                 });
             }
@@ -324,7 +325,7 @@ input:focus {
     }
 
     .my_likes {
-        margin-top: 64px;
+        margin: 64px 0;
     }
 }
 .group_area {

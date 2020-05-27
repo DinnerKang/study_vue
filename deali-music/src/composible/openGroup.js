@@ -30,6 +30,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
         if (groupLength.value < perPage + 1) {
           isFinish.value = true;
           openGroups.value.push(...tempArr.reverse());
+          return;
         }
 
         if (tempArr.length === perPage + 1) {
@@ -37,7 +38,6 @@ export const openGroup = (perPage, page, isScroll = true) => {
           openGroups.value.push(...tempArr.reverse());
           groupLength.value -= perPage;
         }
-
   };
 
   const getOpenGroupData = () => {
@@ -45,8 +45,7 @@ export const openGroup = (perPage, page, isScroll = true) => {
     tempArr = [];
     tempKey = [];
     tempValue = [];
-
-    console.log('call', groupLength.value);
+    
     getOpenGroup()
       .endAt(lastValue.value, lastKey.value)
       .limitToLast(perPage + 1)
@@ -56,10 +55,13 @@ export const openGroup = (perPage, page, isScroll = true) => {
   };
 
   const init = () => {
+    console.log('init');
     getOpenGroupLength()
       .once('value', snapshot => {
         groupLength.value += snapshot.numChildren();
-        console.log('init',  groupLength.value);
+        
+        // 최초 리스트 길이가 perPage 보다 작을 경우 최초 리스트 길이만 부르기
+        if (groupLength.value < perPage +1) perPage = groupLength.value -1;
         getOpenGroup()
           .limitToLast(perPage + 1)
           .on("child_added", snapshot => {

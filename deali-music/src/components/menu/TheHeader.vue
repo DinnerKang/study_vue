@@ -103,6 +103,7 @@ export default {
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
+                border: 1px solid $Main;
             }
             .info_area{
                 height: 30px;

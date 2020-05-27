@@ -17,7 +17,7 @@
             >
                 <div class="list_idx">{{idx + 1}}</div>
                 <div class="list_info">
-                    <div class="list_music_register">{{list.register}}</div>
+                    <div class="list_music_register" v-if="isLounge" >{{list.register}}</div>
                     <div class="list_muisc_name" @click="clickMusic(idx)" :title="list.musicName">{{list.musicName}}</div>
                 </div>
                 <div class="list_duration">{{list.duration | setYoutubeTime}}</div>

@@ -63,7 +63,6 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border: 1px solid $Main;
     margin: 0 auto;
     padding: 0 12px 0 32px;
     box-sizing: border-box;
