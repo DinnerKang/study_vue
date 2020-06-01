@@ -7,6 +7,8 @@ import Search from '../views/Search.vue';
 import PlayPage from '../views/PlayPage';
 import Store from '../store/index';
 import Mobile from '../views/Mobile.vue';
+import CheckPwd from '../views/CheckPwd.vue';
+import loungeKey from '../../loungeKey';
 
 Vue.use(VueRouter);
 
@@ -33,6 +35,13 @@ const routes = [
     name: 'Lounge',
     component: Lounge,
     meta: { unauthorized: true, layout: 'MobileLayout' },
+    beforeEnter: (to, from, next) => {
+      if (to.query[loungeKey]) {
+        next();
+      } else {
+        next('/checkPwd');
+      }
+    },
   },
   {
     path: '/search',
@@ -50,6 +59,12 @@ const routes = [
     path: '/mobile',
     name: 'Mobile',
     component: Mobile,
+    meta: { unauthorized: true, layout: 'MobileLayout' },
+  },
+  {
+    path: '/checkPwd',
+    name: 'checkPwd',
+    component: CheckPwd,
     meta: { unauthorized: true, layout: 'MobileLayout' },
   },
   {

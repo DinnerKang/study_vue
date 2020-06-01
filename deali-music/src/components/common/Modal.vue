@@ -27,10 +27,15 @@ export default {
         height: {
             type: Number,
             default: 360
-        }
+        },
+        disabled: {
+            type: Boolean,
+            default: false,
+        },
     },
     setup(props, { emit }) {
         const closeModal = () => {
+            if (props.disabled) return;
             emit("input", false);
         };
         return {

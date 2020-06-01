@@ -89,7 +89,7 @@ const youtubeStatus = () => {
 export default {
     name: "Lounge",
     components: {
-        MusicList
+        MusicList,
     },
     setup(props, { root }) {
         const { observeLoungeStatus, musicStatus } = youtubeStatus();
@@ -129,7 +129,7 @@ export default {
 
         return {
             myMusicList,
-            musicStatus
+            musicStatus,
         };
     }
 };
