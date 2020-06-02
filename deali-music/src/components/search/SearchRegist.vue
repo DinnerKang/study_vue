@@ -7,7 +7,6 @@
                         v-if="item.snippet.thumbnails"
                         :src="item.snippet.thumbnails.medium.url"
                         class="thumbnails"
-                        :class="{ isLogin: userInfo.dealiName}"
                         alt="유튜브 썸네일"
                         @click="controlMenu(idx)"
                     />
@@ -60,6 +59,10 @@ const clickEvent = (userInfo) => {
     };
 
     const controlMenu = (idx) => {
+        if (!userInfo.value.dealiName) {
+            alert('로그인이 필요합니다.');
+            return;
+        }
         if (isMenu.value === idx) return isMenu.value = '';
         isMenu.value = idx;
     };
@@ -132,8 +135,6 @@ export default {
             .thumbnails {
                 width: 320px;
                 height: 180px;
-            }
-            .isLogin{
                 cursor: pointer;
             }
             .text_area {
