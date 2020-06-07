@@ -8,6 +8,7 @@ import PlayPage from '../views/PlayPage';
 import Store from '../store/index';
 import Mobile from '../views/Mobile.vue';
 import CheckPwd from '../views/CheckPwd.vue';
+import CheckBrowser from '@/views/CheckBrowser.vue';
 import loungeKey from '../../loungeKey';
 
 Vue.use(VueRouter);
@@ -68,6 +69,12 @@ const routes = [
     meta: { unauthorized: true, layout: 'MobileLayout' },
   },
   {
+    path: '/checkBrowser',
+    name: 'CheckBrowser',
+    component: CheckBrowser,
+    meta: { unauthorized: true, layout: 'MobileLayout' },
+  },
+  {
       path: '*',
       component: Home,
   },
@@ -87,6 +94,10 @@ router.beforeEach((to, from, next) => {
       && !Store.state.login.dealiName) {
         alert('로그인 해주세요.');
         return next('/');
+  }
+  const browse = navigator.userAgent.toLowerCase();
+  if (browse.indexOf("chrome") === -1 && to.path !== '/checkBrowser') {
+    return next('/checkBrowser');
   }
   
   return next();
