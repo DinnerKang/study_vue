@@ -26,7 +26,7 @@ const youtubeData = () => {
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
             playerVars: {
-                origin: "https://vue-pwa-776e7.firebaseapp.com",
+                origin: "https://dealibeat.firebaseapp.com/",
                 loop: 1
             },
             height: "360",
@@ -44,10 +44,6 @@ const youtubeData = () => {
             playlist: playList.value
         });
         isReady.value = true;
-
-        setTimeout(() => {
-            player.value.playVideo();
-        }, 1000);
     };
 
     const stateChange = event => {
@@ -114,7 +110,7 @@ export default {
 
         watch(myMusicList, () => {
             if (myMusicList.value.length === 0) return;
-
+            console.log(myMusicList.value);
             if (isReady.value === true) {
                 addPlayList();
             } else {
