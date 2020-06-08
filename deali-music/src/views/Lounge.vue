@@ -70,7 +70,7 @@ const youtubeData = () => {
             playTime: player.value.getDuration(),
             videoName: myMusicList.value.filter(
                 item => item.videoId === player.value.getVideoData()["video_id"]
-            )[0].musicName
+            )[0].musicName,
         };
         addVideoStatus(data);
     };
