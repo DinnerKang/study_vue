@@ -45,12 +45,12 @@ const setMusicList = (props, emit, isLounge) => {
 
         getMusicListByGroup(data).on("value", snapshot => {
             if (!snapshot.val()) return;
-            musicList.value = Object.values(snapshot.val()).reverse();
+            musicList.value = Object.values(snapshot.val());
             emit("input", musicList.value);
         });
     };
 
-    const removeMusic = idx => {
+    const removeMusic = (idx) => {
         if (!confirm("삭제하시겠습니까 ?")) return;
         const data = {
             dealiName: isLounge ? "lounge" : props.groupHost,
@@ -60,8 +60,9 @@ const setMusicList = (props, emit, isLounge) => {
             .orderByKey()
             .once("value", snapshot => {
                 if (!snapshot.val()) return;
-                const key = Object.keys(snapshot.val()).reverse()[idx];
+                const key = Object.keys(snapshot.val())[idx];
                 deleteMusic(data, key);
+                emit('remove-music', idx);
         });
     };
 

@@ -49,7 +49,7 @@ const youtubeData = () => {
 
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
-            playerVars: { origin: "https://vue-pwa-776e7.firebaseapp.com" },
+            playerVars: { origin: "https://dealibeat.firebaseapp.com/" },
             width: "600",
             events: {
                 onReady: addPlayList

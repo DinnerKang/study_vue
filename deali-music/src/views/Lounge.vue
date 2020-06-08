@@ -6,6 +6,7 @@
             :group-host="'lounge'"
             :group-name="'lounge'"
             :group-key="'lounge'"
+            @remove-music="deletePlayList"
         />
     </div>
 </template>
@@ -15,6 +16,8 @@ import MusicList from "@/components/list/MusicList";
 import { addVideoStatus } from "@/services/status";
 import { getControlLoungeStatus } from "@/services/control";
 import { ref, watch, onMounted } from "@vue/composition-api";
+
+
 
 const youtubeData = () => {
     const myMusicList = ref([]);
@@ -26,27 +29,41 @@ const youtubeData = () => {
     const onYouTubeIframeAPIReady = () => {
         player.value = new YT.Player("player", {
             playerVars: {
-                origin: "https://dealibeat.firebaseapp.com/",
+                origin:  "https://dealibeat.firebaseapp.com/",
                 loop: 1
             },
             height: "360",
             width: "640",
             events: {
-                onReady: addPlayList,
+                onReady: initPlayList,
                 onStateChange: stateChange
             }
         });
     };
-
-    const addPlayList = () => {
+    const initPlayList = () => {
         playList.value = myMusicList.value.map(item => item.videoId);
         player.value.cuePlaylist({
             playlist: playList.value
         });
         isReady.value = true;
+    }
+
+    const addPlayList = (music) => {
+        console.log('dd', music, myMusicList.value);
+        playList.value = myMusicList.value.map(item => item.videoId);
+        player.value.loadPlaylist({
+            playlist: playList.value,
+        });
+    };
+    const deletePlayList = (idx) => {
+        console.log(idx);
+        playList.value = myMusicList.value.map(item => item.videoId);
+        player.value.loadPlaylist({
+            playlist: playList.value,
+        });
     };
 
-    const stateChange = event => {
+    const stateChange = (event) => {
         const data = {
             status: event.data,
             currentTime: player.value.getCurrentTime(),
@@ -63,7 +80,8 @@ const youtubeData = () => {
         myMusicList,
         isReady,
         onYouTubeIframeAPIReady,
-        addPlayList
+        addPlayList,
+        deletePlayList,
     };
 };
 
@@ -94,8 +112,10 @@ export default {
             myMusicList,
             isReady,
             onYouTubeIframeAPIReady,
-            addPlayList
+            addPlayList,
+            deletePlayList
         } = youtubeData();
+        const defaultLength = ref(0);
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
@@ -108,14 +128,21 @@ export default {
             if (newValue.status === "next") return player.value.nextVideo();
         });
 
-        watch(myMusicList, () => {
+        watch(myMusicList, (newValue) => {
             if (myMusicList.value.length === 0) return;
-            console.log(myMusicList.value);
+            console.log(defaultLength.value);
             if (isReady.value === true) {
-                addPlayList();
+                if (defaultLength.value < myMusicList.value.length) {
+                    addPlayList(newValue[newValue.length - 1]);
+                }
             } else {
                 onYouTubeIframeAPIReady();
             }
+            
+            defaultLength.value = myMusicList.value.length;
+            console.log(myMusicList.value.length, newValue.length, defaultLength.value);
+
+            
         });
 
         root.$store.commit("menu/disableFooter");
@@ -126,6 +153,7 @@ export default {
         return {
             myMusicList,
             musicStatus,
+            deletePlayList,
         };
     }
 };
