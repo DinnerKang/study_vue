@@ -9,12 +9,6 @@
     </section>
 </template>
 
-<script>
-export default {
-    
-}
-</script>
-
 <style lang="scss" scoped>
     .mobile{
         width: 100vw;

@@ -62,7 +62,7 @@ const setMusicList = (props, emit, isLounge) => {
                 if (!snapshot.val()) return;
                 const key = Object.keys(snapshot.val()).reverse()[idx];
                 deleteMusic(data, key);
-            });
+        });
     };
 
     return {
