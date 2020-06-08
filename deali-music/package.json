@@ -31,9 +31,11 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "minimist": "^1.2.5",
     "node-sass": "^4.13.0",
     "sass-loader": "^8.0.0",
     "serialize-javascript": "^3.0.0",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "websocket-extensions": "^0.1.4"
   }
 }
