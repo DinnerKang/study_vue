@@ -6,7 +6,6 @@
             :group-host="'lounge'"
             :group-name="'lounge'"
             :group-key="'lounge'"
-            @remove-music="deletePlayList"
         />
     </div>
 </template>
@@ -48,21 +47,6 @@ const youtubeData = () => {
         isReady.value = true;
     }
 
-    const addPlayList = (music) => {
-        console.log('dd', music, myMusicList.value);
-        playList.value = myMusicList.value.map(item => item.videoId);
-        player.value.loadPlaylist({
-            playlist: playList.value,
-        });
-    };
-    const deletePlayList = (idx) => {
-        console.log(idx);
-        playList.value = myMusicList.value.map(item => item.videoId);
-        player.value.loadPlaylist({
-            playlist: playList.value,
-        });
-    };
-
     const stateChange = (event) => {
         const data = {
             status: event.data,
@@ -80,8 +64,7 @@ const youtubeData = () => {
         myMusicList,
         isReady,
         onYouTubeIframeAPIReady,
-        addPlayList,
-        deletePlayList,
+        initPlayList,
     };
 };
 
@@ -112,10 +95,8 @@ export default {
             myMusicList,
             isReady,
             onYouTubeIframeAPIReady,
-            addPlayList,
-            deletePlayList
+            initPlayList,
         } = youtubeData();
-        const defaultLength = ref(0);
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
@@ -128,21 +109,13 @@ export default {
             if (newValue.status === "next") return player.value.nextVideo();
         });
 
-        watch(myMusicList, (newValue) => {
+        watch(myMusicList, () => {
             if (myMusicList.value.length === 0) return;
-            console.log(defaultLength.value);
             if (isReady.value === true) {
-                if (defaultLength.value < myMusicList.value.length) {
-                    addPlayList(newValue[newValue.length - 1]);
-                }
+                initPlayList();
             } else {
                 onYouTubeIframeAPIReady();
             }
-            
-            defaultLength.value = myMusicList.value.length;
-            console.log(myMusicList.value.length, newValue.length, defaultLength.value);
-
-            
         });
 
         root.$store.commit("menu/disableFooter");
@@ -153,7 +126,6 @@ export default {
         return {
             myMusicList,
             musicStatus,
-            deletePlayList,
         };
     }
 };

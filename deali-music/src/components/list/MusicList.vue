@@ -45,7 +45,7 @@ const setMusicList = (props, emit, isLounge) => {
 
         getMusicListByGroup(data).on("value", snapshot => {
             if (!snapshot.val()) return;
-            musicList.value = Object.values(snapshot.val());
+            musicList.value = Object.values(snapshot.val()).reverse();
             emit("input", musicList.value);
         });
     };
@@ -60,9 +60,8 @@ const setMusicList = (props, emit, isLounge) => {
             .orderByKey()
             .once("value", snapshot => {
                 if (!snapshot.val()) return;
-                const key = Object.keys(snapshot.val())[idx];
+                const key = Object.keys(snapshot.val()).reverse()[idx];
                 deleteMusic(data, key);
-                emit('remove-music', idx);
         });
     };
 
