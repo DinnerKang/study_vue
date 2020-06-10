@@ -45,6 +45,9 @@ const youtubeData = () => {
             playlist: playList.value
         });
         isReady.value = true;
+        setTimeout(() => {
+            player.value.playVideo();
+        }, 1000);
     }
 
     const stateChange = (event) => {

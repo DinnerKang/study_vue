@@ -82,13 +82,22 @@ export function addLikeGroup(data) {
 export function addShowGroup(data) {
     const ref = firebase.database().ref('group/showGroup');
 
-    return ref.child(data.targetKey).set({
+    return ref.child(data.targetKey).update({
         targetKey: data.targetKey,
         dealiName: data.dealiName,
         groupName: data.groupName,
         likes: {
             count: 0
         },
+    });
+}
+export function uppdateShowGroup(data) {
+    const ref = firebase.database().ref('group/showGroup');
+
+    return ref.child(data.targetKey).update({
+        targetKey: data.targetKey,
+        dealiName: data.dealiName,
+        groupName: data.groupName,
     });
 }
 
@@ -100,7 +109,7 @@ export function editMyGroup(data) {
         thumbnailUrl: data.thumbnailUrl,
     });
     if (data.isShowGroup === true) {
-        addShowGroup(data);
+        uppdateShowGroup(data);
     } else {
         deleteOpenGroup(data);
     }
