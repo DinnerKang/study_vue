@@ -20,6 +20,7 @@
                 </article>
             </div>
         </section>
+        <on-board />
     </div>
 </template>
 
@@ -29,6 +30,11 @@ import MyGroupList from "@/components/list/MyGroupList";
 import { getMusicListByGroup } from "@/services/music";
 import { openGroup } from "@/composible/openGroup";
 import openGroupList from "@/components/list/OpenGroupList";
+import OnBoard from '@/components/common/OnBoard.vue';
+
+const checkOnBoard = () => {
+    console.log('hi');
+};
 
 const myGroup = userInfo => {
     const myGroupKeys = ref([]);
@@ -71,7 +77,8 @@ export default {
     },
     components: {
         MyGroupList,
-        openGroupList
+        openGroupList,
+        OnBoard,
     },
     setup(props, { root }) {
         const userInfo = computed(
@@ -90,6 +97,7 @@ export default {
             userInfo,
             page,
             ...openGroup(perPage, page),
+            checkOnBoard,
         };
     }
 };
