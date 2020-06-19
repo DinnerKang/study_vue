@@ -116,9 +116,10 @@ const controlVideo = () => {
             }
         });
     };
-
-    const videoControl = state => {
-        videoController(state, controlSound.value);
+    
+    const videoControl = (state) => {
+        console.log(state);
+        videoController(state);
     };
 
     const initSound = () => {

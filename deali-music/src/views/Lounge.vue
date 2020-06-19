@@ -59,6 +59,9 @@ const youtubeData = () => {
                 item => item.videoId === player.value.getVideoData()["video_id"]
             )[0].musicName,
         };
+        console.log('state', data.status);
+        if (data.status === 2) player.value.pauseVideo();
+        if (data.status === 1) player.value.playVideo();
         addVideoStatus(data);
     };
 
@@ -76,6 +79,7 @@ const youtubeStatus = () => {
 
     const observeLoungeStatus = () => {
         getControlLoungeStatus().on("value", snapshot => {
+            console.log(snapshot.val());
             musicStatus.value = snapshot.val();
         });
     };
@@ -92,7 +96,6 @@ export default {
         MusicList,
     },
     setup(props, { root }) {
-        const { observeLoungeStatus, musicStatus } = youtubeStatus();
         const {
             player,
             myMusicList,
@@ -100,9 +103,11 @@ export default {
             onYouTubeIframeAPIReady,
             initPlayList,
         } = youtubeData();
+        const { observeLoungeStatus, musicStatus } = youtubeStatus();
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
+            console.log('1', newValue.status);
 
             if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
             if (newValue.idx >= 0) return player.value.playVideoAt(newValue.idx);

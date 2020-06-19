@@ -20,7 +20,7 @@
                 </article>
             </div>
         </section>
-        <on-board />
+        <on-board v-if="true"/>
     </div>
 </template>
 

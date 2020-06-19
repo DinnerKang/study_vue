@@ -11,10 +11,9 @@ export function getControlLoungeStatus() {
 
 // Write
 
-export function videoController(status, volume) {
-    firebase.database().ref(`control/lounge`).set({
+export function videoController(status) {
+    firebase.database().ref(`control/lounge`).update({
         status,
-        volume: volume,
         date: String(new Date()),
     });
 
