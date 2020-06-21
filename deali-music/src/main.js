@@ -4,12 +4,14 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import filters from './filters';
+import VueCookies from 'vue-cookies';
 import VueCompositionApi from '@vue/composition-api';
 
 Vue.use(VueCompositionApi);
 Vue.use(VueMeta);
 Vue.config.productionTip = false;
 Vue.config.devtools = true;
+Vue.use(VueCookies);
 
 // 필터 등록
 Object.entries(filters).map((item) => {

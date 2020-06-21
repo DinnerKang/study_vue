@@ -1,48 +1,47 @@
 <template>
-    <div class="on-board">
+    <div class="on-board" v-if="value">
         <div class="on-board-container">
             <img :src="nowImage" class="board-img" />
-            <h3>{{ boardText[nowView].mainText }}</h3>
-            <pre>
-                {{ boardText[nowView].subText }}
-            </pre>
+            <div>
+                <button>이전</button>
+                <button @click="nowView++">다음</button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import BoardImg0 from '@/assets/images/Dealibeat_1(x2).png';
-import BoardImg1 from '@/assets/images/Dealibeat_2(x2).png';
+import BoardImg1 from '@/assets/images/Dealibeat_1(x2).png';
+import BoardImg2 from '@/assets/images/Dealibeat_2(x2).png';
+import BoardImg3 from '@/assets/images/Dealibeat_3(x2).png';
+import BoardImg4 from '@/assets/images/Dealibeat_4(x2).png';
 import { ref, computed } from '@vue/composition-api';
 
 
-const boardText = [
-    {
-        mainText: '웰컴 투 딜리비트',
-        subText: '딜리셔스 DJ가 되어보세요!<br />딜리비트는 라운지 음악을 컨트롤할 수 있는 스트리밍 서비스입니다.',
-    },
-    {
-        mainText: '로그인하기',
-        subText: '딜리셔스 이메일 계정으로 로그인해 주세요.<br />하단에 재생목록을 관리하는 컨트롤 바가 나타납니다.',    
-    },
-    {   
-        mainText: '음악 검색하기',
-        subText: '상단 검색창에 듣고 싶은 음악을 검색해 주세요. <br />듣고 싶은 음악을 ‘라운지’ 플레이리스트에 넣으면 재생됩니다.',    
-    },
-];
 
 export default {
     name: 'OnBoard',
-    setup() {
-        const nowView = ref(0);
+    props: {
+        value: {
+            type: Boolean,
+            default: false,
+        },
+    },
+    setup(_, { root, emit }) {
+        const nowView = ref(1);
         const nowImage = computed(() => {
-            if (nowView.value === 0 ) return BoardImg0;
             if (nowView.value === 1 ) return BoardImg1;
+            if (nowView.value === 2 ) return BoardImg2;
+            if (nowView.value === 3 ) return BoardImg3;
+            if (nowView.value === 4 ) return BoardImg4;
+            if (nowView.value > 4) {
+                root.$cookies.set('board', true, '1y');
+                emit('input', false);
+                return;
+            }
         });
-        
         return {
             nowImage,
-            boardText,
             nowView,
         };
     },

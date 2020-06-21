@@ -20,7 +20,7 @@
                 </article>
             </div>
         </section>
-        <on-board v-if="true"/>
+        <on-board v-model="checkBoard"/>
     </div>
 </template>
 
@@ -32,8 +32,14 @@ import { openGroup } from "@/composible/openGroup";
 import openGroupList from "@/components/list/OpenGroupList";
 import OnBoard from '@/components/common/OnBoard.vue';
 
-const checkOnBoard = () => {
-    console.log('hi');
+const checkOnBoard = (root) => {
+    const checkBoard = ref(false);
+    const isRead = root.$cookies.get('board');
+    if (!isRead)  checkBoard.value = true;
+
+    return {
+        checkBoard,
+    };
 };
 
 const myGroup = userInfo => {
@@ -97,7 +103,7 @@ export default {
             userInfo,
             page,
             ...openGroup(perPage, page),
-            checkOnBoard,
+            ...checkOnBoard(root),
         };
     }
 };
