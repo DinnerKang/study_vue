@@ -28,7 +28,7 @@ export default {
  body{
    padding:0;
    margin: 0;
-   font-family: 'Nanum Gothic', sans-serif;
+   font-family: 'Noto Sans KR', sans-serif;
  }
  a{
    text-decoration: none;

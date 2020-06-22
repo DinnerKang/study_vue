@@ -59,9 +59,9 @@ const youtubeData = () => {
                 item => item.videoId === player.value.getVideoData()["video_id"]
             )[0].musicName,
         };
-        console.log('state', data.status);
         if (data.status === 2) player.value.pauseVideo();
         if (data.status === 1) player.value.playVideo();
+        if (data.status === 0) player.value.playVideoAt(0);
         addVideoStatus(data);
     };
 
@@ -79,7 +79,6 @@ const youtubeStatus = () => {
 
     const observeLoungeStatus = () => {
         getControlLoungeStatus().on("value", snapshot => {
-            console.log(snapshot.val());
             musicStatus.value = snapshot.val();
         });
     };
@@ -107,10 +106,15 @@ export default {
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
-            console.log('1', newValue.status);
 
             if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
-            if (newValue.idx >= 0) return player.value.playVideoAt(newValue.idx);
+            if (newValue.idx >= 0) {
+                player.value.playVideoAt(newValue.idx);
+                setTimeout(() => {
+                    player.value.playVideo();
+                }, 1000);
+                return;
+            }
             if (newValue.status === "start") return player.value.playVideo();
             if (newValue.status === "stop") return player.value.pauseVideo();
             if (newValue.status === "prev") return player.value.previousVideo();
