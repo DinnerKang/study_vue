@@ -106,9 +106,10 @@ export default {
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
+            console.log(newValue.idx, oldValue.idx);
 
             if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
-            if (newValue.idx >= 0) {
+            if (newValue.idx !== oldValue.idx) {
                 player.value.playVideoAt(newValue.idx);
                 setTimeout(() => {
                     player.value.playVideo();
