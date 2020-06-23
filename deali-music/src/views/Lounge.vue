@@ -45,6 +45,7 @@ const youtubeData = () => {
             playlist: playList.value
         });
         isReady.value = true;
+        player.value.setLoop(true);
         setTimeout(() => {
             player.value.playVideo();
         }, 1000);
@@ -59,6 +60,11 @@ const youtubeData = () => {
                 item => item.videoId === player.value.getVideoData()["video_id"]
             )[0].musicName,
         };
+        console.log(data.status, player.value.getCurrentTime());
+        if (data.status === 3) {
+            player.value.seekTo(0);
+            player.value.playVideo();
+        }
         if (data.status === 2) player.value.pauseVideo();
         if (data.status === 1) player.value.playVideo();
         if (data.status === 0) player.value.playVideoAt(0);
@@ -106,7 +112,7 @@ export default {
 
         watch(musicStatus, (newValue, oldValue) => {
             if (!isReady.value) return;
-            console.log(newValue.idx, oldValue.idx);
+            console.log(newValue, player.value.getCurrentTime());
 
             if (newValue.volume !== oldValue.volume) return player.value.setVolume(newValue.volume);
             if (newValue.idx !== oldValue.idx) {
