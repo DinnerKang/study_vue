@@ -1,10 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import Home from '../views/Home';
-import MyPage from '../views/MyPage';
 import Lounge from '../views/Lounge';
-import Search from '../views/Search.vue';
-import PlayPage from '../views/PlayPage';
 import Store from '../store/index';
 import Mobile from '../views/Mobile.vue';
 import CheckPwd from '../views/CheckPwd.vue';
@@ -17,7 +13,7 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home,
+    component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue'),
     meta: { unauthorized: true },
     beforeEnter: (to, from, next) => {
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
@@ -29,7 +25,7 @@ const routes = [
   {
     path: '/myPage',
     name: 'MyPage',
-    component: MyPage,
+    component: () => import(/* webpackChunkName: "MyPage" */ '../views/MyPage.vue'),
   },
   {
     path: '/lounge',
@@ -47,13 +43,13 @@ const routes = [
   {
     path: '/search',
     name: 'Search',
-    component: Search,
+    component: () => import(/* webpackChunkName: "Search" */ '../views/Search.vue'),
     meta: { unauthorized: true },
   },
   {
     path: '/playPage',
     name: 'PlayPage',
-    component: PlayPage,
+    component: () => import(/* webpackChunkName: "PlayPage" */ '../views/PlayPage.vue'),
     meta: { unauthorized: true },
   },
   {
@@ -76,7 +72,7 @@ const routes = [
   },
   {
       path: '*',
-      component: Home,
+      component: () => import(/* webpackChunkName: "Home" */ '../views/Home.vue'),
   },
 ]
 
