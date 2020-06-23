@@ -96,6 +96,7 @@ const getLike = (key, groupHost, userInfo) => {
 
 
     getLikeGroupList(myData).on('value', snapshot => {
+        if (!snapshot.val()) return;
         const result = snapshot.val();
         if (Object.keys(result).includes(key)){
             isLike.value = true;
