@@ -42,7 +42,7 @@ const checkOnBoard = (root) => {
     };
 };
 
-const myGroup = userInfo => {
+const myGroup = (userInfo) => {
     const myGroupKeys = ref([]);
 
     const getMyGroupList = () => {
@@ -52,7 +52,7 @@ const myGroup = userInfo => {
         };
 
         getMusicListByGroup(data).once("value", snapshot => {
-            if (!snapshot.val()) return;
+            if (!snapshot.val()) return myGroupKeys.value = [];
             const keys = Object.keys(snapshot.val())
                 .sort(() => Math.random() - Math.random())
                 .splice(0, 2);
@@ -95,7 +95,11 @@ export default {
         const { myGroupKeys, getMyGroupList } = myGroup(userInfo);
 
         watch(() => userInfo.value.dealiName, (newValue) => {
-            if (newValue) getMyGroupList();
+            if (newValue) {
+                getMyGroupList();
+            } else {
+                myGroupKeys.value = [];
+            }
         });
 
         return {
