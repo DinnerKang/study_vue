@@ -1,7 +1,11 @@
 <template>
     <div class="on-board" v-if="value">
         <div class="on-board-container">
-            <img :src="nowImage" class="board-img" />
+            <img v-show="nowView === 1" :src="BoardImg1" class="board-img" />
+            <img v-show="nowView === 2" :src="BoardImg2" class="board-img" />
+            <img v-show="nowView === 3" :src="BoardImg3" class="board-img" />
+            <img v-show="nowView === 4" :src="BoardImg4" class="board-img" />
+
             <div class="button-area">
                 <img class="btn" :src="prevButton" alt="이전" @click="clickButton(-1)" />
                 <ul class="bar-area">
@@ -24,7 +28,7 @@ import BoardImg3 from '@/assets/images/Dealibeat_3(x2).png';
 import BoardImg4 from '@/assets/images/Dealibeat_4(x2).png';
 import prevButton from '@/assets/images/back_button(x2).png';
 import nextButton from '@/assets/images/next_button(x2).png';
-import { ref, computed } from '@vue/composition-api';
+import { ref, watch } from '@vue/composition-api';
 
 
 
@@ -38,27 +42,26 @@ export default {
     },
     setup(_, { root, emit }) {
         const nowView = ref(1);
-        const nowImage = computed(() => {
-            if (nowView.value === 1 ) return BoardImg1;
-            if (nowView.value === 2 ) return BoardImg2;
-            if (nowView.value === 3 ) return BoardImg3;
-            if (nowView.value === 4 ) return BoardImg4;
-            if (nowView.value > 4) {
-                root.$cookies.set('board', true, '1y');
+        watch(() => nowView.value, (newValue) => {
+            if (newValue > 4) {
+                root.$cookies.set('onBoard', true, '1y');
                 emit('input', false);
                 return;
             }
-        });
+        })
         const clickButton = (num) => {
             if (nowView.value === 1 && num === -1) return; 
             nowView.value = nowView.value + num;
         };
         return {
-            nowImage,
             nowView,
             clickButton,
             nextButton,
             prevButton,
+            BoardImg1,
+            BoardImg2,
+            BoardImg3,
+            BoardImg4,
         };
     },
 }

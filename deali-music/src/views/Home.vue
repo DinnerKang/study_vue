@@ -34,7 +34,7 @@ import OnBoard from '@/components/common/OnBoard.vue';
 
 const checkOnBoard = (root) => {
     const checkBoard = ref(false);
-    const isRead = root.$cookies.get('board');
+    const isRead = root.$cookies.get('onBoard');
     if (!isRead)  checkBoard.value = true;
 
     return {
