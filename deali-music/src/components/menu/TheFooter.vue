@@ -61,7 +61,7 @@
                 </div>
                 <img class="option_icon" :src="menuIcon" alt="메뉴" @click="isMenu=!isMenu" />
                 <transition name="slideTop">
-                    <div class="menu_area" v-if="isMenu">
+                    <div class="menu_area" v-show="isMenu">
                         <music-list
                             :group-name="'lounge'"
                             :group-key="'lounge'"

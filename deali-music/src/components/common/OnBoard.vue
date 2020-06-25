@@ -99,8 +99,8 @@ export default {
             box-sizing: border-box;
 
             .btn {
-                width: 70.5px;
-                height: 28px;
+                width: 100px;
+                height: 40px;
                 cursor: pointer;
             }
             .bar-area{
@@ -112,6 +112,7 @@ export default {
                     border-radius: 3px;
                     background-color: $Black;
                     margin: 0 9px;
+                    border: none;
                 }
                 .active{
                     background-color: $Main;
