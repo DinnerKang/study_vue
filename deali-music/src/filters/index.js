@@ -51,7 +51,7 @@ export default {
     setYoutubeTime(value) {
         if (!value) return;
         let match = value.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
-        if (!match) return '스트리밍 중';
+        if (!match) return '라이브 방송';
         match = match.slice(1).map(function(x) {
           if (x != null) {
               return x.replace(/\D/, '');
