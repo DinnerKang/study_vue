@@ -52,7 +52,8 @@ const youtubeData = () => {
             playerVars: { origin: "https://dealibeat.firebaseapp.com/" },
             width: "600",
             events: {
-                onReady: addPlayList
+                onReady: addPlayList,
+                onStateChange: stateChange,
             }
         });
     };
@@ -67,6 +68,9 @@ const youtubeData = () => {
         setTimeout(() => {
             player.value.playVideo();
         }, 1000);
+    };
+    const stateChange = (event) => {
+        console.log(event);
     };
 
     const changeMusic = (idx) => {
