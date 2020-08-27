@@ -39,6 +39,7 @@ li {
     align-items: center;
     margin-top: 500px;
     border: 1px solid red;
+    margin-left: 80px;
 }
 
 .hello {
@@ -46,7 +47,6 @@ li {
     width: 800px;
     border: 1px solid #000;
     display: flex;
-    column-gap: 80px;
     flex-wrap: wrap;
 }
 </style>
