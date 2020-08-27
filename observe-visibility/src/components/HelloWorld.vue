@@ -1,8 +1,10 @@
 <template>
 <div>
     <ul class="hello">
-        <li v-for="(list, idx) in 10" :key="idx" :id="idx" v-observe-visibility="visibilityChanged">
+        <li v-for="(list, idx) in 10" :key="idx">
             {{idx}}
+            <div class="hidden-container" :id="idx" v-observe-visibility="visibilityChanged">
+            </div>
         </li>
     </ul>
 </div>
@@ -18,7 +20,10 @@ export default {
         console.log('hi');
         const visibilityChanged = (isVisible, entry) => {
             if (isVisible === false) return;
+            console.log(entry.target.parentNode);
             console.log('보이는 ID: ', entry.target.id);
+            // 한번 노출했으니 제거
+            entry.target.parentNode.removeChild(entry.target);
         };
         return {
             visibilityChanged,
@@ -40,6 +45,7 @@ li {
     margin-top: 500px;
     border: 1px solid red;
     margin-left: 80px;
+    position: relative;
 }
 
 .hello {
@@ -48,5 +54,11 @@ li {
     border: 1px solid #000;
     display: flex;
     flex-wrap: wrap;
+}
+
+.hidden-container {
+    width: 100%;
+    height: 1px;
+    position: absolute;
 }
 </style>
