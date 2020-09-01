@@ -1,23 +1,22 @@
 <template>
     <div class="default">
         <ul class="box-area">
-            <li
-                class="default-box"
-                v-for="(list, idx) in 10"
-                :key="idx"
-                :id="idx"
-            >
-                {{idx}}
-            </li>
+            <li id="0" class="default-box">0</li>
+            <li id="1" class="default-box">1</li>
+            <li id="2" class="default-box">2</li>
+            <li id="3" class="default-box">3</li>
+            <li id="4" class="default-box">4</li>
+            <li id="5" class="default-box">5</li>
+            <li id="6" class="default-box">6</li>
         </ul>
-        <ul class="default-nav">
-            <li
-                class="default-list"
-                v-for="(list, idx) in 10"
-                :key="idx"
-            >
-                {{ idx }}
-            </li>
+        <ul class="nav-area">
+            <li class="default-list">0</li>
+            <li class="default-list">1</li>
+            <li class="default-list">2</li>
+            <li class="default-list">3</li>
+            <li class="default-list">4</li>
+            <li class="default-list">5</li>
+            <li class="default-list">6</li>
         </ul>
     </div>
 </template>
@@ -66,17 +65,21 @@ export default {
 .box-area {
     position: absolute;
     width: 100%;
+    height: 100%;
+    padding-left: 30px;
+    display: flex;
+    flex-wrap: wrap;
 }
 .default-box{
     width: 50px;
     height: 50px;
     border: 1px solid #222;
-    margin: 20px auto;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 20px 30px;
 }
-.default-nav {
+.nav-area {
     position: sticky;
     top: 0;
     left: 0;
@@ -87,6 +90,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    color: #fff;
 }
 .active {
     background-color: red;

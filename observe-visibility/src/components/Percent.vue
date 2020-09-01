@@ -1,23 +1,30 @@
 <template>
     <div class="percent">
         <ul class="box-area">
-            <li
-                class="percent-box"
-                v-for="(list, idx) in 10"
-                :key="idx"
-                :id="idx"
-            >
-                {{idx}}
+            <li class="percent-box" id="0">
+                0
             </li>
+            <li class="percent-box" id="1">1</li>
+            <li class="percent-box" id="2">2</li>
+            <li class="percent-box" id="3">3</li>
+            <li class="percent-box" id="4">4</li>
+            <li class="percent-box" id="5">5</li>
+            <li class="percent-box" id="6">6</li>
+            <li class="percent-box" id="7">7</li>
+            <li class="percent-box" id="8">8</li>
+            <li class="percent-box" id="9">9</li>
         </ul>
-        <ul class="percent-nav">
-            <li
-                class="percent-list"
-                v-for="(list, idx) in 10"
-                :key="idx"
-            >
-                {{ idx }}
-            </li>
+        <ul class="nav-area">
+            <li class="percent-list">0</li>
+            <li class="percent-list">1</li>
+            <li class="percent-list">2</li>
+            <li class="percent-list">3</li>
+            <li class="percent-list">4</li>
+            <li class="percent-list">5</li>
+            <li class="percent-list">6</li>
+            <li class="percent-list">7</li>
+            <li class="percent-list">8</li>
+            <li class="percent-list">9</li>
         </ul>
     </div>
 </template>
@@ -76,7 +83,7 @@ export default {
     align-items: center;
     justify-content: center;
 }
-.percent-nav {
+.nav-area{
     position: sticky;
     top: 0;
     left: 0;
@@ -87,6 +94,8 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    color: #fff;
 }
 .active {
     background-color: red;
