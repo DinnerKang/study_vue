@@ -39,7 +39,7 @@ const setObserve = () => {
                 document.querySelectorAll('.percent-list')[entry.target.id].classList.remove('active');
                 return;
             }
-            console.log('노출하는 상자 ID: ',entry.target.id);
+            // console.log('노출하는 상자 ID: ',entry.target.id);
             document.querySelectorAll('.percent-list')[entry.target.id].classList.add('active');
         });
     });

@@ -25,16 +25,17 @@
 import { onMounted } from '@vue/composition-api';
 
 const setObserve = () => {
-    const observer = new IntersectionObserver(entries => {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) {
                 document.querySelectorAll('.default-list')[entry.target.id].classList.remove('active');
                 return;
             }
-            console.log('노출하는 상자 ID: ',entry.target.id);
+            console.log('노출하는 상자 ID: ', entry.target.id);
+            observer.unobserve(entry.target);
             document.querySelectorAll('.default-list')[entry.target.id].classList.add('active');
         });
-    });
+    }, { root: document.getElementsByClassName('default')[0], threshold: 0.5});
 
     document.getElementsByClassName('default-box').forEach((box) => {
         observer.observe(box);
