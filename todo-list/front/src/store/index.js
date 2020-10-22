@@ -5,11 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    kakaoCode: '',
+    userName: '',
+    platform: '',
   },
   mutations: {
-    setKakaoCode(state, payload) {
-      state.kakaoCode = payload;
+    setUser(state, payload) {
+      state.userName = payload.name;
+      state.platform = payload.platform;
     },
   },
   actions: {

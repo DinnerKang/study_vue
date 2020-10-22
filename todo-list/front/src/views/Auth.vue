@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getKakaoToken } from "@/services/login/login";
+import { getKakaoToken, getKakaoUserInfo } from "@/services/login/login";
 export default {
     name: 'Auth',
     created() {
@@ -15,15 +15,26 @@ export default {
     },
     methods: {
         async setKakaoToken () {
+            console.log('카카오 인증 코드', this.$route.query.code);
             const { data } = await getKakaoToken(this.$route.query.code);
-            console.log(data);
             if (data.error) {
                 alert('카카오톡 로그인 오류입니다.');
                 this.$router.replace('/login');
                 return;
             }
             window.Kakao.Auth.setAccessToken(data.access_token);
+            this.$cookies.set('access-token', data.access_token, '1d');
+            this.$cookies.set('refresh-token', data.refresh_token, '1d');
+            await this.setUserInfo();
             this.$router.replace('/');
+        },
+        async setUserInfo () {
+            const res = await getKakaoUserInfo();
+            const userInfo = {
+                name: res.kakao_account.profile.nickname,
+                platform: 'kakao',
+            };
+            this.$store.commit('setUser', userInfo);
         },
     }
 }

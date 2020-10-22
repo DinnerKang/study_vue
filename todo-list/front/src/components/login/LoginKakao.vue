@@ -1,5 +1,9 @@
 <template>
-    <img class="kakao_btn" src="@/assets/login/kakao_login_medium_narrow.png" @click="loginWithKakao" />
+    <img
+        class="kakao_btn"
+        src="@/assets/login/kakao_login_medium_narrow.png"
+        @click="loginWithKakao"
+    />
 </template>
 
 <script>

@@ -4,7 +4,6 @@
         <div>
             <login-kakao></login-kakao>
         </div>
-        <button type="button" @click="test">테스트</button>
     </article>
 </template>
 
@@ -14,20 +13,6 @@ export default {
     name: "TheLogin",
     components: {
         LoginKakao,
-    },
-    methods: {
-        test() {
-            console.log("test");
-            window.Kakao.API.request({
-                url: "/v2/user/me",
-                success: function (response) {
-                    console.log(response);
-                },
-                fail: function (error) {
-                    console.log(error);
-                },
-            });
-        },
     },
 };
 </script>
