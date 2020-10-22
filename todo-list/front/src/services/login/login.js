@@ -20,15 +20,12 @@ const getKakaoToken = async (code) => {
         var query = Object.keys(data)
             .map(k => esc(k) + '=' + esc(data[k]))
             .join('&');
-        console.log(query);
         const result = await axios.post('https://kauth.kakao.com/oauth/token', query, { headers: kakaoHeader });
         return result;
     } catch (e) {
         console.log(e);
     }
-
 };
-
 export {
     getKakaoToken,
 };

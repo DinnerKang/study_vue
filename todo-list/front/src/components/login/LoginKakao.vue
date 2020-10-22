@@ -1,32 +1,19 @@
 <template>
-    <button type="button" @click="loginWithKakao">카카오 로그인</button>
+    <img class="kakao_btn" src="@/assets/login/kakao_login_medium_narrow.png" @click="loginWithKakao" />
 </template>
 
 <script>
-import { getKakaoToken } from "@/services/login/login";
 
 const loginWithKakao = () => {
     const params = {
-        redirectUri: "http://localhost:8080/login",
+        redirectUri: "http://localhost:8080/auth",
     };
     window.Kakao.Auth.authorize(params);
 };
+
 export default {
     name: "LoginKakao",
-    setup(props, { root }) {
-        const setKakaoToken = async () => {
-            const { data } = await getKakaoToken(root.$route.query.code);
-            window.Kakao.Auth.setAccessToken(data.access_token);
-            console.log(data);
-        };
-
-        if (root.$route.query.code) {
-            // window.Kakao.Auth.setAccessToken(this.$route.query.code);
-            console.log(root.$route.query.code);
-            setKakaoToken();
-        }
-
-        
+    setup() {
         return {
             loginWithKakao,
         };
@@ -34,5 +21,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.kakao_btn {
+    cursor: pointer;
+}
 </style>
