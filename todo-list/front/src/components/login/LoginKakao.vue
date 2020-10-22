@@ -4,19 +4,15 @@
 
 <script>
 
-const loginWithKakao = () => {
-    const params = {
-        redirectUri: "http://localhost:8080/auth",
-    };
-    window.Kakao.Auth.authorize(params);
-};
-
 export default {
     name: "LoginKakao",
-    setup() {
-        return {
-            loginWithKakao,
-        };
+    methods: {
+        loginWithKakao() {
+            const params = {
+                redirectUri: "http://localhost:8080/auth",
+            };
+            window.Kakao.Auth.authorize(params);
+        },
     },
 };
 </script>
