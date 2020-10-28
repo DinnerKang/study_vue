@@ -8,6 +8,14 @@
     <title><%= htmlWebpackPlugin.options.title %></title>
     <!--카카오-->
     <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+    <!--구글-->
+    <script src="https://apis.google.com/js/platform.js?onload=triggerGoogleLoaded" async defer></script>
+    <meta name="google-signin-client_id" content="18304878068-0rtpi00o0ifpho3irk306eimgi2fhq6a.apps.googleusercontent.com">
+    <script type="text/javascript">
+      function triggerGoogleLoaded() {
+        window.dispatchEvent(new Event("google-loaded"));
+      }
+    </script>
   </head>
   <body>
     <noscript>

@@ -5,6 +5,9 @@
             <login-kakao></login-kakao>
         </div>
         <div>
+            <login-firebase></login-firebase>
+        </div>
+        <div>
             <login-google></login-google>
         </div>
     </article>
@@ -12,12 +15,14 @@
 
 <script>
 import LoginKakao from "./LoginKakao";
+import LoginFirebase from './LoginFirebase';
 import LoginGoogle from './LoginGoogle';
 
 export default {
     name: "TheLogin",
     components: {
         LoginKakao,
+        LoginFirebase,
         LoginGoogle,
     },
 };

@@ -1,40 +1,30 @@
 <template>
-    <img
-        src="@/assets/login/btn_google_signin_light_normal_web@2x.png"
-        @click="loginWithGoogle"
-    />
+    <div class="g-signin2" id="google-signin-btn"></div>
 </template>
 
 <script>
-import * as firebase from "firebase/app";
-import "firebase/auth";
-const firebaseConfig = {
-    apiKey: "AIzaSyB5CXXxYHN5jJ1ESA0w_2p5pYwXaZAw6nw",
-    authDomain: "test-web-e8d37.firebaseapp.com",
-    databaseURL: "https://test-web-e8d37.firebaseio.com",
-    projectId: "test-web-e8d37",
-    storageBucket: "test-web-e8d37.appspot.com",
-    messagingSenderId: "390069637413",
-    appId: "1:390069637413:web:36307ee220a1a37c590acc",
-};
-
 export default {
-    created() {
-        firebase.initializeApp(firebaseConfig);
+    mounted() {
+       window.addEventListener("google-loaded", this.renderGoogleLoginButton);
     },
-    methods: {
-        async loginWithGoogle() {
-            console.log("login");
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.setCustomParameters({
-                prompt: "select_account",
+    methods:{
+        renderGoogleLoginButton() {
+            window.gapi.signin2.render("google-signin-btn", {
+                onsuccess: this.onSignIn,
             });
-            const profile = await firebase.auth().signInWithPopup(provider);
-            console.log(profile);
         },
-    },
-};
+        onSignIn (googleUser) {
+            console.log('test');
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        },
+    }
+}
 </script>
 
 <style scoped>
+
 </style>
