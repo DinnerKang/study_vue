@@ -11,7 +11,7 @@
     "@vue/composition-api": "^1.0.0-beta.17",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
-    "firebase": "^7.24.0",
+    "firebase": "^8.0.0",
     "query-string": "^5.1.1",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
