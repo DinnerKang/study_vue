@@ -47,8 +47,14 @@ const getGoogleToken = (googleUser) => {
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 }
+const naverLogin = async () => {
+    const test = await axios.get('https://nid.naver.com/oauth2.0/authorize');
+    console.log(test);
+};
+
 export {
     getKakaoToken,
     getKakaoUserInfo,
     getGoogleToken,
+    naverLogin,
 };

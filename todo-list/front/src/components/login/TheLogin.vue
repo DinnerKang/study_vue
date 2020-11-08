@@ -10,6 +10,9 @@
         <div>
             <login-google></login-google>
         </div>
+        <div>
+            <login-naver></login-naver>
+        </div>
     </article>
 </template>
 
@@ -17,6 +20,7 @@
 import LoginKakao from "./LoginKakao";
 import LoginFirebase from './LoginFirebase';
 import LoginGoogle from './LoginGoogle';
+import LoginNaver from './LoginNaver';
 
 export default {
     name: "TheLogin",
@@ -24,6 +28,7 @@ export default {
         LoginKakao,
         LoginFirebase,
         LoginGoogle,
+        LoginNaver,
     },
 };
 </script>
