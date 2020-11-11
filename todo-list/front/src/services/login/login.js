@@ -4,6 +4,7 @@ const kakaoHeader = {
     'Authorization': '86cd328810189ad3e09170078d1f1ea4',
     'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
 };
+
 const getKakaoToken = async (code) => {
     console.log('loginWithKakao');
     try {
@@ -46,15 +47,48 @@ const getGoogleToken = (googleUser) => {
     console.log('Name: ' + profile.getName());
     console.log('Image URL: ' + profile.getImageUrl());
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
-const naverLogin = async () => {
-    const test = await axios.get('https://nid.naver.com/oauth2.0/authorize');
-    console.log(test);
+};
+
+const naverLogin = new window.naver.LoginWithNaverId({
+    clientId: "a0K6ybsWcgRtXZiQlXfk",
+    callbackUrl: "http://localhost:8080/auth",
+    isPopup: false /* 팝업을 통한 연동처리 여부 */,
+    loginButton: {
+        color: "green",
+        type: 3,
+        height: 60,
+    } /* 로그인 버튼의 타입을 지정 */,
+});
+const naverService = () => {
+    
+
+    const setNaver = () => {
+        naverLogin.init();
+    };
+
+    const getUserInfo = (data) => {
+        console.log(naverLogin);
+        naverLogin.accessToken = data;
+        naverLogin.getLoginStatus(function (status) {
+            console.log(status);
+            if (status) {
+                var email = naverLogin.user.getEmail();
+                var name = naverLogin.user.getNickName();
+                console.log(email, name);
+            } else {
+                console.log("AccessToken이 올바르지 않습니다.");
+            }
+        });
+    };
+    return {
+        setNaver,
+        getUserInfo,
+    };
 };
 
 export {
     getKakaoToken,
     getKakaoUserInfo,
     getGoogleToken,
-    naverLogin,
+    naverService,
 };

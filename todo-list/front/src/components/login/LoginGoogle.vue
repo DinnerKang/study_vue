@@ -3,11 +3,11 @@
 </template>
 
 <script>
-import { getGoogleToken } from '@/services/login/login';
+// import { getGoogleToken } from '@/services/login/login';
 
 export default {
     created() {
-        window.onSignIn = getGoogleToken;
+        // window.onSignIn = getGoogleToken;
     },
 }
 </script>

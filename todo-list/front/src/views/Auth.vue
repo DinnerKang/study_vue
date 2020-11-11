@@ -5,12 +5,17 @@
 </template>
 
 <script>
-import { getKakaoToken, getKakaoUserInfo } from "@/services/login/login";
+import { getKakaoToken, getKakaoUserInfo, naverService } from "@/services/login/login";
 export default {
     name: 'Auth',
     created() {
         if (this.$route.query.code) {
             this.setKakaoToken();
+        }
+        if (this.$route.hash) {
+            console.log(this.$route.hash);
+            const token = this.$route.hash.split('&')[0].substr(14);
+            naverService().getUserInfo(token);
         }
     },
     methods: {
