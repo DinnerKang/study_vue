@@ -49,31 +49,28 @@ const getGoogleToken = (googleUser) => {
     console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 };
 
-const naverLogin = new window.naver.LoginWithNaverId({
-    clientId: "a0K6ybsWcgRtXZiQlXfk",
-    callbackUrl: "http://localhost:8080/auth",
-    isPopup: false /* 팝업을 통한 연동처리 여부 */,
-    loginButton: {
-        color: "green",
-        type: 3,
-        height: 60,
-    } /* 로그인 버튼의 타입을 지정 */,
-});
-const naverService = () => {
-    
 
+const naverService = () => {
+    const naverLogin = new window.naver.LoginWithNaverId({
+        clientId: "a0K6ybsWcgRtXZiQlXfk",
+        callbackUrl: "http://localhost:8080/auth",
+        isPopup: false /* 팝업을 통한 연동처리 여부 */,
+        loginButton: {
+            color: "green",
+            type: 3,
+            height: 60,
+        } /* 로그인 버튼의 타입을 지정 */,
+    });
     const setNaver = () => {
         naverLogin.init();
     };
-
-    const getUserInfo = (data) => {
+    const getUserInfo = () => {
+        setNaver();
         console.log(naverLogin);
-        naverLogin.accessToken = data;
-        naverLogin.getLoginStatus(function (status) {
-            console.log(status);
+        naverLogin.getLoginStatus((status) => {
             if (status) {
-                var email = naverLogin.user.getEmail();
-                var name = naverLogin.user.getNickName();
+                const email = naverLogin.user.email;
+                const name = naverLogin.user.name;
                 console.log(email, name);
             } else {
                 console.log("AccessToken이 올바르지 않습니다.");

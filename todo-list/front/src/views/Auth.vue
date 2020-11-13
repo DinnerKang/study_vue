@@ -1,6 +1,6 @@
 <template>
     <div>
-        test
+        <div id="naverIdLogin" style="display: none"></div>
     </div>
 </template>
 
@@ -12,10 +12,10 @@ export default {
         if (this.$route.query.code) {
             this.setKakaoToken();
         }
+    },
+    mounted() {
         if (this.$route.hash) {
-            console.log(this.$route.hash);
-            const token = this.$route.hash.split('&')[0].substr(14);
-            naverService().getUserInfo(token);
+            naverService().getUserInfo();
         }
     },
     methods: {
@@ -41,6 +41,9 @@ export default {
             };
             this.$store.commit('setUser', userInfo);
         },
+        getInfo() {
+            naverService().getUserInfo();
+        }
     }
 }
 </script>
