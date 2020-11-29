@@ -6,7 +6,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.post('/test', (req, res) => {
+app.post('/signUp', (req, res) => {
+    console.log(req.body);
+    return res.json({ result: 'success' });
+})
+app.post('/emailLogin', (req, res) => {
     console.log(req.body);
     return res.json({a: 1});
 });

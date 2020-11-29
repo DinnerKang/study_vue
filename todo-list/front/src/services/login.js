@@ -1,4 +1,4 @@
-import axios from '@/services/axios/axios';
+import axios from '@/services/axios';
 
 const kakaoHeader = {
     'Authorization': '86cd328810189ad3e09170078d1f1ea4',
@@ -83,9 +83,23 @@ const naverService = () => {
     };
 };
 
+const emailService = () => {
+    const emailLogin = async (email, password) => {
+        const data = {
+            email,
+            password,
+        };
+        const result = await axios.post('/emailLogin', data);
+        console.log(result);
+    };
+    return {
+        emailLogin,
+    };
+};
 export {
     getKakaoToken,
     getKakaoUserInfo,
     getGoogleToken,
     naverService,
+    emailService,
 };

@@ -8,6 +8,7 @@
 <script>
 import firebase from "firebase/app";
 import "firebase/auth";
+/*
 const firebaseConfig = {
     apiKey: "AIzaSyB5CXXxYHN5jJ1ESA0w_2p5pYwXaZAw6nw",
     authDomain: "test-web-e8d37.firebaseapp.com",
@@ -17,10 +18,11 @@ const firebaseConfig = {
     messagingSenderId: "390069637413",
     appId: "1:390069637413:web:36307ee220a1a37c590acc",
 };
+*/
 
 export default {
     created() {
-        firebase.initializeApp(firebaseConfig);
+        // firebase.initializeApp(firebaseConfig);
     },
     methods: {
         async loginWithGoogle() {

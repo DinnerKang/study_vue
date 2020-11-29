@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { getKakaoToken, getKakaoUserInfo, naverService } from "@/services/login/login";
+import { getKakaoToken, getKakaoUserInfo, naverService } from "@/services/login";
 export default {
     name: 'Auth',
     created() {

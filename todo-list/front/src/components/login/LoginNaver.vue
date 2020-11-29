@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { naverService } from '@/services/login/login';
+import { naverService } from '@/services/login';
 export default {
     mounted() {
         naverService().setNaver();

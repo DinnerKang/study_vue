@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import SignUp from '@/views/SignUp.vue';
 import Login from '@/views/Login.vue';
 import Auth from '@/views/Auth.vue';
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/auth',
     name: 'Auth',
     component: Auth,
+  },
+  {
+    path: '/signUp',
+    name: 'SignUp',
+    component: SignUp,
   },
   {
     path: '/about',
