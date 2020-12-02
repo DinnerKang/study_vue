@@ -1,10 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const privateKey = 'dinner';
 
 app.post('/signUp', (req, res) => {
     console.log(req.body);
@@ -12,7 +15,10 @@ app.post('/signUp', (req, res) => {
 })
 app.post('/emailLogin', (req, res) => {
     console.log(req.body);
-    return res.json({a: 1});
+    const token = jwt.sign({ 
+        foo: 'bar',
+     }, privateKey, { expiresIn: '1d' });
+    return res.json({a: token});
 });
 
 http.createServer(app).listen(5000, () => {
