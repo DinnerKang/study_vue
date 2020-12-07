@@ -7,10 +7,13 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+let user = [];
 const privateKey = 'dinner';
 
 app.post('/signUp', (req, res) => {
     console.log(req.body);
+    user.push(req.body);
+    console.log(user);
     return res.json({ result: 'success' });
 })
 app.post('/emailLogin', (req, res) => {
