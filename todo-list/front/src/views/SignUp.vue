@@ -1,28 +1,26 @@
 <template>
     <section>
-        <div>
-            회원가입 페이지
-        </div>
-        <div>
-            <input type="text" v-model="email" />
-        </div>
-        <div>
-            <input type="text" v-model="password" />
-        </div>
-        <div>
-            <button @click="clickSignUp(email, password)">완료</button>
-        </div>
+        <div>회원가입 페이지</div>
+        <form @submit.prevent="clickSignUp(email, password)">
+            <div>
+                <input type="email" v-model="email" />
+            </div>
+            <div>
+                <input type="text" v-model="password" />
+            </div>
+            <button type="submit">완료</button>
+        </form>
     </section>
 </template>
 
 <script>
-import { ref } from '@vue/composition-api';
-import { signUpService } from '@/services/signUp';
+import { ref } from "@vue/composition-api";
+import { signUpService } from "@/services/signUp";
 
 export default {
     setup() {
-        const email = ref('');
-        const password = ref('');
+        const email = ref("");
+        const password = ref("");
 
         return {
             email,
@@ -30,9 +28,7 @@ export default {
             ...signUpService(),
         };
     },
-}
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
