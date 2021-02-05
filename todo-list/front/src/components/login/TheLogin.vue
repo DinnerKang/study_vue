@@ -16,6 +16,7 @@
             <div>
                 <button type="button" @click="$router.push('/signUp')">회원가입</button>
             </div>
+            <button type="button" @click="testAPI">테스트 API</button>
         </div>
         <div>
             <login-kakao></login-kakao>
@@ -54,10 +55,14 @@ export default {
         const loginWithEmail = async (email, password) => {
             await emailService().emailLogin(email, password);
         };
+        const testAPI = async () => {
+            await emailService().test();
+        }
         return {
             email,
             password,
             loginWithEmail,
+            testAPI,
         };
     },
 };

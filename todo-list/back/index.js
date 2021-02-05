@@ -17,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 const privateKey = 'dinner';
+const refreshKey = 'refresh';
 
 app.post('/signUp', (req, res) => {
     console.log('회원 추가: ', req.body);
@@ -52,19 +53,44 @@ app.post('/emailLogin', (req, res) => {
                     const token = jwt.sign({ 
                         email: req.body.email,
                         info: '토큰에 넣고싶은거',
-                     }, privateKey, { expiresIn: '1d' });
+                     }, privateKey, { expiresIn: '1m' });
+                     const refreshToken = jwt.sign({ 
+                        email: req.body.email,
+                        info: '리프레시토큰입니다',
+                     }, refreshKey, { expiresIn: '3d' });
 
-                     conn.query('UPDATE user SET access_token = ?, refresh_token = ? WHERE email = ?', [token, token, email], (err, rows) => {
+                     conn.query('UPDATE user SET access_token = ?, refresh_token = ? WHERE email = ?', [token, refreshToken, email], (err, rows) => {
                         if (err) return res.status(500).json({ result: err });
                      });
 
-                    return res.json({ msg: '로그인 성공', result: token });
+                    return res.json({ msg: '로그인 성공', result:  { access_token: token, refresh_token: refreshToken} });
                 } else {
                     return res.status(500).json({ result: '비밀번호가 틀렸습니다.' });
                 }
             });
         }
         conn.release();
+    });
+});
+
+app.get('/testAPI', (req, res) => {
+    const token = req.headers['access-token'];
+    // 토큰 검증
+    jwt.verify(token, privateKey, (err, decoded) => {
+        if (err) return res.status(401).json({ result: err });
+        return res.json({ msg: '성공', result:  { access_token: '123' } });
+    });
+});
+app.get('/refreshToken', (req, res) => {
+    const token = req.headers['refresh-token'];
+    console.log('refresh', token);
+    // 토큰 검증
+    jwt.verify(token, refreshKey, (err, decoded) => {
+        if (err) return res.status(500).json({ result: err });
+        const token = jwt.sign({ 
+            email: req.body.email,
+         }, privateKey, { expiresIn: '1m' });
+         return res.json({ msg: '리프레쉬 성공', result:  { access_token: token } });
     });
 });
 

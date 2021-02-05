@@ -1,4 +1,5 @@
 import axios from '@/services/axios';
+import VueCookies from 'vue-cookies';
 
 const kakaoHeader = {
     'Authorization': '86cd328810189ad3e09170078d1f1ea4',
@@ -89,17 +90,46 @@ const emailService = () => {
             email,
             password,
         };
-        const result = await axios.post('/emailLogin', data);
-        console.log(result);
+        try {
+            const { result } = (await axios.post('/emailLogin', data)).data;
+            VueCookies.set('access-token', result.access_token);
+            VueCookies.set('refresh-token', result.refresh_token);
+            console.log(result);
+            return result;  
+        } catch (e) {
+            return e;
+        }
     };
+    const test = async () => {
+        try {
+            const data = await axios.get('/testAPI');
+            console.log('API 성공');
+            return data;
+        } catch (e) {
+            return e;
+        }
+    };
+
     return {
         emailLogin,
+        test,
     };
 };
+const refreshToken = async () => {
+    try {
+        const { result } = (await axios.get('/refreshToken')).data;
+        VueCookies.set('access-token', result.access_token);
+        console.log(result);
+        return result;
+    } catch (e) {
+        console.log(e);
+    }
+}
 export {
     getKakaoToken,
     getKakaoUserInfo,
     getGoogleToken,
     naverService,
     emailService,
+    refreshToken,
 };
