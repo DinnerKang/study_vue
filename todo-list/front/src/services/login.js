@@ -92,8 +92,8 @@ const emailService = () => {
         };
         try {
             const { result } = (await axios.post('/emailLogin', data)).data;
-            VueCookies.set('access-token', result.access_token);
-            VueCookies.set('refresh-token', result.refresh_token);
+            VueCookies.set('access-token', result.access_token, '60s');
+            VueCookies.set('refresh-token', result.refresh_token, '3d');
             console.log(result);
             return result;  
         } catch (e) {
@@ -106,6 +106,7 @@ const emailService = () => {
             console.log('API 성공');
             return data;
         } catch (e) {
+            console.log('API 실패');
             return e;
         }
     };
@@ -119,7 +120,7 @@ const refreshToken = async () => {
     try {
         const { result } = (await axios.get('/refreshToken')).data;
         VueCookies.set('access-token', result.access_token);
-        console.log(result);
+        console.log('Refresh API 성공', result);
         return result;
     } catch (e) {
         console.log(e);

@@ -50,8 +50,8 @@ export default {
         LoginNaver,
     },
     setup() {
-        const email = ref("");
-        const password = ref("");
+        const email = ref("jenhyuk@naver.com");
+        const password = ref("1234");
         const loginWithEmail = async (email, password) => {
             await emailService().emailLogin(email, password);
         };

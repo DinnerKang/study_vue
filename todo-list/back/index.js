@@ -53,7 +53,7 @@ app.post('/emailLogin', (req, res) => {
                     const token = jwt.sign({ 
                         email: req.body.email,
                         info: '토큰에 넣고싶은거',
-                     }, privateKey, { expiresIn: '1m' });
+                     }, privateKey, { expiresIn: '60s' });
                      const refreshToken = jwt.sign({ 
                         email: req.body.email,
                         info: '리프레시토큰입니다',
@@ -89,7 +89,7 @@ app.get('/refreshToken', (req, res) => {
         if (err) return res.status(500).json({ result: err });
         const token = jwt.sign({ 
             email: req.body.email,
-         }, privateKey, { expiresIn: '1m' });
+         }, privateKey, { expiresIn: '60s' });
          return res.json({ msg: '리프레쉬 성공', result:  { access_token: token } });
     });
 });
