@@ -11,6 +11,6 @@
   "dependencies": {
     "axios": "^0.19.1",
     "cheerio": "^1.0.0-rc.3",
-    "serverless": "^1.61.3"
+    "serverless": "^3.27.0"
   }
 }
